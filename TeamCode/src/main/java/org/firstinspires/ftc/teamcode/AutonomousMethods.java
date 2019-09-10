@@ -221,6 +221,8 @@ public abstract class AutonomousMethods extends LinearOpMode {
         lastAngle = new Orientation();
     }
 
+    //end of initialization----------------------------------------------------------------------------------------------------------------------
+
     //get angle value from imu
     public double GetIMUHeading() {
         Orientation angle = imu.getAngularOrientation().toAxesReference(AxesReference.INTRINSIC).toAxesOrder(AxesOrder.XYZ);
@@ -260,6 +262,9 @@ public abstract class AutonomousMethods extends LinearOpMode {
     String formatDegrees(double degrees){
         return String.format(Locale.getDefault(), "%.1f", AngleUnit.DEGREES.normalize(degrees));
     }
+
+
+    //Basic auto ovement -----------------------------------------------------------------------------------------------------
 
     //reset encoder values
     public void ResetEncoders() throws InterruptedException {
@@ -499,6 +504,8 @@ public abstract class AutonomousMethods extends LinearOpMode {
         StopMotors();
 
     }
+
+    //Basic controlled move ----------------------------------------------------------------------------------------------
 
     public void LeftMoveControlled(double basePower, int EncoderTarget) throws InterruptedException {
         double heading;
@@ -893,6 +900,9 @@ public abstract class AutonomousMethods extends LinearOpMode {
         sleep(1000);
     }
 
+    // End movement -----------------------------------------------------------------------------------------------------------
+
+    //elevator methods --------------------------------------------------------------------------------------------------------
     //moves elevator down. in turn moves robot up if hanging
     public void moveElevatorDown(double speed) {
         while (bottomLimitSwitch.getState() == true && opModeIsActive()) {
@@ -926,6 +936,7 @@ public abstract class AutonomousMethods extends LinearOpMode {
         }
         elevator.setPower(0);
     }
+    //elevator methods end
 
 
     public double InchesToPulses(double Inches){
@@ -943,6 +954,9 @@ public abstract class AutonomousMethods extends LinearOpMode {
         return Pulses / PulsesPerInch;
 
     } // TODO THIS NEEDS TO BE VERIFIED!!!
+
+
+    // beginning odometry -------------------------------------------------------------------------------------------------
 
     // odometry methods:
     // TODO variables initiated locally for now will be moved to top later.
