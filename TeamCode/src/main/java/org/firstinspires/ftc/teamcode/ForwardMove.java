@@ -32,7 +32,7 @@ import java.util.Locale;
 public abstract class ForwardMove extends AutonomousMethods {
     //stores Autonomous movement methods
 
-    //Basic auto ovement -----------------------------------------------------------------------------------------------------
+    //Basic auto movement -----------------------------------------------------------------------------------------------------
 
     //reset encoder values
 
@@ -621,59 +621,6 @@ public abstract class ForwardMove extends AutonomousMethods {
         StopMotors();
     }
 
-    //end rotate -----------------------------------------------------------------------------------
-
-    //2018 ROVER RUCKUS METHODS
-
-    public void moveForwardCoordinate(int x, int y, double MotorPower) {
-
-        double distance = Math.sqrt((x * x) + (y * y));
-
-        double angle = Math.toDegrees(Math.atan(x / y));
-
-        telemetry.addData("Angle: ", angle);
-        telemetry.addData("calc: ",Math.atan(x / y));
-        telemetry.addData("Gyro: ", Math.abs(GetIMUHeading()));
-        telemetry.update();
-
-        sleep(500);
-
-        RotateRightAngle(.3, angle, false, 0, 0);
-
-        sleep(500);
-
-        //RESET ENCODERS
-
-        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        sleep(10);
-
-        frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        //END RESET ENCODERS
-
-        backRight.setPower(MotorPower);
-        frontLeft.setPower(MotorPower);
-        backLeft.setPower(MotorPower);
-        frontRight.setPower(MotorPower);
-
-        while (Math.abs(frontRight.getCurrentPosition()) < InchesToPulses(distance) && opModeIsActive()){
-            telemetry.addData("Inches:",distance);
-            telemetry.addData("pulses:", InchesToPulses(distance));
-            telemetry.addData("encoder:", frontRight.getCurrentPosition());
-            telemetry.update();
-        }
-
-        StopMotors();
-
-        sleep(1000);
-    }
 
 
 }

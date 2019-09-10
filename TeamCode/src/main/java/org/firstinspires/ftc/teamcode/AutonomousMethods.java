@@ -938,7 +938,7 @@ public abstract class AutonomousMethods extends LinearOpMode {
     }
     //elevator methods end
 
-
+    //deprecated conversions
     public double InchesToPulses(double Inches){
 
         double PulsesPerInch = NR40_PPR * DRIVE_WHEEL_GEAR_RATIO / (WHEEL_DIAMETER * Math.PI);
