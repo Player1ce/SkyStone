@@ -31,35 +31,29 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import java.util.Locale;
 
 
-public interface RobotMethods {
-    public void InitializeHardware();
-    public void InitializeIMU();
-    public void GetIMUHeading();
-    public void ResetEncoders();
-    public void StopMotor();
-    public void ForwardMove(double MotorPower);
-    public void ForwardMove(double MotorPower, int EncoerTarget) throws InterruptedException;
-    public void ForwardMove(double MotorPower, int EncoderTarget, boolean stop) throws InterruptedException;
-    public void BackwardMove(double MotorPower, int EncoderTarget, boolean stop) throws InterruptedException;
-    public void ForwardMoveInches(double MotorPower, double Inches) throws InterruptedException;
-    public void BackwardMoveInches(double MotorPower, double Inches) throws InterruptedException;
-    public void BackwardMove(double MotorPower);
-    public void BackwardMove(double MotorPower, int EncoderTarget) throws InterruptedException;
-    public void LeftMove(double MotorPower);
-    public void LeftMove(double MotorPower, int EncoderTarget) throws InterruptedException;
-    public void RightMove(double MotorPower);
-    public void RightMove(double MotorPower, int EncoderTarget) throws InterruptedException;
-    public void RotateRightAngle(double MotorPower, double angleValue, boolean strong, double k1, double k2);
-    public void RotateRightShimmyAngle(double MotorPower, double angleValue, boolean strong, double k1, double k2);
-    public void RotateLeftAngle(double MotorPower, double angleValue);
-    public void RotateRightSpecialAngle(double MotorPower, double angleValue);
-    public void RotateLeftSpecialAngle(double MotorPower, double angleValue);
-    public void moveElevatorDown(double speed);
-    public void moveElevatorUp(double speed);
-
-
-
-
-
-
+public interface RobotMethods extends LinearOpMode{
+    void InitializeHardware();
+    void InitializeIMU();
+    void GetIMUHeading();
+    void ResetEncoders();
+    void StopMotor();
+    void ForwardMove(double MotorPower);
+    void ForwardMove(double MotorPower, int EncoerTarget) throws InterruptedException;
+    void ForwardMove(double MotorPower, int EncoderTarget, boolean stop) throws InterruptedException;
+    void BackwardMove(double MotorPower, int EncoderTarget, boolean stop) throws InterruptedException;
+    void ForwardMoveInches(double MotorPower, double Inches) throws InterruptedException;
+    void BackwardMoveInches(double MotorPower, double Inches) throws InterruptedException;
+    void BackwardMove(double MotorPower);
+    void BackwardMove(double MotorPower, int EncoderTarget) throws InterruptedException;
+    void LeftMove(double MotorPower);
+    void LeftMove(double MotorPower, int EncoderTarget) throws InterruptedException;
+    void RightMove(double MotorPower);
+    void RightMove(double MotorPower, int EncoderTarget) throws InterruptedException;
+    void RotateRightAngle(double MotorPower, double angleValue, boolean strong, double k1, double k2);
+    void RotateRightShimmyAngle(double MotorPower, double angleValue, boolean strong, double k1, double k2);
+    void RotateLeftAngle(double MotorPower, double angleValue);
+    void RotateRightSpecialAngle(double MotorPower, double angleValue);
+    void RotateLeftSpecialAngle(double MotorPower, double angleValue);
+    void moveElevatorDown(double speed);
+    void moveElevatorUp(double speed);
 }
