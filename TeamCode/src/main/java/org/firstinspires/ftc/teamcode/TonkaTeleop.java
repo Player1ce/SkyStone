@@ -8,9 +8,11 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@TeleOp(name="Rover Ruckus Teleop FINAL", group="FINAL Rover Ruckus")
+@TeleOp(name="TonkaTeleop", group="FINAL Rover Ruckus")
 //@Disabled
-public class RoverRuckusTeleOp extends OpMode {
+public class TonkaTeleop extends OpMode {
+
+    boolean reverse = false;
 
     //all motors are declared; letting the code know that these motors exist
     DcMotor frontRight;
@@ -60,13 +62,13 @@ public class RoverRuckusTeleOp extends OpMode {
 
 
 /*        double x_left = gamepad1.left_stick_x;
-        double x_right = -gamepad1.right_stick_x;
-        double y_left = gamepad1.left_stick_y;
+    double x_right = -gamepad1.right_stick_x;
+    double y_left = gamepad1.left_stick_y;
 
-        double frontRightPower = (y_left - x_right + x_left) * CONSTANT; //-right
-        double frontLeftPower = (-y_left - x_right + x_left) * CONSTANT; //-right
-        double backRightPower = (-y_left - x_right - x_left) * CONSTANT; //-right
-        double backLeftPower = (y_left - x_right - x_left) * CONSTANT; //-right*/
+    double frontRightPower = (y_left - x_right + x_left) * CONSTANT; //-right
+    double frontLeftPower = (-y_left - x_right + x_left) * CONSTANT; //-right
+    double backRightPower = (-y_left - x_right - x_left) * CONSTANT; //-right
+    double backLeftPower = (y_left - x_right - x_left) * CONSTANT; //-right*/
 
         x_left = gamepad1.left_stick_x;
 
@@ -79,23 +81,23 @@ public class RoverRuckusTeleOp extends OpMode {
         }
 
 
-        frontRightPower = (y_left - x_right - x_left) * CONSTANT; //-right
-        frontLeftPower = (y_left + x_right + x_left) * CONSTANT; //-right
-        backRightPower = (y_left + x_right - x_left) * CONSTANT; //-right
+        frontRightPower = (-y_left - x_right - x_left) * CONSTANT; //-right
+        frontLeftPower = (y_left - x_right - x_left) * CONSTANT; //-right
+        backRightPower = (-y_left - x_right + x_left) * CONSTANT; //-right
         backLeftPower = (y_left - x_right + x_left) * CONSTANT;
 
 
-        /*if (!reverse) {
-            frontRight.setPower(frontRightPower);
-            frontLeft.setPower(frontLeftPower);
-            backRight.setPower(backRightPower);
-            backLeft.setPower(backLeftPower);
-        } else {
-            frontRight.setPower(-frontRightPower);
-            frontLeft.setPower(-frontLeftPower);
-            backRight.setPower(-backRightPower);
-            backLeft.setPower(-backLeftPower);
-        }*/
+    /*if (!reverse) {
+        frontRight.setPower(frontRightPower);
+        frontLeft.setPower(frontLeftPower);
+        backRight.setPower(backRightPower);
+        backLeft.setPower(backLeftPower);
+    } else {
+        frontRight.setPower(-frontRightPower);
+        frontLeft.setPower(-frontLeftPower);
+        backRight.setPower(-backRightPower);
+        backLeft.setPower(-backLeftPower);
+    }*/
 
         frontRight.setPower(frontRightPower);
         frontLeft.setPower(frontLeftPower);
@@ -111,9 +113,11 @@ public class RoverRuckusTeleOp extends OpMode {
             telemetry.addData("F/R:", "REVERSE");
         }else {
             telemetry.addData("F/R:", "FORWARD");
-            }
+        }
         telemetry.update();
 
-        }
+    }
+
+
 
 }
