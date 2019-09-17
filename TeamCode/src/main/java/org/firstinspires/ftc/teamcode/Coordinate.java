@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.hardware.DcMotor;
 
 @Autonomous(name= "Coordinate", group="Test")
 public class Coordinate extends AutonomousMethods {
@@ -63,7 +62,7 @@ public class Coordinate extends AutonomousMethods {
 
         sleep(5000);
 
-        //ForwardMove(.5, (int) InchesToPulses(distance));
+        //movementMethods(.5, (int) InchesToPulses(distance));
 
 
 

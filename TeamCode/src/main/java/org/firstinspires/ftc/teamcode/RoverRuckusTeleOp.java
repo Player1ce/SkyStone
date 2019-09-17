@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
 
+@SuppressWarnings("StatementWithEmptyBody")
 @TeleOp(name="Rover Ruckus Teleop FINAL", group="FINAL Rover Ruckus")
 //@Disabled
 public class RoverRuckusTeleOp extends OpMode {
