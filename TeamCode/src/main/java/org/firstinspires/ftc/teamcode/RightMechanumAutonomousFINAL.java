@@ -8,7 +8,7 @@ public class RightMechanumAutonomousFINAL extends AutonomousMethods {
     public void runOpMode() throws InterruptedException {
         InitializeHardware();
         InitializeIMU();
-        InitializeDetector();
+        //TODO: InitializeDetector();
 
         //starts timer
         waitForStart();
@@ -22,7 +22,7 @@ public class RightMechanumAutonomousFINAL extends AutonomousMethods {
             sleep(200);
 
             //gets original position of gold block
-            goldX = detector.getXPosition();
+            //TODO: goldX = detector.getXPosition();
             telemetry.addData("Position: ", goldX);
             telemetry.update();
             sleep(200);
@@ -32,7 +32,7 @@ public class RightMechanumAutonomousFINAL extends AutonomousMethods {
             sleep(200);
 
             //takes position of gold block when lowered
-            goldX = detector.getXPosition();
+            //TODO: .goldX = detector.getXPosition();
             telemetry.addData("Position: ", goldX);
             telemetry.update();
             sleep(500);
