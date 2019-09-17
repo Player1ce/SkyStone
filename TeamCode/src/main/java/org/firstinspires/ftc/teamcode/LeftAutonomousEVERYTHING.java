@@ -11,7 +11,7 @@ public class LeftAutonomousEVERYTHING extends AutonomousMethods {
 
         InitializeHardware();
         robotMethods.InitializeIMU();
-        robotMethods.InitializeDetector();
+        //TODO: robotMethods.InitializeDetector();
 
 
 
@@ -28,7 +28,7 @@ public class LeftAutonomousEVERYTHING extends AutonomousMethods {
         sleep(200);
 
         //gets original position of gold block
-        goldX = detector.getXPosition();
+        //TODO: goldX = detector.getXPosition();
         telemetry.addData("Position: ", goldX);
         telemetry.update();
         sleep(200);
@@ -38,7 +38,7 @@ public class LeftAutonomousEVERYTHING extends AutonomousMethods {
         sleep(200);
 
         //takes position of gold block when lowered
-        goldX = detector.getXPosition();
+        //TODO: goldX = detector.getXPosition();
         telemetry.addData("Position: ", goldX);
         telemetry.update();
         sleep(500);

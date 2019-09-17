@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 
 import android.app.Activity;
+import android.graphics.Path;
 import android.view.View;
 
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
@@ -36,25 +37,27 @@ public interface RobotMethods {
     void InitializeHardware(OpMode opMode);
     void InitializeIMU();
     double GetIMUHeading();
-    void ResetEncoders();
-    void StopMotor();
+    void ResetEncoders(LinearOpMode linearOpMode);
+    void StopMotors();
+    double InchesToPulses(double Inches);
+    double PulsesToInches(double Pulses);
     void ForwardMove(double MotorPower);
-    void ForwardMove(double MotorPower, int EncoerTarget) ;
-    void ForwardMove(double MotorPower, int EncoderTarget, boolean stop) ;
-    void BackwardMove(double MotorPower, int EncoderTarget, boolean stop) ;
-    void ForwardMoveInches(double MotorPower, double Inches) ;
-    void BackwardMoveInches(double MotorPower, double Inches) ;
+    void ForwardMove(double MotorPower, int EncoderTarget, LinearOpMode linearOpMode);
+    void ForwardMove(double MotorPower, int EncoderTarget, boolean stop, LinearOpMode linearOpMode);
+    void BackwardMove(double MotorPower, int EncoderTarget, boolean stop, LinearOpMode linearOpMode);
+    void ForwardMoveInches(double MotorPower, double Inches, LinearOpMode linearOpMode);
     void BackwardMove(double MotorPower);
-    void BackwardMove(double MotorPower, int EncoderTarget) ;
+    void BackwardMove(double MotorPower, int EncoderTarget, LinearOpMode linearOpMode);
+    void BackwardMoveInches(double MotorPower, double Inches, LinearOpMode linearOpMode);
     void LeftMove(double MotorPower);
-    void LeftMove(double MotorPower, int EncoderTarget) ;
+    void LeftMove(double MotorPower, int EncoderTarget, LinearOpMode linearOpMode);
     void RightMove(double MotorPower);
-    void RightMove(double MotorPower, int EncoderTarget) ;
-    void RotateRightAngle(double MotorPower, double angleValue, boolean strong, double k1, double k2);
+    void RightMove(double MotorPower, int EncoderTarget, LinearOpMode linearOpMode);
+    void RotateRightAngle(double MotorPower, double angleValue, boolean strong, double k1, double k2, LinearOpMode linearOpMode);
     void RotateRightShimmyAngle(double MotorPower, double angleValue, boolean strong, double k1, double k2);
-    void RotateLeftAngle(double MotorPower, double angleValue);
-    void RotateRightSpecialAngle(double MotorPower, double angleValue);
-    void RotateLeftSpecialAngle(double MotorPower, double angleValue);
-    void moveElevatorDown(double speed);
-    void moveElevatorUp(double speed);
+    void RotateLeftAngle(double MotorPower, double angleValue, LinearOpMode linearOpMode);
+    void RotateRightSpecialAngle(double MotorPower, double angleValue, LinearOpMode linearOpMode);
+    void RotateLeftSpecialAngle(double MotorPower, double angleValue, LinearOpMode linearOpMode);
+    void moveElevatorDown(double speed, LinearOpMode linearOpMode);
+    void moveElevatorUp(double speed, LinearOpMode linearOpMode);
 }

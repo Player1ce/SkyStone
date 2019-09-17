@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.graphics.Path;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
@@ -15,11 +16,11 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
-import org.firstinspires.ftc.teamcode.AutonomousMethods;
-import org.firstinspires.ftc.teamcode.RobotMethods;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+
+//TODO: make inches to pulses conversions accurate
 public class BasicRobotMethods implements RobotMethods{
     DcMotor frontLeft;
     DcMotor frontRight;
@@ -60,81 +61,83 @@ public class BasicRobotMethods implements RobotMethods{
 public void test(){}
 
     @Override
-        public void InitializeHardware (OpMode opMode) {
-            HardwareMap hardwareMap=opMode.hardwareMap;
+    public void InitializeHardware (OpMode opMode) {
+        HardwareMap hardwareMap=opMode.hardwareMap;
 
-            //initalize motors and set direction and mode
-            frontLeft = hardwareMap.dcMotor.get("frontLeft");
-            frontLeft.setDirection(DcMotor.Direction.REVERSE);
-            //frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //initalize motors and set direction and mode
+        frontLeft = hardwareMap.dcMotor.get("frontLeft");
+        frontLeft.setDirection(DcMotor.Direction.REVERSE);
+        //frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-            backLeft = hardwareMap.dcMotor.get("backLeft");
-            //backLeft.setDirection(DcMotor.Direction.REVERSE);
-            //backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        backLeft = hardwareMap.dcMotor.get("backLeft");
+        //backLeft.setDirection(DcMotor.Direction.REVERSE);
+        //backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-            frontRight = hardwareMap.dcMotor.get("frontRight");
-            frontRight.setDirection(DcMotor.Direction.REVERSE);
-            //frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontRight = hardwareMap.dcMotor.get("frontRight");
+        frontRight.setDirection(DcMotor.Direction.REVERSE);
+        //frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-            backRight = hardwareMap.dcMotor.get("backRight");
-            //backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        backRight = hardwareMap.dcMotor.get("backRight");
+        //backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-            //create encoder motor objects
-            horizontalEncoder = hardwareMap.dcMotor.get("horizontalEncoder");
-            horizontalEncoder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //create encoder motor objects
+        horizontalEncoder = hardwareMap.dcMotor.get("horizontalEncoder");
+        horizontalEncoder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-            forwardEncoder = hardwareMap.dcMotor.get("forwardEncoder");
-            forwardEncoder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        forwardEncoder = hardwareMap.dcMotor.get("forwardEncoder");
+        forwardEncoder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-            //brake system
-            frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        //brake system
+        frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-            bottomLimitSwitch = hardwareMap.digitalChannel.get("bottomLimitSwitch");
-            topLimitSwitch = hardwareMap.digitalChannel.get("topLimitSwitch");
+        bottomLimitSwitch = hardwareMap.digitalChannel.get("bottomLimitSwitch");
+        topLimitSwitch = hardwareMap.digitalChannel.get("topLimitSwitch");
 
-            //initialize IMU in the REV module
-            imu = hardwareMap.get(BNO055IMU.class, "imu");
+        //initialize IMU in the REV module
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
 
-            pivot = hardwareMap.servo.get("pivot");
+        pivot = hardwareMap.servo.get("pivot");
 
-            leftServo = hardwareMap.servo.get("leftServo");
-            rightServo = hardwareMap.servo.get("rightServo");
-            midServo = hardwareMap.servo.get("midServo");
+        leftServo = hardwareMap.servo.get("leftServo");
+        rightServo = hardwareMap.servo.get("rightServo");
+        midServo = hardwareMap.servo.get("midServo");
 
-            elevator = hardwareMap.dcMotor.get("elevator");
-            elevator.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            //intake = hardwareMap.dcMotor.get("intake");
+        elevator = hardwareMap.dcMotor.get("elevator");
+        elevator.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        //intake = hardwareMap.dcMotor.get("intake");
 
-            //  random variables
-            boolean bad = false;
+        //  random variables
+        boolean bad = false;
 
-            int goldX = 0;
+        int goldX = 0;
+    }
 
-        }
 
-        public void InitializeIMU () {
-            BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-            parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
-            parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-            parameters.calibrationDataFile = "AdafruitIMUCalibration.json"; // see the calibration sample opmode
-            parameters.loggingEnabled      = true;
-            parameters.loggingTag          = "IMU";
-            parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
+    @Override
+    public void InitializeIMU () {
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.calibrationDataFile = "AdafruitIMUCalibration.json"; // see the calibration sample opmode
+        parameters.loggingEnabled      = true;
+        parameters.loggingTag          = "IMU";
+        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
 
-            imu.initialize(parameters);
+        imu.initialize(parameters);
 
-            imu.startAccelerationIntegration(new Position(), new Velocity(), 250);
+        imu.startAccelerationIntegration(new Position(), new Velocity(), 250);
 
-            lastAngle = new Orientation();
+        lastAngle = new Orientation();
 
-        }
+    }
+
 
     @Override
     public double GetIMUHeading() {
@@ -155,108 +158,382 @@ public void test(){}
         //return -angles.thirdAngle;
     }
 
+
     @Override
-    public void ResetEncoders() {
+    public void ResetEncoders(LinearOpMode linearOpMode) {
+        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        linearOpMode.sleep(50);
+
+        frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
     }
 
+
     @Override
-    public void StopMotor() {
+    public void StopMotors() {
+        frontLeft.setPower(0);
+        frontRight.setPower(0);
+        backLeft.setPower(0);
+        backRight.setPower(0);
 
     }
+
+
+    @Override
+    public double InchesToPulses(double Inches){
+
+        double PulsesPerInch = NR40_PPR * DRIVE_WHEEL_GEAR_RATIO / (WHEEL_DIAMETER * Math.PI);
+
+        return Inches * PulsesPerInch;
+
+    } // TODO THIS NEEDS TO BE VERIFIED!!!
+
+
+    @Override
+    public double PulsesToInches(double Pulses){
+
+        double PulsesPerInch = NR40_PPR * DRIVE_WHEEL_GEAR_RATIO / (WHEEL_DIAMETER * Math.PI);
+
+        return Pulses / PulsesPerInch;
+
+    } // TODO THIS NEEDS TO BE VERIFIED!!!
+
 
     @Override
     public void ForwardMove(double MotorPower) {
-
+        backRight.setPower(MotorPower);
+        frontLeft.setPower(MotorPower);
+        backLeft.setPower(MotorPower);
+        frontRight.setPower(MotorPower);
     }
+
 
     @Override
-    public void ForwardMove(double MotorPower, int EncoerTarget) {
+    public void ForwardMove(double MotorPower, int EncoderTarget, LinearOpMode linearOpMode) {
+        ResetEncoders(linearOpMode);
+
+        backRight.setPower(MotorPower);
+        frontLeft.setPower(MotorPower);
+        backLeft.setPower(MotorPower);
+        frontRight.setPower(MotorPower);
+
+        while (Math.abs(backRight.getCurrentPosition()) < EncoderTarget && linearOpMode.opModeIsActive()){
+            linearOpMode.telemetry.addData("Moving Forward","Moving Forward");
+            linearOpMode.telemetry.addData("encoder value:", backRight.getCurrentPosition());
+            linearOpMode.telemetry.addData("encoder target:", EncoderTarget);
+            linearOpMode.telemetry.update();
+        }
+        StopMotors();
 
     }
+
 
     @Override
-    public void ForwardMove(double MotorPower, int EncoderTarget, boolean stop) {
+    public void ForwardMove(double MotorPower, int EncoderTarget, boolean stop, LinearOpMode linearOpMode) {
+        ResetEncoders(linearOpMode);
+        backRight.setPower(MotorPower);
+        frontLeft.setPower(MotorPower);
+        backLeft.setPower(MotorPower);
+        frontRight.setPower(MotorPower);
 
+        while (Math.abs(frontRight.getCurrentPosition()) < EncoderTarget && linearOpMode.opModeIsActive()){
+            linearOpMode.telemetry.addData("Moving Forward","Moving Forward");
+            linearOpMode.telemetry.addData("encoder value:", frontRight.getCurrentPosition());
+            linearOpMode.telemetry.addData("encoder target:", EncoderTarget);
+            linearOpMode.telemetry.update();
+        }
+        if (stop) StopMotors();
     }
+
 
     @Override
-    public void BackwardMove(double MotorPower, int EncoderTarget, boolean stop) {
+    public void BackwardMove(double MotorPower, int EncoderTarget, boolean stop, LinearOpMode linearOpMode) {
+        ResetEncoders(linearOpMode);
+        backRight.setPower(-MotorPower);
+        frontLeft.setPower(-MotorPower);
+        backLeft.setPower(-MotorPower);
+        frontRight.setPower(-MotorPower);
 
+        while (Math.abs(frontRight.getCurrentPosition()) < EncoderTarget && linearOpMode.opModeIsActive()) {
+            linearOpMode.telemetry.addData("Moving Backward", "Moving Backward");
+            linearOpMode.telemetry.addData("encoder value:", frontRight.getCurrentPosition());
+            linearOpMode.telemetry.addData("encoder target:", EncoderTarget);
+            linearOpMode.telemetry.update();
+        }
+        if (stop) StopMotors();
     }
+
 
     @Override
-    public void ForwardMoveInches(double MotorPower, double Inches) {
+    public void ForwardMoveInches(double MotorPower, double Inches, LinearOpMode linearOpMode) {
+        ResetEncoders(linearOpMode);
 
+        backRight.setPower(MotorPower);
+        frontLeft.setPower(MotorPower);
+        backLeft.setPower(MotorPower);
+        frontRight.setPower(MotorPower);
+
+        while (Math.abs(frontRight.getCurrentPosition()) < InchesToPulses(Inches) && linearOpMode.opModeIsActive()){
+            linearOpMode.telemetry.addData("Moving Forward","Moving Forward");
+            linearOpMode.telemetry.addData("encoder value:", PulsesToInches(frontRight.getCurrentPosition()));
+            linearOpMode.telemetry.addData("encoder target:", Inches);
+            linearOpMode.telemetry.update();
+        }
+
+        StopMotors();
     }
 
-    @Override
-    public void BackwardMoveInches(double MotorPower, double Inches) {
-
-    }
 
     @Override
     public void BackwardMove(double MotorPower) {
-
+        backRight.setPower(-MotorPower);
+        frontLeft.setPower(-MotorPower);
+        backLeft.setPower(-MotorPower);
+        frontRight.setPower(-MotorPower);
     }
+
 
     @Override
-    public void BackwardMove(double MotorPower, int EncoderTarget) {
+    public void BackwardMove(double MotorPower, int EncoderTarget, LinearOpMode linearOpMode) {
+        ResetEncoders(linearOpMode);
+
+        backRight.setPower(-MotorPower);
+        frontLeft.setPower(-MotorPower);
+        backLeft.setPower(-MotorPower);
+        frontRight.setPower(-MotorPower);
+
+        while (Math.abs(backRight.getCurrentPosition()) < EncoderTarget && linearOpMode.opModeIsActive()){
+            linearOpMode.telemetry.addData("Moving Backward","Moving Backward");
+            linearOpMode.telemetry.addData("encoder value:", backRight.getCurrentPosition());
+            linearOpMode.telemetry.addData("encoder target:", EncoderTarget);
+            linearOpMode.telemetry.update();
+        }
+
+        StopMotors();
 
     }
+
+
+    @Override
+    public void BackwardMoveInches(double MotorPower, double Inches, LinearOpMode linearOpMode) {
+        ResetEncoders(linearOpMode);
+
+        backRight.setPower(-MotorPower);
+        frontLeft.setPower(-MotorPower);
+        backLeft.setPower(-MotorPower);
+        frontRight.setPower(-MotorPower);
+
+        while (Math.abs(frontRight.getCurrentPosition()) < InchesToPulses(Inches) && linearOpMode.opModeIsActive()){
+            linearOpMode.telemetry.addData("Moving Forward","Moving Forward");
+            linearOpMode.telemetry.addData("encoder value:", PulsesToInches(frontRight.getCurrentPosition()));
+            linearOpMode.telemetry.addData("encoder target:", Inches);
+            linearOpMode.telemetry.update();
+        }
+
+        StopMotors();
+
+
+    }
+
 
     @Override
     public void LeftMove(double MotorPower) {
-
+        frontRight.setPower(MotorPower);
+        backRight.setPower(-MotorPower);
+        frontLeft.setPower(-MotorPower);
+        backLeft.setPower(MotorPower);
     }
+
 
     @Override
-    public void LeftMove(double MotorPower, int EncoderTarget) {
+    public void LeftMove(double MotorPower, int EncoderTarget, LinearOpMode linearOpMode) {
+        ResetEncoders(linearOpMode);
+        frontRight.setPower(MotorPower);
+        backRight.setPower(-MotorPower);
+        frontLeft.setPower(-MotorPower);
+        backLeft.setPower(MotorPower);
+
+
+        while (Math.abs(backLeft.getCurrentPosition()) < EncoderTarget && linearOpMode.opModeIsActive()){
+            linearOpMode.telemetry.addData("Moving Left","Moving Left");
+            linearOpMode.telemetry.addData("encoder value:", frontRight.getCurrentPosition());
+            linearOpMode.telemetry.addData("encoder target:", EncoderTarget);
+            linearOpMode.telemetry.update();
+        }
+
+        StopMotors();
 
     }
+
 
     @Override
     public void RightMove(double MotorPower) {
-
+        frontRight.setPower(-MotorPower);
+        backRight.setPower(MotorPower);
+        frontLeft.setPower(MotorPower);
+        backLeft.setPower(-MotorPower);
     }
+
 
     @Override
-    public void RightMove(double MotorPower, int EncoderTarget) {
+    public void RightMove(double MotorPower, int EncoderTarget, LinearOpMode linearOpMode) {
+        ResetEncoders(linearOpMode);
+        frontRight.setPower(-MotorPower);
+        backRight.setPower(MotorPower);
+        frontLeft.setPower(MotorPower);
+        backLeft.setPower(-MotorPower);
 
+
+        while (Math.abs(backRight.getCurrentPosition()) < EncoderTarget && linearOpMode.opModeIsActive()){
+            linearOpMode.telemetry.addData("Moving Right","Moving Right");
+            linearOpMode.telemetry.addData("encoder value:", frontRight.getCurrentPosition());
+            linearOpMode.telemetry.addData("encoder target:", EncoderTarget);
+            linearOpMode.telemetry.update();
+        }
+
+        StopMotors();
     }
+
 
     @Override
-    public void RotateRightAngle(double MotorPower, double angleValue, boolean strong, double k1, double k2) {
+    public void RotateRightAngle(double MotorPower, double angleValue, boolean strong, double k1, double k2, LinearOpMode linearOpMode) {
+        double startTime = System.currentTimeMillis();
+        double lastAngle = 0;
+        while (Math.abs(GetIMUHeading()) < angleValue && linearOpMode.opModeIsActive()) {
+            if (strong) {
+                backRight.setPower(-MotorPower * k1);
+                frontRight.setPower(-MotorPower * k1);
+                frontLeft.setPower(MotorPower * k2);
+                backLeft.setPower(MotorPower * k2);
+            } else {
+                backRight.setPower(-MotorPower);
+                frontRight.setPower(-MotorPower);
+                frontLeft.setPower(MotorPower);
+                backLeft.setPower(MotorPower);
+            }
+            linearOpMode.telemetry.addData("Heading: ", Math.abs(GetIMUHeading()));
+            linearOpMode.telemetry.update();
+            //time check to see if moving, if has not changed more than .9 degrees in 1.5 seconds, move a bit to readjust
+            if (System.currentTimeMillis() - startTime >= 1500) {
+                startTime = System.currentTimeMillis();
+                if (!(Math.abs(GetIMUHeading()) > lastAngle + .9)) {
+                    BackwardMove(.5);
+                    linearOpMode.sleep(350);
+                    StopMotors();
+                }
+                lastAngle = Math.abs(GetIMUHeading());
+            }
 
+        }
+        StopMotors();
     }
+
 
     @Override
     public void RotateRightShimmyAngle(double MotorPower, double angleValue, boolean strong, double k1, double k2) {
 
     }
 
-    @Override
-    public void RotateLeftAngle(double MotorPower, double angleValue) {
 
+    @Override
+    public void RotateLeftAngle(double MotorPower, double angleValue, LinearOpMode linearOpMode) {
+        double startTime = System.currentTimeMillis();
+        double lastAngle = 0;
+        while ((Math.abs(GetIMUHeading())) > angleValue && linearOpMode.opModeIsActive()) {
+            backRight.setPower(MotorPower);
+            frontLeft.setPower(-MotorPower);
+            backLeft.setPower(-MotorPower);
+            frontRight.setPower(MotorPower);
+            linearOpMode.telemetry.addData("Heading: ", Math.abs(GetIMUHeading()));
+            linearOpMode.telemetry.update();
+            if (System.currentTimeMillis() - startTime >= 1500) {
+                startTime = System.currentTimeMillis();
+                if (!(Math.abs(GetIMUHeading()) < lastAngle - .9)) {
+                    ForwardMove(.5);
+                    linearOpMode.sleep(350);
+                    StopMotors();
+                }
+                lastAngle = Math.abs(GetIMUHeading());
+            }
+        }
+        StopMotors();
     }
 
-    @Override
-    public void RotateRightSpecialAngle(double MotorPower, double angleValue) {
 
+    @Override
+    public void RotateRightSpecialAngle(double MotorPower, double angleValue, LinearOpMode linearOpMode) {
+        double startTime = System.currentTimeMillis();
+        double lastAngle = 0;
+        while (GetIMUHeading() > angleValue && linearOpMode.opModeIsActive()) {
+            backRight.setPower(-MotorPower);
+            frontRight.setPower(-MotorPower);
+            frontLeft.setPower(MotorPower);
+            backLeft.setPower(MotorPower);
+            linearOpMode.telemetry.addData("Heading: ", Math.abs(GetIMUHeading()));
+            linearOpMode.telemetry.update();
+            if (System.currentTimeMillis() - startTime >= 1500) {
+                startTime = System.currentTimeMillis();
+                if (!(Math.abs(GetIMUHeading()) > lastAngle + .9)) {
+                    BackwardMove(.5);
+                    linearOpMode.sleep(300);
+                    StopMotors();
+                }
+                lastAngle = Math.abs(GetIMUHeading());
+            }
+
+        }
+        StopMotors();
     }
 
-    @Override
-    public void RotateLeftSpecialAngle(double MotorPower, double angleValue) {
 
+    @Override
+    public void RotateLeftSpecialAngle(double MotorPower, double angleValue, LinearOpMode linearOpMode) {
+// while ((Math.abs(GetIMUHeading())) > angleValue) {
+        double startTime = System.currentTimeMillis();
+        double lastAngle = 0;
+        while (GetIMUHeading() < angleValue && linearOpMode.opModeIsActive()) {
+            backRight.setPower(MotorPower);
+            frontLeft.setPower(-MotorPower);
+            backLeft.setPower(-MotorPower);
+            frontRight.setPower(MotorPower);
+            linearOpMode.telemetry.addData("Heading: ", Math.abs(GetIMUHeading()));
+            linearOpMode.telemetry.update();
+            //time check to see if moving, if has not changed more than .9 degrees in 1.5 seconds, move a bit to readjust
+            if (System.currentTimeMillis() - startTime >= 1500) {
+                startTime = System.currentTimeMillis();
+                if (!(Math.abs(GetIMUHeading()) < lastAngle - .9)) {
+                    ForwardMove(.6);
+                    linearOpMode.sleep(100);
+                    StopMotors();
+                }
+                lastAngle = Math.abs(GetIMUHeading());
+            }
+        }
+        StopMotors();
     }
 
-    @Override
-    public void moveElevatorDown(double speed) {
 
+    @Override
+    public void moveElevatorDown(double speed, LinearOpMode linearOpMode) {
+        while (bottomLimitSwitch.getState() && linearOpMode.opModeIsActive()) {
+            elevator.setPower(-speed);
+        }
+        elevator.setPower(0);
     }
 
-    @Override
-    public void moveElevatorUp(double speed) {
 
+    @Override
+    public void moveElevatorUp(double speed, LinearOpMode linearOpMode) {
+        while (topLimitSwitch.getState() && linearOpMode.opModeIsActive()) {
+            elevator.setPower(speed);
+        }
+        elevator.setPower(0);
     }
 }
