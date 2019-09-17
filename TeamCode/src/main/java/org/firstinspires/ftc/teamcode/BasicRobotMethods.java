@@ -1,9 +1,10 @@
-package org.firstinspires.ftc.teamcode.Movement;
+package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
@@ -19,7 +20,7 @@ import org.firstinspires.ftc.teamcode.RobotMethods;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-public abstract class Acceleration implements RobotMethods  {
+public class BasicRobotMethods implements RobotMethods{
     DcMotor frontLeft;
     DcMotor frontRight;
     DcMotor backLeft;
@@ -56,9 +57,12 @@ public abstract class Acceleration implements RobotMethods  {
     long startTime;
     boolean bad;
 
+public void test(){}
 
     @Override
-        public void InitializeHardware () {
+        public void InitializeHardware (OpMode opMode) {
+            HardwareMap hardwareMap=opMode.hardwareMap;
+
             //initalize motors and set direction and mode
             frontLeft = hardwareMap.dcMotor.get("frontLeft");
             frontLeft.setDirection(DcMotor.Direction.REVERSE);
@@ -149,5 +153,110 @@ public abstract class Acceleration implements RobotMethods  {
         return globalAngle;
 
         //return -angles.thirdAngle;
+    }
+
+    @Override
+    public void ResetEncoders() {
+
+    }
+
+    @Override
+    public void StopMotor() {
+
+    }
+
+    @Override
+    public void ForwardMove(double MotorPower) {
+
+    }
+
+    @Override
+    public void ForwardMove(double MotorPower, int EncoerTarget) {
+
+    }
+
+    @Override
+    public void ForwardMove(double MotorPower, int EncoderTarget, boolean stop) {
+
+    }
+
+    @Override
+    public void BackwardMove(double MotorPower, int EncoderTarget, boolean stop) {
+
+    }
+
+    @Override
+    public void ForwardMoveInches(double MotorPower, double Inches) {
+
+    }
+
+    @Override
+    public void BackwardMoveInches(double MotorPower, double Inches) {
+
+    }
+
+    @Override
+    public void BackwardMove(double MotorPower) {
+
+    }
+
+    @Override
+    public void BackwardMove(double MotorPower, int EncoderTarget) {
+
+    }
+
+    @Override
+    public void LeftMove(double MotorPower) {
+
+    }
+
+    @Override
+    public void LeftMove(double MotorPower, int EncoderTarget) {
+
+    }
+
+    @Override
+    public void RightMove(double MotorPower) {
+
+    }
+
+    @Override
+    public void RightMove(double MotorPower, int EncoderTarget) {
+
+    }
+
+    @Override
+    public void RotateRightAngle(double MotorPower, double angleValue, boolean strong, double k1, double k2) {
+
+    }
+
+    @Override
+    public void RotateRightShimmyAngle(double MotorPower, double angleValue, boolean strong, double k1, double k2) {
+
+    }
+
+    @Override
+    public void RotateLeftAngle(double MotorPower, double angleValue) {
+
+    }
+
+    @Override
+    public void RotateRightSpecialAngle(double MotorPower, double angleValue) {
+
+    }
+
+    @Override
+    public void RotateLeftSpecialAngle(double MotorPower, double angleValue) {
+
+    }
+
+    @Override
+    public void moveElevatorDown(double speed) {
+
+    }
+
+    @Override
+    public void moveElevatorUp(double speed) {
+
     }
 }

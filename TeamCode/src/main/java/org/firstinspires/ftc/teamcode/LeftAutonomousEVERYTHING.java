@@ -4,11 +4,16 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 @Autonomous(name= "LeftAutonomousEVERYTHING", group="FINAL Rover Ruckus")
 public class LeftAutonomousEVERYTHING extends AutonomousMethods {
+    RobotMethods robotMethods=new BasicRobotMethods();
 
     public void runOpMode() throws InterruptedException {
+        robotMethods.InitializeHardware(this);
+
         InitializeHardware();
-        InitializeIMU();
-        InitializeDetector();
+        robotMethods.InitializeIMU();
+        robotMethods.InitializeDetector();
+
+
 
         //starts timer
         waitForStart();
