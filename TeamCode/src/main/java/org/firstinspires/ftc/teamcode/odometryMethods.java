@@ -1,24 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
-
-import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
-import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
-import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DigitalChannel;
-import com.qualcomm.robotcore.hardware.Servo;
-
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.robotcore.external.navigation.Position;
-import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-
 
 public class odometryMethods extends BasicRobotMethods {
 	DcMotor horizontalEncoder;
@@ -28,11 +11,11 @@ public class odometryMethods extends BasicRobotMethods {
     int horizonatalLeeway = 15;
 	
 	@Override
-	public void resetOdometry() throws InterruptedException {
+	public void resetOdometry(LinearOpMode linearOpMode) {
 		forwardEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         horizontalEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        sleep(50);
+        linearOpMode.sleep(50);
 
         forwardEncoder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         horizontalEncoder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -74,9 +57,9 @@ public class odometryMethods extends BasicRobotMethods {
 	}
 	
 	@Override
-	public void forwardMoveOdometry(double MotorPower, int EncoderTarget){
-		 ResetEncoders();
-        ResetOdometry();
+	public void forwardMoveOdometry(double MotorPower, int EncoderTarget, LinearOpMode linearOpMode){
+	    ResetEncoders(linearOpMode);
+        resetOdometry(linearOpMode);
         backRight.setPower(MotorPower);
         frontLeft.setPower(MotorPower);
         backLeft.setPower(MotorPower);
@@ -84,11 +67,11 @@ public class odometryMethods extends BasicRobotMethods {
         String running = "Normal";
         boolean offPoint = true;
 
-        while ((offPoint) && opModeIsActive()) {
-            telemetry.addData("running: ", running);
-            telemetry.addData("encoder value:", frontRight.getCurrentPosition());
-            telemetry.addData("encoder target:", EncoderTarget);
-            telemetry.update();
+        while ((offPoint) && linearOpMode.opModeIsActive()) {
+            linearOpMode.telemetry.addData("running: ", running);
+            linearOpMode.telemetry.addData("encoder value:", frontRight.getCurrentPosition());
+            linearOpMode.telemetry.addData("encoder target:", EncoderTarget);
+            linearOpMode.telemetry.update();
             int measure = Math.abs(EncoderTarget - horizontalEncoder.getCurrentPosition());
 
 
@@ -96,10 +79,10 @@ public class odometryMethods extends BasicRobotMethods {
                 //DriveForward(double MotorPower, int EncoderTarget);
             }
             if (forwardEncoder.getCurrentPosition() > EncoderTarget) {
-                ForwardCorrection(MotorPower, EncoderTarget);
+                forwardCorrection(MotorPower, EncoderTarget);
             }
             if (measure > horizonatalLeeway) {
-                HorizontalCorrection(MotorPower, EncoderTarget);
+                horizontalCorrection(MotorPower, EncoderTarget);
             }
             //check position
             if ((Math.abs(EncoderTarget - forwardEncoder.getCurrentPosition()) < forwardLeeway) && (Math.abs(EncoderTarget - horizontalEncoder.getCurrentPosition()) < horizonatalLeeway)) {

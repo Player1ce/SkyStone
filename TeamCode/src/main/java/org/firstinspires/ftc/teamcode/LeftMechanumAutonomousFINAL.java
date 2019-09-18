@@ -40,11 +40,7 @@ public class LeftMechanumAutonomousFINAL extends AutonomousMethods {
         sleep(500);
 
         //establishes whether gold block is to the  or not
-        if (goldX > 530 || goldX == 0) {
-            right = true;
-        } else {
-            right = false;
-        }
+        right = goldX > 530 || goldX == 0;
 
         //if gold block is seen, it is either right or middle and moves an x coordinate change of 40 based on position of gold block
         //also, checks time taking, should not take more than 5 seconds so stops there

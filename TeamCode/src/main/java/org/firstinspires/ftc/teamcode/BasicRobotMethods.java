@@ -536,10 +536,10 @@ public void test(){}
         elevator.setPower(0);
     }
 	@Override
-	public void resetOdometry() {
-		
+	public void resetOdometry(LinearOpMode linearOpMode) {
+
 	}
-	
+
 	@Override
 	public void horizontalCorrection(double MotorPower, int EncoderTarget){
 		
@@ -551,7 +551,7 @@ public void test(){}
 	}
 	
 	@Override
-	public void forwardMoveOdometry(double MotorPower, int EncoderTarget){
+	public void forwardMoveOdometry(double MotorPower, int EncoderTarget, LinearOpMode linearOpMode){
 		
 	}
 }
