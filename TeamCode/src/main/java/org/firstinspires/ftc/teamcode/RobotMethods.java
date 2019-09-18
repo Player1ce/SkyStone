@@ -35,4 +35,8 @@ public interface RobotMethods {
     void RotateLeftSpecialAngle(double MotorPower, double angleValue, LinearOpMode linearOpMode);
     void moveElevatorDown(double speed, LinearOpMode linearOpMode);
     void moveElevatorUp(double speed, LinearOpMode linearOpMode);
-}
+	void resetOdometry();
+	void horizontalCorrection(double MotorPower, int EncoderTarget);
+	void forwardCorrection(double MotorPower, int EncoderTarget);
+	void forwardMoveOdometry(double MotorPower, int EncoderTarget);
+	

@@ -535,4 +535,23 @@ public void test(){}
         }
         elevator.setPower(0);
     }
+	@Override
+	public void resetOdometry() {
+		
+	}
+	
+	@Override
+	public void horizontalCorrection(double MotorPower, int EncoderTarget){
+		
+	}
+	
+	@Override
+	public void forwardCorrection(double MotorPower, int EncoderTarget){
+		
+	}
+	
+	@Override
+	public void forwardMoveOdometry(double MotorPower, int EncoderTarget){
+		
+	}
 }
