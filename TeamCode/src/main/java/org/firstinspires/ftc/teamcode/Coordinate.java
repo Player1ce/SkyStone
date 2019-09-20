@@ -62,7 +62,7 @@ public class Coordinate extends AutonomousMethods {
 
         sleep(5000);
 
-        //movementMethods(.5, (int) InchesToPulses(distance));
+        //MovementMethods(.5, (int) InchesToPulses(distance));
 
 
 

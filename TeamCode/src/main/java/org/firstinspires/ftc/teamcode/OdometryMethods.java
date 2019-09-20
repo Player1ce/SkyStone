@@ -3,15 +3,18 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-public class odometryMethods extends BasicRobotMethods {
+public class OdometryMethods extends BasicRobotMethods {
 	DcMotor horizontalEncoder;
     DcMotor forwardEncoder;
+    LinearOpMode linearOpMode;
 	
 	int forwardLeeway = 15;
     int horizonatalLeeway = 15;
+
+
 	
 	@Override
-	public void resetOdometry(LinearOpMode linearOpMode) {
+	public void resetOdometry() {
 		forwardEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         horizontalEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
@@ -57,9 +60,9 @@ public class odometryMethods extends BasicRobotMethods {
 	}
 	
 	@Override
-	public void forwardMoveOdometry(double MotorPower, int EncoderTarget, LinearOpMode linearOpMode){
-	    ResetEncoders(linearOpMode);
-        resetOdometry(linearOpMode);
+	public void forwardMoveOdometry(double MotorPower, int EncoderTarget){
+	    ResetEncoders();
+        resetOdometry();
         backRight.setPower(MotorPower);
         frontLeft.setPower(MotorPower);
         backLeft.setPower(MotorPower);

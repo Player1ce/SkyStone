@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.AutonomousMethods;
 
 
 //@Disabled
-public abstract class movementMethods extends AutonomousMethods {
+public abstract class MovementMethods extends AutonomousMethods {
     //stores Autonomous movement methods
 
     //Basic auto movement -----------------------------------------------------------------------------------------------------

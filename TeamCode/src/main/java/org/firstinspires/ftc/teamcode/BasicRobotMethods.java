@@ -21,6 +21,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 //TODO: make inches to pulses conversions accurate
 public class BasicRobotMethods implements RobotMethods{
+    LinearOpMode linearOpMode;
     DcMotor frontLeft;
     DcMotor frontRight;
     DcMotor backLeft;
@@ -159,7 +160,7 @@ public void test(){}
 
 
     @Override
-    public void ResetEncoders(LinearOpMode linearOpMode) {
+    public void ResetEncoders() {
         frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -215,8 +216,8 @@ public void test(){}
 
 
     @Override
-    public void ForwardMove(double MotorPower, int EncoderTarget, LinearOpMode linearOpMode) {
-        ResetEncoders(linearOpMode);
+    public void ForwardMove(double MotorPower, int EncoderTarget) {
+        ResetEncoders();
 
         backRight.setPower(MotorPower);
         frontLeft.setPower(MotorPower);
@@ -235,8 +236,8 @@ public void test(){}
 
 
     @Override
-    public void ForwardMove(double MotorPower, int EncoderTarget, boolean stop, LinearOpMode linearOpMode) {
-        ResetEncoders(linearOpMode);
+    public void ForwardMove(double MotorPower, int EncoderTarget, boolean stop) {
+        ResetEncoders();
         backRight.setPower(MotorPower);
         frontLeft.setPower(MotorPower);
         backLeft.setPower(MotorPower);
@@ -253,8 +254,8 @@ public void test(){}
 
 
     @Override
-    public void BackwardMove(double MotorPower, int EncoderTarget, boolean stop, LinearOpMode linearOpMode) {
-        ResetEncoders(linearOpMode);
+    public void BackwardMove(double MotorPower, int EncoderTarget, boolean stop) {
+        ResetEncoders();
         backRight.setPower(-MotorPower);
         frontLeft.setPower(-MotorPower);
         backLeft.setPower(-MotorPower);
@@ -271,8 +272,8 @@ public void test(){}
 
 
     @Override
-    public void ForwardMoveInches(double MotorPower, double Inches, LinearOpMode linearOpMode) {
-        ResetEncoders(linearOpMode);
+    public void ForwardMoveInches(double MotorPower, double Inches) {
+        ResetEncoders();
 
         backRight.setPower(MotorPower);
         frontLeft.setPower(MotorPower);
@@ -300,8 +301,8 @@ public void test(){}
 
 
     @Override
-    public void BackwardMove(double MotorPower, int EncoderTarget, LinearOpMode linearOpMode) {
-        ResetEncoders(linearOpMode);
+    public void BackwardMove(double MotorPower, int EncoderTarget) {
+        ResetEncoders();
 
         backRight.setPower(-MotorPower);
         frontLeft.setPower(-MotorPower);
@@ -321,8 +322,8 @@ public void test(){}
 
 
     @Override
-    public void BackwardMoveInches(double MotorPower, double Inches, LinearOpMode linearOpMode) {
-        ResetEncoders(linearOpMode);
+    public void BackwardMoveInches(double MotorPower, double Inches) {
+        ResetEncoders();
 
         backRight.setPower(-MotorPower);
         frontLeft.setPower(-MotorPower);
@@ -352,8 +353,8 @@ public void test(){}
 
 
     @Override
-    public void LeftMove(double MotorPower, int EncoderTarget, LinearOpMode linearOpMode) {
-        ResetEncoders(linearOpMode);
+    public void LeftMove(double MotorPower, int EncoderTarget) {
+        ResetEncoders();
         frontRight.setPower(MotorPower);
         backRight.setPower(-MotorPower);
         frontLeft.setPower(-MotorPower);
@@ -382,8 +383,8 @@ public void test(){}
 
 
     @Override
-    public void RightMove(double MotorPower, int EncoderTarget, LinearOpMode linearOpMode) {
-        ResetEncoders(linearOpMode);
+    public void RightMove(double MotorPower, int EncoderTarget) {
+        ResetEncoders();
         frontRight.setPower(-MotorPower);
         backRight.setPower(MotorPower);
         frontLeft.setPower(MotorPower);
@@ -402,7 +403,7 @@ public void test(){}
 
 
     @Override
-    public void RotateRightAngle(double MotorPower, double angleValue, boolean strong, double k1, double k2, LinearOpMode linearOpMode) {
+    public void RotateRightAngle(double MotorPower, double angleValue, boolean strong, double k1, double k2) {
         double startTime = System.currentTimeMillis();
         double lastAngle = 0;
         while (Math.abs(GetIMUHeading()) < angleValue && linearOpMode.opModeIsActive()) {
@@ -442,7 +443,7 @@ public void test(){}
 
 
     @Override
-    public void RotateLeftAngle(double MotorPower, double angleValue, LinearOpMode linearOpMode) {
+    public void RotateLeftAngle(double MotorPower, double angleValue) {
         double startTime = System.currentTimeMillis();
         double lastAngle = 0;
         while ((Math.abs(GetIMUHeading())) > angleValue && linearOpMode.opModeIsActive()) {
@@ -467,7 +468,7 @@ public void test(){}
 
 
     @Override
-    public void RotateRightSpecialAngle(double MotorPower, double angleValue, LinearOpMode linearOpMode) {
+    public void RotateRightSpecialAngle(double MotorPower, double angleValue) {
         double startTime = System.currentTimeMillis();
         double lastAngle = 0;
         while (GetIMUHeading() > angleValue && linearOpMode.opModeIsActive()) {
@@ -493,7 +494,7 @@ public void test(){}
 
 
     @Override
-    public void RotateLeftSpecialAngle(double MotorPower, double angleValue, LinearOpMode linearOpMode) {
+    public void RotateLeftSpecialAngle(double MotorPower, double angleValue) {
 // while ((Math.abs(GetIMUHeading())) > angleValue) {
         double startTime = System.currentTimeMillis();
         double lastAngle = 0;
@@ -520,7 +521,7 @@ public void test(){}
 
 
     @Override
-    public void moveElevatorDown(double speed, LinearOpMode linearOpMode) {
+    public void moveElevatorDown(double speed) {
         while (bottomLimitSwitch.getState() && linearOpMode.opModeIsActive()) {
             elevator.setPower(-speed);
         }
@@ -529,14 +530,14 @@ public void test(){}
 
 
     @Override
-    public void moveElevatorUp(double speed, LinearOpMode linearOpMode) {
+    public void moveElevatorUp(double speed) {
         while (topLimitSwitch.getState() && linearOpMode.opModeIsActive()) {
             elevator.setPower(speed);
         }
         elevator.setPower(0);
     }
 	@Override
-	public void resetOdometry(LinearOpMode linearOpMode) {
+	public void resetOdometry() {
 
 	}
 
@@ -551,7 +552,7 @@ public void test(){}
 	}
 	
 	@Override
-	public void forwardMoveOdometry(double MotorPower, int EncoderTarget, LinearOpMode linearOpMode){
+	public void forwardMoveOdometry(double MotorPower, int EncoderTarget){
 		
 	}
 }
