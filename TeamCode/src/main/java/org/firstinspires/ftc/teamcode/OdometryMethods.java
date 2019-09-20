@@ -31,10 +31,10 @@ public class OdometryMethods extends BasicRobotMethods {
 
         while (error > horizonatalLeeway) {
             if ((EncoderTarget - horizontalEncoder.getCurrentPosition()) < 0) {
-                //DriveLeft(double MotorPower, int EncoderTarget);
+                LeftMove(MotorPower, EncoderTarget);
             }
             if ((EncoderTarget - horizontalEncoder.getCurrentPosition()) > 0) {
-                //DriveRight(double MotorPower, int EncoderTarget);
+                RightMove(MotorPower, EncoderTarget);
             }
 
         }
@@ -48,10 +48,10 @@ public class OdometryMethods extends BasicRobotMethods {
 
         while (error > forwardLeeway) {
             if ((EncoderTarget - forwardEncoder.getCurrentPosition()) < 0) {
-                //DriveBackward(double MotorPower, int EncoderTarget);
+                BackwardMove(MotorPower, EncoderTarget);
             }
             if ((EncoderTarget - forwardEncoder.getCurrentPosition()) > 0) {
-                //DriveForward(double MotorPower, int EncoderTarget);
+                ForwardMove(MotorPower,EncoderTarget);
             }
 
         }
@@ -79,7 +79,7 @@ public class OdometryMethods extends BasicRobotMethods {
 
 
             if (forwardEncoder.getCurrentPosition() < EncoderTarget) {
-                //DriveForward(double MotorPower, int EncoderTarget);
+                ForwardMove(MotorPower, EncoderTarget);
             }
             if (forwardEncoder.getCurrentPosition() > EncoderTarget) {
                 forwardCorrection(MotorPower, EncoderTarget);

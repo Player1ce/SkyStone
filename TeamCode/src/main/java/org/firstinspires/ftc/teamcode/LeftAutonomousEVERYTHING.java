@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 @Autonomous(name= "LeftAutonomousEVERYTHING", group="FINAL Rover Ruckus")
 public class LeftAutonomousEVERYTHING extends AutonomousMethods {
-    RobotMethods robotMethods=new BasicRobotMethods();
+    RobotMethods robotMethods=new OdometryMethods();
 
     public void runOpMode() throws InterruptedException {
         robotMethods.InitializeHardware(this);
