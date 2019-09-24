@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 @TeleOp(name="TonkaTeleop", group="FINAL Rover Ruckus")
 //@Disabled
 public class TonkaTeleop extends OpMode {
+    RobotMethods robot = new TeleOpMethods();
 
     boolean reverse = false;
 
@@ -126,6 +127,7 @@ public class TonkaTeleop extends OpMode {
 
 
         //hook controller
+        //TODO should be able to replace with: robot.hookController(gamepad1);
         if (gamepad1.left_bumper) {
             leftHook.setPosition(1);
             rightHook.setPosition(1);
