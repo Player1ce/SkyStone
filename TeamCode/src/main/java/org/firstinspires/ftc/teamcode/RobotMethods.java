@@ -63,5 +63,7 @@ public interface RobotMethods {
     void forwardCorrection(double MotorPower, int EncoderTarget);
 
     void forwardMoveOdometry(double MotorPower, int EncoderTarget);
+
+    void backwardMoveOdometry(double MotorPower, int EncoderTarget);
 }
 	
