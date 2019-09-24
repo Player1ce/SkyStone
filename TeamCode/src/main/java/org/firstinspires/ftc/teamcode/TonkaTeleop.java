@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp(name="TonkaTeleop", group="FINAL Rover Ruckus")
 //@Disabled
@@ -17,6 +18,10 @@ public class TonkaTeleop extends OpMode {
     DcMotor frontLeft;
     DcMotor backRight;
     DcMotor backLeft;
+    Servo leftHook;
+    Servo rightHook;
+    Servo testServo;
+
 
     //constants delcared; used to allow us to decrease available motor power which yields greater precision
     final double CONSTANT = 1.0;
@@ -33,6 +38,7 @@ public class TonkaTeleop extends OpMode {
     double frontLeftPower; //-right
     double backRightPower; //-right
     double backLeftPower;
+    double hookPosition = 1;
 
 
     public void init() {
@@ -48,6 +54,12 @@ public class TonkaTeleop extends OpMode {
         backRight = hardwareMap.dcMotor.get("backRight");
 
         backLeft = hardwareMap.dcMotor.get("backLeft");
+
+        //making servo configuration names
+        leftHook = hardwareMap.servo.get("leftHook");
+        rightHook = hardwareMap.servo.get("rightHook");
+        testServo = hardwareMap.servo.get("testServo");
+
 
 
         //attaching configuration names to limit switches;
@@ -103,19 +115,30 @@ public class TonkaTeleop extends OpMode {
         backLeft.setPower(backLeftPower);
 
 
-
         //telemetry is used to show on the driver controller phone what the code sees
         //this particular telemetry shows the state of the top and bottom limit switch which wil/ either be true
         //or false since limit switches are booleans
         if (reverse) {
             telemetry.addData("F/R:", "REVERSE");
-        }else {
+        } else {
             telemetry.addData("F/R:", "FORWARD");
         }
         telemetry.update();
 
+
+        //hook controller
+        if (gamepad1.left_bumper) {
+            leftHook.setPosition(1);
+            rightHook.setPosition(1);
+        } else if (gamepad1.right_bumper) {
+            leftHook.setPosition(0);
+            rightHook.setPosition(0);
+        }
+
+        if (gamepad1.b) {
+            testServo.setPosition(1);
+        }
+
     }
-
-
 
 }
