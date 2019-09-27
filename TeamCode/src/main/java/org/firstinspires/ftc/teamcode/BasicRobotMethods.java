@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import android.graphics.Path;
-
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
@@ -10,7 +8,6 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
-import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
@@ -20,7 +17,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-
+import com.qualcomm.robotcore.hardware.Gamepad;
 
 //TODO: make inches to pulses conversions accurate
 public class BasicRobotMethods implements RobotMethods{
@@ -67,7 +64,7 @@ public class BasicRobotMethods implements RobotMethods{
 public void test(){}
 
     @Override
-    public void InitializeHardware (OpMode opMode) {
+    public void InitializeHardware () {
         HardwareMap hardwareMap=opMode.hardwareMap;
 
         //initalize motors and set direction and mode
@@ -168,7 +165,6 @@ public void test(){}
         //return -angles.thirdAngle;
     }
 
-
     @Override
     public void ResetEncoders() {
         frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -185,7 +181,6 @@ public void test(){}
 
     }
 
-
     @Override
     public void StopMotors() {
         frontLeft.setPower(0);
@@ -194,7 +189,6 @@ public void test(){}
         backRight.setPower(0);
 
     }
-
 
     @Override
     public double InchesToPulses(double Inches){
@@ -205,7 +199,6 @@ public void test(){}
 
     } // TODO THIS NEEDS TO BE VERIFIED!!!
 
-
     @Override
     public double PulsesToInches(double Pulses){
 
@@ -214,7 +207,6 @@ public void test(){}
         return Pulses / PulsesPerInch;
 
     } // TODO THIS NEEDS TO BE VERIFIED!!!
-
 
     @Override
     public void ForwardMove(double MotorPower) {
@@ -571,22 +563,15 @@ public void test(){}
 
     }
 
-    @Override
+    /*@Override
     public void hookController(Gamepad gamepad) {
 
-    }
+    }*/
 
     @Override
     public void moveHook(String position) {
-        position = position.toLowerCase();
-        if (position == "up") {
-            leftHook.setPosition(1);
-            rightHook.setPosition(1);
-        } else if (position == "down") {
-            leftHook.setPosition(0);
-            rightHook.setPosition(0);
-        }
 
     }
+
 
 }
