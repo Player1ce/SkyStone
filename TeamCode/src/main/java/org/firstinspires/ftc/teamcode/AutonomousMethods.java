@@ -1049,7 +1049,6 @@ public abstract class AutonomousMethods extends LinearOpMode {
         StopMotors();
     }
 
-
 }
 
 

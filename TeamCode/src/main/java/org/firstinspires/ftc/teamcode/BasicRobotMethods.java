@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.graphics.Path;
+
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
@@ -8,6 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
@@ -22,12 +25,15 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 //TODO: make inches to pulses conversions accurate
 public class BasicRobotMethods implements RobotMethods{
     LinearOpMode linearOpMode;
+    OpMode opMode;
     DcMotor frontLeft;
     DcMotor frontRight;
     DcMotor backLeft;
     DcMotor backRight;
     DcMotor horizontalEncoder;
     DcMotor forwardEncoder;
+    Servo leftHook;
+    Servo rightHook;
     BNO055IMU imu;
     ModernRoboticsI2cGyro gyro;
     ModernRoboticsI2cRangeSensor rangeSensor;
@@ -90,6 +96,10 @@ public void test(){}
 
         forwardEncoder = hardwareMap.dcMotor.get("forwardEncoder");
         forwardEncoder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        //initialize hook system
+        leftHook = hardwareMap.servo.get("leftHook");
+        rightHook = hardwareMap.servo.get("rightHook");
 
         //brake system
         frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -555,4 +565,28 @@ public void test(){}
 	public void forwardMoveOdometry(double MotorPower, int EncoderTarget){
 		
 	}
+
+	@Override
+    public void backwardMoveOdometry(double MotorPower, int EncoderTarget) {
+
+    }
+
+    @Override
+    public void hookController(Gamepad gamepad) {
+
+    }
+
+    @Override
+    public void moveHook(String position) {
+        position = position.toLowerCase();
+        if (position == "up") {
+            leftHook.setPosition(1);
+            rightHook.setPosition(1);
+        } else if (position == "down") {
+            leftHook.setPosition(0);
+            rightHook.setPosition(0);
+        }
+
+    }
+
 }

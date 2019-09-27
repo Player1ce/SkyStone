@@ -1,7 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.graphics.Path;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.Gamepad;
 
 public interface RobotMethods {
     void InitializeHardware(OpMode opMode);
@@ -63,5 +67,11 @@ public interface RobotMethods {
     void forwardCorrection(double MotorPower, int EncoderTarget);
 
     void forwardMoveOdometry(double MotorPower, int EncoderTarget);
+
+    void backwardMoveOdometry(double MotorPower, int EncoderTarget);
+
+    void hookController(Gamepad gamepad);
+
+    void moveHook(String position);
 }
 	
