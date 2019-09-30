@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 public interface RobotMethods {
-    void InitializeHardware(OpMode opMode);
+    void InitializeHardware();
 
     void InitializeIMU();
 
@@ -70,7 +70,7 @@ public interface RobotMethods {
 
     void backwardMoveOdometry(double MotorPower, int EncoderTarget);
 
-    void hookController(Gamepad gamepad);
+    //void hookController(Gamepad gamepad);
 
     void moveHook(String position);
 }

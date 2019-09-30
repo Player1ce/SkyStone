@@ -63,7 +63,7 @@ public class TeleOpMethods extends BasicRobotMethods {
 
 
     //method to control hooks in TeleOp (still needs testing)
-    @Override
+    /*@Override
     public void hookController(Gamepad gamepad) {
         if (gamepad.left_bumper) {
             leftHook.setPosition(1);
@@ -72,6 +72,6 @@ public class TeleOpMethods extends BasicRobotMethods {
             leftHook.setPosition(0);
             rightHook.setPosition(0);
         }
-    }
+    }*/
 
 }
