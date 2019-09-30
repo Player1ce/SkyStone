@@ -20,9 +20,16 @@ public class TankTeleOp extends OpMode {
     DcMotor backRight;
     DcMotor backLeft;
 
+    DcMotor elevator;
+
+    DigitalChannel bottomLimitSwitch;
+    DigitalChannel topLimitSwitch;
+
     boolean reverse = false;
 
     final double CONSTANT = 1.0;
+    final double ELEVATOR_SPEED = .6;
+
 
 
     double x_left;
@@ -46,6 +53,11 @@ public class TankTeleOp extends OpMode {
 
         backRight = hardwareMap.dcMotor.get("backRight");
         backLeft = hardwareMap.dcMotor.get("backLeft");
+
+        elevator = hardwareMap.dcMotor.get("elevator");
+
+        bottomLimitSwitch = hardwareMap.digitalChannel.get("bottomLimitSwitch");
+        topLimitSwitch = hardwareMap.digitalChannel.get("topLimitSwitch");
 
 
     }
@@ -97,6 +109,19 @@ public class TankTeleOp extends OpMode {
         frontLeft.setPower(frontLeftPower);
         backRight.setPower(backRightPower);
         backLeft.setPower(backLeftPower);
+
+
+        //code for the hanging arm's elevator
+        //right and left trigger are float values meaning they can accept variable control
+        //this allows us to determine how fast or slow we want to ascend and descend.
+        if (gamepad2.right_trigger > 0.1 && topLimitSwitch.getState()) {
+            elevator.setPower(gamepad2.right_trigger);   //
+
+        } else if (gamepad2.left_trigger > 0.1 && bottomLimitSwitch.getState()) {
+            elevator.setPower(-gamepad2.left_trigger); //
+        } else {
+            elevator.setPower(0);
+        }
 
 
 
