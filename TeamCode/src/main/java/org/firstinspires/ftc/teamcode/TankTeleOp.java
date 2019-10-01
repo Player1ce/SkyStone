@@ -19,6 +19,7 @@ public class TankTeleOp extends OpMode {
     DcMotor frontLeft;
     DcMotor backRight;
     DcMotor backLeft;
+    //DcMotor spool;
 
     DcMotor elevator;
 
@@ -28,7 +29,6 @@ public class TankTeleOp extends OpMode {
     Servo hookServo;
 
     boolean reverse = false;
-
     final double CONSTANT = 1.0;
     final double ELEVATOR_SPEED = .6;
 
@@ -56,7 +56,10 @@ public class TankTeleOp extends OpMode {
         backRight = hardwareMap.dcMotor.get("backRight");
         backLeft = hardwareMap.dcMotor.get("backLeft");
 
-       // elevator = hardwareMap.dcMotor.get("elevator");
+        //spool setup
+        //spool = hardwareMap.dcMotor.get("spool");
+
+        //elevator = hardwareMap.dcMotor.get("elevator");
 
         hookServo = hardwareMap.servo.get ("hookServo");
 
@@ -82,12 +85,16 @@ public class TankTeleOp extends OpMode {
 
         x_left = gamepad1.left_stick_x;
 
+
         if (!reverse) {
             x_right = gamepad1.right_stick_x;
             y_left = -gamepad1.left_stick_y;
         } else {
-            x_right = -gamepad1.right_stick_x;
-            y_left = gamepad1.left_stick_y;
+            double store2 = -gamepad1.right_stick_x;
+            double store3 = gamepad1.left_stick_y;
+            x_right = store2;
+            y_left = store3;
+
         }
 
 
@@ -96,8 +103,8 @@ public class TankTeleOp extends OpMode {
         backRightPower = (y_left + x_right + x_left) * CONSTANT; //-right
         backLeftPower = (y_left - x_right - x_left) * CONSTANT;
 
-
-        /*if (!reverse) {
+        /*
+        if (!reverse) {
             frontRight.setPower(frontRightPower);
             frontLeft.setPower(frontLeftPower);
             backRight.setPower(backRightPower);
@@ -107,7 +114,8 @@ public class TankTeleOp extends OpMode {
             frontLeft.setPower(-frontLeftPower);
             backRight.setPower(-backRightPower);
             backLeft.setPower(-backLeftPower);
-        }*/
+        }
+        */
 
         frontRight.setPower(frontRightPower);
         frontLeft.setPower(frontLeftPower);
@@ -116,26 +124,12 @@ public class TankTeleOp extends OpMode {
 
         if (gamepad1.x)  {
             hookServo.setPosition(0);
+            //hookServo.setPosition(.47);
         }
         else if (gamepad1.y)  {
             hookServo.setPosition(1);
         }
 
-
-
-        //code for the hanging arm's elevator
-        //right and left trigger are float values meaning they can accept variable control
-        //this allows us to determine how fast or slow we want to ascend and descend.
-       /* if (gamepad2.right_trigger > 0.1 && topLimitSwitch.getState()) {
-            elevator.setPower(gamepad2.right_trigger);   //
-
-        } else if (gamepad2.left_trigger > 0.1 && bottomLimitSwitch.getState()) {
-            elevator.setPower(-gamepad2.left_trigger); //
-        } else {
-            elevator.setPower(0);
-        }
-
-*/
 
         //telemetry is used to show on the driver controller phone what the code sees
         //this particular telemetry shows the state of the top and bottom limit switch which wil/ either be true
@@ -147,6 +141,18 @@ public class TankTeleOp extends OpMode {
         }
         telemetry.update();
 
+        /*
+        if (gamepad1.right_trigger > 0) {
+            spool.setPower(gamepad1.right_trigger * CONSTANT);
+        } else if (gamepad1.left_trigger > 0) {
+            spool.setPower(gamepad1.left_trigger * CONSTANT);
+        }
+         */
+
+        if (gamepad1.b) {
+            boolean store = !reverse;
+            reverse = store;
+        }
 
     }
 

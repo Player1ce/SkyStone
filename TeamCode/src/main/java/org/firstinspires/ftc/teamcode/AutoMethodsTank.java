@@ -72,5 +72,16 @@ public class AutoMethodsTank extends BasicRobotMethods{
         //return -angles.thirdAngle;
     }
 
+    @Override
+    public void moveHook(String position){
+        String fixedPosition = position.toLowerCase();
+        if (fixedPosition == "up")  {
+            hookServo.setPosition(0);
+        }
+        else if (fixedPosition == "down")  {
+            hookServo.setPosition(1);
+        }
+    }
+
 
 }

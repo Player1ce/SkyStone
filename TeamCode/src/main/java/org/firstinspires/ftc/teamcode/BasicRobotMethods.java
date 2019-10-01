@@ -29,8 +29,7 @@ public class BasicRobotMethods implements RobotMethods{
     DcMotor backRight;
     DcMotor horizontalEncoder;
     DcMotor forwardEncoder;
-    Servo leftHook;
-    Servo rightHook;
+    Servo hookServo;
     BNO055IMU imu;
     ModernRoboticsI2cGyro gyro;
     ModernRoboticsI2cRangeSensor rangeSensor;
@@ -95,8 +94,7 @@ public void test(){}
         forwardEncoder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         //initialize hook system
-        leftHook = hardwareMap.servo.get("leftHook");
-        rightHook = hardwareMap.servo.get("rightHook");
+        hookServo = hardwareMap.servo.get("hookServo");
 
         //brake system
         frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
