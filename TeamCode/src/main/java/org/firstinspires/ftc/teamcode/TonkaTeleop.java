@@ -19,6 +19,7 @@ public class TonkaTeleop extends OpMode {
     DcMotor frontLeft;
     DcMotor backRight;
     DcMotor backLeft;
+    //DcMotor spool;
     Servo leftHook;
     Servo rightHook;
     Servo testServo;
@@ -39,6 +40,7 @@ public class TonkaTeleop extends OpMode {
     double frontLeftPower; //-right
     double backRightPower; //-right
     double backLeftPower;
+    double spoolPower;
 
 
     public void init() {
@@ -54,6 +56,8 @@ public class TonkaTeleop extends OpMode {
         backRight = hardwareMap.dcMotor.get("backRight");
 
         backLeft = hardwareMap.dcMotor.get("backLeft");
+
+        //spool = hardwareMap.dcMotor.get("spool");
 
         //making servo configuration names
         leftHook = hardwareMap.servo.get("leftHook");
@@ -135,6 +139,16 @@ public class TonkaTeleop extends OpMode {
             leftHook.setPosition(0);
             rightHook.setPosition(0);
         }
+
+        /*
+        // Spool control: left for up, right for dowm.
+        //WARNING: Be very careful with the speed here. The motor power is set based on how far the trigger is pulled.
+        if (gamepad1.right_trigger > 0) {
+            spool.setPower(gamepad1.right_trigger);
+        } else if (gamepad1.left_trigger > 0) {
+            spool.setPower(-gamepad1.left_trigger)
+        }
+        */
 
     }
 
