@@ -25,6 +25,8 @@ public class TankTeleOp extends OpMode {
     DigitalChannel bottomLimitSwitch;
     DigitalChannel topLimitSwitch;
 
+    Servo hookServo;
+
     boolean reverse = false;
 
     final double CONSTANT = 1.0;
@@ -54,11 +56,13 @@ public class TankTeleOp extends OpMode {
         backRight = hardwareMap.dcMotor.get("backRight");
         backLeft = hardwareMap.dcMotor.get("backLeft");
 
-        elevator = hardwareMap.dcMotor.get("elevator");
+       // elevator = hardwareMap.dcMotor.get("elevator");
 
-        bottomLimitSwitch = hardwareMap.digitalChannel.get("bottomLimitSwitch");
+        hookServo = hardwareMap.servo.get ("hookServo");
+
+       /* bottomLimitSwitch = hardwareMap.digitalChannel.get("bottomLimitSwitch");
         topLimitSwitch = hardwareMap.digitalChannel.get("topLimitSwitch");
-
+*/
 
     }
 
@@ -110,11 +114,19 @@ public class TankTeleOp extends OpMode {
         backRight.setPower(backRightPower);
         backLeft.setPower(backLeftPower);
 
+        if (gamepad1.x)  {
+            hookServo.setPosition(0);
+        }
+        else if (gamepad1.y)  {
+            hookServo.setPosition(1);
+        }
+
+
 
         //code for the hanging arm's elevator
         //right and left trigger are float values meaning they can accept variable control
         //this allows us to determine how fast or slow we want to ascend and descend.
-        if (gamepad2.right_trigger > 0.1 && topLimitSwitch.getState()) {
+       /* if (gamepad2.right_trigger > 0.1 && topLimitSwitch.getState()) {
             elevator.setPower(gamepad2.right_trigger);   //
 
         } else if (gamepad2.left_trigger > 0.1 && bottomLimitSwitch.getState()) {
@@ -123,7 +135,7 @@ public class TankTeleOp extends OpMode {
             elevator.setPower(0);
         }
 
-
+*/
 
         //telemetry is used to show on the driver controller phone what the code sees
         //this particular telemetry shows the state of the top and bottom limit switch which wil/ either be true

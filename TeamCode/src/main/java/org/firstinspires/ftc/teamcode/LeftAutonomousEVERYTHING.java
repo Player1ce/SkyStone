@@ -7,7 +7,7 @@ public class LeftAutonomousEVERYTHING extends AutonomousMethods {
     RobotMethods robotMethods=new OdometryMethods();
 
     public void runOpMode() throws InterruptedException {
-        robotMethods.InitializeHardware(this);
+        //robotMethods.InitializeHardware(this);
 
         InitializeHardware();
         robotMethods.InitializeIMU();
