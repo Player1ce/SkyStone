@@ -60,8 +60,6 @@ public class BasicRobotMethods implements RobotMethods{
     long startTime;
     boolean bad;
 
-public void test(){}
-
     @Override
     public void InitializeHardware () {
         HardwareMap hardwareMap=opMode.hardwareMap;
@@ -119,9 +117,7 @@ public void test(){}
         //intake = hardwareMap.dcMotor.get("intake");
 
         //  random variables
-        boolean bad = false;
 
-        int goldX = 0;
     }
 
 
@@ -205,6 +201,11 @@ public void test(){}
         return Pulses / PulsesPerInch;
 
     } // TODO THIS NEEDS TO BE VERIFIED!!!
+
+    @Override
+    public void startTime() {
+        startTime = System.currentTimeMillis();
+    }
 
     @Override
     public void ForwardMove(double MotorPower) {

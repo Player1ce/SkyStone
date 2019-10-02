@@ -22,6 +22,8 @@ public interface RobotMethods {
 
     double PulsesToInches(double Pulses);
 
+    void startTime();
+
     void ForwardMove(double MotorPower);
 
     void ForwardMove(double MotorPower, int EncoderTarget);

@@ -1,22 +1,19 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-public class AutoMethodsTank extends BasicRobotMethods{
-    LinearOpMode linearOpMode;
-    OpMode opMode;
-    DcMotor frontLeft;
+public class AutoMethodsGoBildaChassis extends BasicRobotMethods {
+
     DcMotor frontRight;
-    DcMotor backLeft;
+    DcMotor frontLeft;
     DcMotor backRight;
-    Servo hookServo;
+    DcMotor backLeft;
 
-    final double WHEEL_DIAMETER = 6;
-    final int NR40_PPR = 1120;
-    final double DRIVE_WHEEL_GEAR_RATIO = 1;
+    Servo hookServo;
+    final double CONSTANT = 1.0;
+    final double ELEVATOR_SPEED = .6;
+    final double INTAKE_SPEED = .7;
 
     @Override
     public void InitializeHardware() {
@@ -53,6 +50,5 @@ public class AutoMethodsTank extends BasicRobotMethods{
             hookServo.setPosition(1);
         }
     }
-
 
 }
