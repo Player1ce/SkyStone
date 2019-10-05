@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 
 @SuppressWarnings("StatementWithEmptyBody")
-@TeleOp(name="Tank TeleOp", group="FINAL Rover Ruckus")
+@TeleOp(name="Tank TeleOp", group="Skystone")
 //@Disabled
 
 

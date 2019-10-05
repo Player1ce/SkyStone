@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@TeleOp(name="GoBildaChassisTeleop", group="FINAL Rover Ruckus")
+@TeleOp(name="GoBildaChassisTeleop", group="Skystone")
 //@Disabled
 public class GoBildaChassisTeleop extends OpMode {
     private RobotMethods robot = new TeleOpMethods();

@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
+@Disabled
 @Autonomous(name= "LeftMechanumAutonomousFINAL", group="FINAL Rover Ruckus")
 public class LeftMechanumAutonomousFINAL extends AutonomousMethods {
 
