@@ -14,7 +14,9 @@ public class TankAutonomous extends LinearOpMode {
         waitForStart();
         robot.startTime();
 
-        robot.hookServo.setPosition(.47);
+        robot.moveHook("up");
+
+        robot.hookServo.setPosition(25);
 
     }
 

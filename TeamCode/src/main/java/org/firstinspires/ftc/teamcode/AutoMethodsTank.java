@@ -47,7 +47,7 @@ public class AutoMethodsTank extends BasicRobotMethods{
     public void moveHook(String position){
         String fixedPosition = position.toLowerCase();
         if (fixedPosition.equals("up"))  {
-            hookServo.setPosition(.45);
+            hookServo.setPosition(.47);
         }
         else if (fixedPosition.equals("down"))  {
             hookServo.setPosition(1);
