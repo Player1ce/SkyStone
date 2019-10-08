@@ -529,10 +529,6 @@ public abstract class BasicRobotMethods implements RobotMethods{
 
     }
 
-    public void setMovementVars (Gamepad gamepad1, boolean reverse) {
-
-    }
-
     public void setPower (double frontRightPower, double frontLeftPower, double backRightPower, double backLeftPower) {
     }
 

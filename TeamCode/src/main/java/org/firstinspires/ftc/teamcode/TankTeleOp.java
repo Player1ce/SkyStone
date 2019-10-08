@@ -17,6 +17,8 @@ public class TankTeleOp extends OpMode {
 
     ButtonOneShot aButtonLogic=new ButtonOneShot();
 
+    SetPowerVariables setVars = new SetPowerVariables();
+
     Servo hookServo;
 
     boolean reverse = false;
@@ -48,13 +50,30 @@ public class TankTeleOp extends OpMode {
 
     public void loop() {
 
+        //TODO test this for functionality. Is it worth it?
+        setVars.setMovementVars(gamepad1, reverse);
+        telemetry.addData("x_left:", setVars.x_left);
+        telemetry.addData("x_right:", setVars.x_right);
+        telemetry.addData("y_left:", setVars.y_left);
+        double x_left = setVars.x_left;
+        double x_right = setVars.x_right;
+        double y_left = setVars.y_left;
 
+        /*
+        x_left = gamepad1.left_stick_x;
+        if (!reverse) {
+            x_right = gamepad1.right_stick_x;
+            y_left = -gamepad1.left_stick_y;
+        } else {
+            x_right = -gamepad1.right_stick_x;
+            y_left = gamepad1.left_stick_y;
+        }
+         */
 
         frontRightPower = (y_left - x_right + x_left) * CONSTANT; //-right
         frontLeftPower = (y_left + x_right - x_left) * CONSTANT; //-right
         backRightPower = (y_left + x_right + x_left) * CONSTANT; //-right
         backLeftPower = (y_left - x_right - x_left) * CONSTANT;
-
 
         robot.setPower(frontRightPower, frontLeftPower, backRightPower, backLeftPower);
 

@@ -42,22 +42,8 @@ public class TeleOpMethods extends BasicRobotMethods {
 
         //spool = hardwareMap.dcMotor.get("spool");
     }
-    /*TODO
-    public double setMovementVars (Gamepad gamepad1, boolean reverse) {
-        double x_left;
-        double x_right;
-        double y_left;
-        x_left = gamepad1.left_stick_x;
-        if (!reverse) {
-            x_right = gamepad1.right_stick_x;
-            y_left = -gamepad1.left_stick_y;
-        } else {
-            x_right = -gamepad1.right_stick_x;
-            y_left = gamepad1.left_stick_y;
-        }
-        return x_left;
-    }
-    */
+
+
 
     public void setPower (double frontRightPower, double frontLeftPower, double backRightPower, double backLeftPower) {
         frontRight.setPower(frontRightPower);

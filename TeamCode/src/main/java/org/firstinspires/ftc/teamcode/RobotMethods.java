@@ -67,8 +67,6 @@ public interface RobotMethods {
 
     void moveHook(String position);
 
-    void setMovementVars(Gamepad gamepad1, boolean reverse);
-
     void setPower (double frontRight, double frontLeft, double backRight, double backLeft);
 
 
