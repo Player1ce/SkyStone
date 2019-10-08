@@ -13,18 +13,15 @@ import com.qualcomm.robotcore.hardware.Servo;
 //@Disabled
 public class TankTeleOp extends OpMode {
     private TeleOpMethods robot = new TeleOpMethods();
-    //DcMotor spool;
-
-    ButtonOneShot aButtonLogic=new ButtonOneShot();
+    private ButtonOneShot aButtonLogic = new ButtonOneShot();
 
     Servo hookServo;
 
     boolean reverse = false;
     final double CONSTANT = 1.0;
     final double spoolConstant = 1.0;
-    final double elevatorSpeed = .6;
 
-
+    //DcMotor spool;
 
     double x_left;
     double x_right;
@@ -53,11 +50,11 @@ public class TankTeleOp extends OpMode {
         telemetry.addData("x_left:", robot.x_left);
         telemetry.addData("x_right:", robot.x_right);
         telemetry.addData("y_left:", robot.y_left);
-        double x_left = robot.x_left;
-        double x_right = robot.x_right;
-        double y_left = robot.y_left;
+        x_left = robot.x_left;
+        x_right = robot.x_right;
+        y_left = robot.y_left;
 
-        /*
+        /* old reverse code
         x_left = gamepad1.left_stick_x;
         if (!reverse) {
             x_right = gamepad1.right_stick_x;
@@ -86,7 +83,6 @@ public class TankTeleOp extends OpMode {
             hookServo.setPosition(1);
         }
 
-
         if (aButtonLogic.isPressed(gamepad1.a)) {
             reverse = !reverse;
         }
@@ -101,7 +97,7 @@ public class TankTeleOp extends OpMode {
         telemetry.update();
 
 
-        /* spool code uncomment when we add it or to test a motor.
+        /* spool code. Uncomment when we add it or to test a motor.
         if (gamepad1.right_trigger > 0) {
             spool.setPower(gamepad1.right_trigger * spoolConstant);
         } else if (gamepad1.left_trigger > 0) {

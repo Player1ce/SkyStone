@@ -54,7 +54,6 @@ public class GoBildaChassisTeleop extends OpMode {
     }
 
     public void loop() {
-
         x_left = gamepad1.left_stick_x;
 
         if (!reverse) {
@@ -71,19 +70,6 @@ public class GoBildaChassisTeleop extends OpMode {
         backRightPower = (-y_left - x_right + x_left) * CONSTANT; //-right
         backLeftPower = (y_left - x_right + x_left) * CONSTANT;
 
-
-    /*if (!reverse) {
-        frontRight.setPower(frontRightPower);
-        frontLeft.setPower(frontLeftPower);
-        backRight.setPower(backRightPower);
-        backLeft.setPower(backLeftPower);
-    } else {
-        frontRight.setPower(-frontRightPower);
-        frontLeft.setPower(-frontLeftPower);
-        backRight.setPower(-backRightPower);
-        backLeft.setPower(-backLeftPower);
-    }*/
-
         robot.setPower(frontRightPower, frontLeftPower, backRightPower, backLeftPower);
 
 
@@ -99,7 +85,6 @@ public class GoBildaChassisTeleop extends OpMode {
 
         /*
         //hook controller
-        //TODO should be able to replace with: robot.hookController(gamepad1);
         if (gamepad1.left_bumper) {
             leftHook.setPosition(1);
             rightHook.setPosition(1);
