@@ -69,6 +69,7 @@ public interface RobotMethods {
 
     void setPower (double frontRight, double frontLeft, double backRight, double backLeft);
 
+    void setPowerVars(Gamepad gamepad1, boolean reverse);
 
 }
 	

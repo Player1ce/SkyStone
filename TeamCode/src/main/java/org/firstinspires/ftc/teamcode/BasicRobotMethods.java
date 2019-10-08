@@ -513,7 +513,7 @@ public abstract class BasicRobotMethods implements RobotMethods{
 	public void forwardCorrection(double MotorPower, int EncoderTarget){
 		
 	}
-	
+
 	@Override
 	public void forwardMoveOdometry(double MotorPower, int EncoderTarget){
 		
@@ -529,7 +529,13 @@ public abstract class BasicRobotMethods implements RobotMethods{
 
     }
 
+    @Override
     public void setPower (double frontRightPower, double frontLeftPower, double backRightPower, double backLeftPower) {
+    }
+
+    @Override
+    public void setPowerVars(Gamepad gamepad1, boolean reverse) {
+
     }
 
 
