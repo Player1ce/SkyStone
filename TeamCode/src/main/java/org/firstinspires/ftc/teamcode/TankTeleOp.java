@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -15,6 +14,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class TankTeleOp extends OpMode {
     private TeleOpMethods robot = new TeleOpMethods();
     //DcMotor spool;
+
+    ButtonOneShot aButtonLogic=new ButtonOneShot();
 
     DcMotor elevator;
 
@@ -104,14 +105,8 @@ public class TankTeleOp extends OpMode {
 
 
 
-        if (gamepad1.a) {
-                if (a_waitforpush) {
-                    reverse = !reverse;
-                    a_waitforpush = false;
-                }
-        }
-        else {
-            a_waitforpush = true;
+        if (aButtonLogic.isPressed(gamepad1.a)) {
+            reverse = !reverse;
         }
 
         /* spool code uncomment when we add it or to test a motor.
