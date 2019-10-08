@@ -1,8 +1,0 @@
-1. use ctrl f to find error: caused on port to new version and fix it.
-    this is an error with the gold block sensor caused by 3 import lines.
-2. complete the odometry methods.
-3. complete review of methods to find functionality and remove unnecessary code (this is a doozy)
-4. test new hook control method.
-
-
-info: path = <drive letter>/SkyStone-master/TeamCode/src/main/java/org/firstinspires/ftc

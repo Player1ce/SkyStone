@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
@@ -17,12 +18,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.Gamepad;
 
 //TODO: make inches to pulses conversions accurate
 public abstract class BasicRobotMethods implements RobotMethods{
     LinearOpMode linearOpMode;
-    OpMode opMode;
     DcMotor frontLeft;
     DcMotor frontRight;
     DcMotor backLeft;
@@ -41,9 +40,6 @@ public abstract class BasicRobotMethods implements RobotMethods{
     Servo rightServo;
     Servo midServo;
 
-    DcMotor elevator;
-    DcMotor intake;
-
     Orientation lastAngle;
     double globalAngle;
 
@@ -54,11 +50,7 @@ public abstract class BasicRobotMethods implements RobotMethods{
     final int NR40_PPR = 1120;
     final double DRIVE_WHEEL_GEAR_RATIO = 1;
 
-    Position position;
-    Velocity velocity;
-
     long startTime;
-    boolean bad;
 
     @Override
     public void InitializeHardware (OpMode opMode) {
@@ -105,19 +97,6 @@ public abstract class BasicRobotMethods implements RobotMethods{
 
         //initialize IMU in the REV module
         imu = hardwareMap.get(BNO055IMU.class, "imu");
-
-        pivot = hardwareMap.servo.get("pivot");
-
-        leftServo = hardwareMap.servo.get("leftServo");
-        rightServo = hardwareMap.servo.get("rightServo");
-        midServo = hardwareMap.servo.get("midServo");
-
-        elevator = hardwareMap.dcMotor.get("elevator");
-        elevator.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        //intake = hardwareMap.dcMotor.get("intake");
-
-        //  random variables
-
     }
 
 
@@ -520,23 +499,6 @@ public abstract class BasicRobotMethods implements RobotMethods{
         StopMotors();
     }
 
-
-    @Override
-    public void moveElevatorDown(double speed) {
-        while (bottomLimitSwitch.getState() && linearOpMode.opModeIsActive()) {
-            elevator.setPower(-speed);
-        }
-        elevator.setPower(0);
-    }
-
-
-    @Override
-    public void moveElevatorUp(double speed) {
-        while (topLimitSwitch.getState() && linearOpMode.opModeIsActive()) {
-            elevator.setPower(speed);
-        }
-        elevator.setPower(0);
-    }
 	@Override
 	public void resetOdometry() {
 
@@ -562,21 +524,16 @@ public abstract class BasicRobotMethods implements RobotMethods{
 
     }
 
-    /*@Override
-    public void hookController(Gamepad gamepad) {
-
-    }*/
-
     @Override
     public void moveHook(String position) {
 
     }
 
+    public void setMovementVars (Gamepad gamepad1, boolean reverse) {
+
+    }
+
     public void setPower (double frontRightPower, double frontLeftPower, double backRightPower, double backLeftPower) {
-        frontRight.setPower(frontRightPower);
-        frontLeft.setPower(frontLeftPower);
-        backRight.setPower(backRightPower);
-        backLeft.setPower(backLeftPower);
     }
 
 

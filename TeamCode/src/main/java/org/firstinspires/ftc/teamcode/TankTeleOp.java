@@ -17,11 +17,6 @@ public class TankTeleOp extends OpMode {
 
     ButtonOneShot aButtonLogic=new ButtonOneShot();
 
-    DcMotor elevator;
-
-    DigitalChannel bottomLimitSwitch;
-    DigitalChannel topLimitSwitch;
-
     Servo hookServo;
 
     boolean reverse = false;
@@ -40,38 +35,19 @@ public class TankTeleOp extends OpMode {
     double backRightPower; //-right
     double backLeftPower;
 
-    boolean a_waitforpush;
-
     public void init() {
         //attaching configuration names to each motor; each one of these names must match the name
         //of the motor in the configuration profile on the phone (spaces and capitalization matter)
         //or else an error will occur
         robot.InitializeHardware(this);
+        hookServo = hardwareMap.servo.get ("hookServo");
 
         //spool setup
         //spool = hardwareMap.dcMotor.get("spool");
-
-        //elevator = hardwareMap.dcMotor.get("elevator");
-
-        //TODO: hookServo = hardwareMap.servo.get ("hookServo");
-
-       /* bottomLimitSwitch = hardwareMap.digitalChannel.get("bottomLimitSwitch");
-        topLimitSwitch = hardwareMap.digitalChannel.get("topLimitSwitch");
-*/
-
     }
 
     public void loop() {
-        x_left = gamepad1.left_stick_x;
 
-
-        if (!reverse) {
-            x_right = gamepad1.right_stick_x;
-            y_left = -gamepad1.left_stick_y;
-        } else {
-            x_right = -gamepad1.right_stick_x;
-            y_left = gamepad1.left_stick_y;
-        }
 
 
         frontRightPower = (y_left - x_right + x_left) * CONSTANT; //-right
@@ -79,9 +55,12 @@ public class TankTeleOp extends OpMode {
         backRightPower = (y_left + x_right + x_left) * CONSTANT; //-right
         backLeftPower = (y_left - x_right - x_left) * CONSTANT;
 
+
         robot.setPower(frontRightPower, frontLeftPower, backRightPower, backLeftPower);
 
-        /* TODO
+
+        //TODO: Test for values and functionality
+        telemetry.addData("hookServo Position", hookServo.getPosition());
         if (gamepad1.x)  {
             hookServo.setPosition(0);
             //hookServo.setPosition(.47);
@@ -90,24 +69,20 @@ public class TankTeleOp extends OpMode {
             hookServo.setPosition(1);
         }
 
-         */
+
+        if (aButtonLogic.isPressed(gamepad1.a)) {
+            reverse = !reverse;
+        }
 
 
         //telemetry is used to show on the driver controller phone what the code sees
         if (reverse) {
             telemetry.addData("F/R:", "REVERSE");
-            telemetry.addData("a_waitforpush:", a_waitforpush);
         }else {
             telemetry.addData("F/R:", "FORWARD");
-            telemetry.addData("a_waitforpush:", a_waitforpush);
         }
         telemetry.update();
 
-
-
-        if (aButtonLogic.isPressed(gamepad1.a)) {
-            reverse = !reverse;
-        }
 
         /* spool code uncomment when we add it or to test a motor.
         if (gamepad1.right_trigger > 0) {
