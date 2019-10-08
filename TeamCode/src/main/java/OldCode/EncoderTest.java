@@ -1,15 +1,9 @@
-package org.firstinspires.ftc.teamcode;
-
-import android.app.Activity;
-import android.graphics.Color;
-import android.view.View;
+package OldCode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.hardware.ColorSensor;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
-import com.qualcomm.robotcore.hardware.Servo;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
+import OldCode.AutonomousMethods;
+
 /**
  * Created by jesuit on 8/27/2018.
  */

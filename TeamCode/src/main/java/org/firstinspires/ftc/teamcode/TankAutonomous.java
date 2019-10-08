@@ -8,7 +8,7 @@ public class TankAutonomous extends LinearOpMode {
     private AutoMethodsTank robot = new AutoMethodsTank();
 
     public void runOpMode() throws InterruptedException {
-        robot.InitializeHardware();
+        robot.InitializeHardware(this);
         robot.InitializeIMU();
 
         waitForStart();

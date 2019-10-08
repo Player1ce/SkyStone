@@ -1,6 +1,8 @@
-package org.firstinspires.ftc.teamcode;
+package OldCode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+
+import OldCode.AutonomousMethods;
 
 @Autonomous(name= "Coordinate", group="Test")
 public class Coordinate extends AutonomousMethods {

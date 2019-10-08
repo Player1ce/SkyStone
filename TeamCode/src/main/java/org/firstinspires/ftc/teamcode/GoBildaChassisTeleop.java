@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.Hardware;
 
 @TeleOp(name="GoBildaChassisTeleop", group="Skystone")
 //@Disabled
@@ -15,14 +16,7 @@ public class GoBildaChassisTeleop extends OpMode {
     boolean reverse = false;
 
     //all motors are declared; letting the code know that these motors exist
-    DcMotor frontRight;
-    DcMotor frontLeft;
-    DcMotor backRight;
-    DcMotor backLeft;
-    //DcMotor spool;
-    Servo leftHook;
-    Servo rightHook;
-    Servo testServo;
+
 
 
     //constants delcared; used to allow us to decrease available motor power which yields greater precision
@@ -47,22 +41,11 @@ public class GoBildaChassisTeleop extends OpMode {
         //attaching configuration names to each motor; each one of these names must match the name
         //of the motor in the configuration profile on the phone (spaces and capitalization matter)
         //or else an error will occur
-        frontRight = hardwareMap.dcMotor.get("frontRight");
-        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        frontLeft = hardwareMap.dcMotor.get("frontLeft");
-        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        backRight = hardwareMap.dcMotor.get("backRight");
-
-        backLeft = hardwareMap.dcMotor.get("backLeft");
+        robot.InitializeHardware(this);
 
         //spool = hardwareMap.dcMotor.get("spool");
 
         //making servo configuration names
-        leftHook = hardwareMap.servo.get("leftHook");
-        rightHook = hardwareMap.servo.get("rightHook");
-        testServo = hardwareMap.servo.get("testServo");
 
 
 
@@ -71,18 +54,6 @@ public class GoBildaChassisTeleop extends OpMode {
     }
 
     public void loop() {
-
-        //allows driver to have all four direction steering by using mechanum wheels
-
-
-/*        double x_left = gamepad1.left_stick_x;
-    double x_right = -gamepad1.right_stick_x;
-    double y_left = gamepad1.left_stick_y;
-
-    double frontRightPower = (y_left - x_right + x_left) * CONSTANT; //-right
-    double frontLeftPower = (-y_left - x_right + x_left) * CONSTANT; //-right
-    double backRightPower = (-y_left - x_right - x_left) * CONSTANT; //-right
-    double backLeftPower = (y_left - x_right - x_left) * CONSTANT; //-right*/
 
         x_left = gamepad1.left_stick_x;
 
@@ -113,10 +84,7 @@ public class GoBildaChassisTeleop extends OpMode {
         backLeft.setPower(-backLeftPower);
     }*/
 
-        frontRight.setPower(frontRightPower);
-        frontLeft.setPower(frontLeftPower);
-        backRight.setPower(backRightPower);
-        backLeft.setPower(backLeftPower);
+        robot.setPower(frontRightPower, frontLeftPower, backRightPower, backLeftPower);
 
 
         //telemetry is used to show on the driver controller phone what the code sees
@@ -129,7 +97,7 @@ public class GoBildaChassisTeleop extends OpMode {
         }
         telemetry.update();
 
-
+        /*
         //hook controller
         //TODO should be able to replace with: robot.hookController(gamepad1);
         if (gamepad1.left_bumper) {
@@ -139,6 +107,7 @@ public class GoBildaChassisTeleop extends OpMode {
             leftHook.setPosition(0);
             rightHook.setPosition(0);
         }
+        */
 
         /*
         // Spool control: left for up, right for dowm.

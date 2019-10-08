@@ -20,7 +20,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 //TODO: make inches to pulses conversions accurate
-public class BasicRobotMethods implements RobotMethods{
+public abstract class BasicRobotMethods implements RobotMethods{
     LinearOpMode linearOpMode;
     OpMode opMode;
     DcMotor frontLeft;
@@ -61,7 +61,7 @@ public class BasicRobotMethods implements RobotMethods{
     boolean bad;
 
     @Override
-    public void InitializeHardware () {
+    public void InitializeHardware (OpMode opMode) {
         HardwareMap hardwareMap=opMode.hardwareMap;
 
         //initalize motors and set direction and mode
@@ -570,6 +570,13 @@ public class BasicRobotMethods implements RobotMethods{
     @Override
     public void moveHook(String position) {
 
+    }
+
+    public void setPower (double frontRightPower, double frontLeftPower, double backRightPower, double backLeftPower) {
+        frontRight.setPower(frontRightPower);
+        frontLeft.setPower(frontLeftPower);
+        backRight.setPower(backRightPower);
+        backLeft.setPower(backLeftPower);
     }
 
 

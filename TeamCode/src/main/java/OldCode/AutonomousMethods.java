@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package OldCode;
 
 import android.app.Activity;
 import android.view.View;
@@ -7,6 +7,7 @@ import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 //import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -58,7 +59,7 @@ public abstract class AutonomousMethods extends LinearOpMode {
     ModernRoboticsI2cRangeSensor rangeSensor;
     ColorSensor colorSensor;
 
-    Servo pivot;
+    public Servo pivot;
 
     Servo leftServo;
     Servo rightServo;

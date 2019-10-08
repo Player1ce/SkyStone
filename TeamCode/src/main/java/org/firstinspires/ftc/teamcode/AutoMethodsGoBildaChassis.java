@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -16,7 +17,7 @@ public class AutoMethodsGoBildaChassis extends BasicRobotMethods {
     final double INTAKE_SPEED = .7;
 
     @Override
-    public void InitializeHardware() {
+    public void InitializeHardware(OpMode opMode) {
         //initalize motors and set direction and mode
         frontLeft = linearOpMode.hardwareMap.dcMotor.get("frontLeft");
         frontLeft.setDirection(DcMotor.Direction.REVERSE);

@@ -8,7 +8,7 @@ public class GoBildaChassisAutonomous extends LinearOpMode {
     private AutoMethodsGoBildaChassis robot = new AutoMethodsGoBildaChassis();
 
     public void runOpMode() throws InterruptedException {
-        robot.InitializeHardware();
+        robot.InitializeHardware(this);
         robot.InitializeIMU();
 
         waitForStart();

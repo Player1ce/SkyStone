@@ -7,6 +7,7 @@ import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -20,8 +21,6 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 public class TeleOpMethods extends BasicRobotMethods {
-    LinearOpMode linearOpMode;
-    OpMode opMode;
     DcMotor frontLeft;
     DcMotor frontRight;
     DcMotor backLeft;
@@ -47,8 +46,6 @@ public class TeleOpMethods extends BasicRobotMethods {
     Orientation lastAngle;
     double globalAngle;
 
-    DigitalChannel bottomLimitSwitch;
-    DigitalChannel topLimitSwitch;
 
     final double WHEEL_DIAMETER = 6;
     final int NR40_PPR = 1120;
@@ -60,7 +57,29 @@ public class TeleOpMethods extends BasicRobotMethods {
     long startTime;
     boolean bad;
 
+    @Override
+    public void InitializeHardware(OpMode opMode){
+        HardwareMap hardwareMap = opMode.hardwareMap;
 
+        frontRight = hardwareMap.dcMotor.get("frontRight");
+        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        frontLeft = hardwareMap.dcMotor.get("frontLeft");
+        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        backRight = hardwareMap.dcMotor.get("backRight");
+
+        backLeft = hardwareMap.dcMotor.get("backLeft");
+
+        //spool = hardwareMap.dcMotor.get("spool");
+    }
+
+    public void setPower (double frontRightPower, double frontLeftPower, double backRightPower, double backLeftPower) {
+        frontRight.setPower(frontRightPower);
+        frontLeft.setPower(frontLeftPower);
+        backRight.setPower(backRightPower);
+        backLeft.setPower(backLeftPower);
+    }
 
     //method to control hooks in TeleOp (still needs testing)
     /*@Override

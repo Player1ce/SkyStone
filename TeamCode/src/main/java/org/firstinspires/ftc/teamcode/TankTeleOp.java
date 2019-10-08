@@ -12,13 +12,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 @SuppressWarnings("StatementWithEmptyBody")
 @TeleOp(name="Tank TeleOp", group="Skystone")
 //@Disabled
-
-
 public class TankTeleOp extends OpMode {
-    DcMotor frontRight;
-    DcMotor frontLeft;
-    DcMotor backRight;
-    DcMotor backLeft;
+    private TeleOpMethods robot = new TeleOpMethods();
     //DcMotor spool;
 
     DcMotor elevator;
@@ -44,25 +39,20 @@ public class TankTeleOp extends OpMode {
     double backRightPower; //-right
     double backLeftPower;
 
+    boolean a_waitforpush;
+
     public void init() {
         //attaching configuration names to each motor; each one of these names must match the name
         //of the motor in the configuration profile on the phone (spaces and capitalization matter)
         //or else an error will occur
-        frontRight = hardwareMap.dcMotor.get("frontRight");
-        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        frontLeft = hardwareMap.dcMotor.get("frontLeft");
-        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        backRight = hardwareMap.dcMotor.get("backRight");
-        backLeft = hardwareMap.dcMotor.get("backLeft");
+        robot.InitializeHardware(this);
 
         //spool setup
         //spool = hardwareMap.dcMotor.get("spool");
 
         //elevator = hardwareMap.dcMotor.get("elevator");
 
-        hookServo = hardwareMap.servo.get ("hookServo");
+        //TODO: hookServo = hardwareMap.servo.get ("hookServo");
 
        /* bottomLimitSwitch = hardwareMap.digitalChannel.get("bottomLimitSwitch");
         topLimitSwitch = hardwareMap.digitalChannel.get("topLimitSwitch");
@@ -88,12 +78,9 @@ public class TankTeleOp extends OpMode {
         backRightPower = (y_left + x_right + x_left) * CONSTANT; //-right
         backLeftPower = (y_left - x_right - x_left) * CONSTANT;
 
+        robot.setPower(frontRightPower, frontLeftPower, backRightPower, backLeftPower);
 
-        frontRight.setPower(frontRightPower);
-        frontLeft.setPower(frontLeftPower);
-        backRight.setPower(backRightPower);
-        backLeft.setPower(backLeftPower);
-
+        /* TODO
         if (gamepad1.x)  {
             hookServo.setPosition(0);
             //hookServo.setPosition(.47);
@@ -102,17 +89,29 @@ public class TankTeleOp extends OpMode {
             hookServo.setPosition(1);
         }
 
+         */
+
 
         //telemetry is used to show on the driver controller phone what the code sees
         if (reverse) {
             telemetry.addData("F/R:", "REVERSE");
+            telemetry.addData("a_waitforpush:", a_waitforpush);
         }else {
             telemetry.addData("F/R:", "FORWARD");
+            telemetry.addData("a_waitforpush:", a_waitforpush);
         }
         telemetry.update();
 
-        if (gamepad1.b) {
-            reverse = !reverse;
+
+
+        if (gamepad1.a) {
+                if (a_waitforpush) {
+                    reverse = !reverse;
+                    a_waitforpush = false;
+                }
+        }
+        else {
+            a_waitforpush = true;
         }
 
         /* spool code uncomment when we add it or to test a motor.

@@ -19,7 +19,7 @@ public class AutoMethodsTank extends BasicRobotMethods{
     final double DRIVE_WHEEL_GEAR_RATIO = 1;
 
     @Override
-    public void InitializeHardware() {
+    public void InitializeHardware(OpMode opMode) {
         //initalize motors and set direction and mode
         frontLeft = linearOpMode.hardwareMap.dcMotor.get("frontLeft");
         frontLeft.setDirection(DcMotor.Direction.REVERSE);
