@@ -12,9 +12,8 @@ public class AutoMethodsGoBildaChassis extends BasicRobotMethods {
     DcMotor backLeft;
 
     Servo hookServo;
+
     final double CONSTANT = 1.0;
-    final double ELEVATOR_SPEED = .6;
-    final double INTAKE_SPEED = .7;
 
     @Override
     public void InitializeHardware(OpMode opMode) {
