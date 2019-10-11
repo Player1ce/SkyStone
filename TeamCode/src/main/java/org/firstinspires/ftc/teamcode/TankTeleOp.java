@@ -36,6 +36,7 @@ public class TankTeleOp extends OpMode {
         //or else an error will occur
         robot.InitializeHardware(this);
 
+        hookServo=hardwareMap.servo.get("hookServo");
 
         DcMotor frontRight = hardwareMap.dcMotor.get("frontRight");
         frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
