@@ -64,7 +64,7 @@ public class TankTeleOp extends OpMode {
         if (hookServoButtonLogic.isPressed(gamepad1.x)) {
             hookServoEnable = !hookServoEnable;
         }
-        if (!hookServoEnable)  {
+        if (hookServoEnable)  {
             hookServo.setPosition(0);
             //hookServo.setPosition(.47);
         }
