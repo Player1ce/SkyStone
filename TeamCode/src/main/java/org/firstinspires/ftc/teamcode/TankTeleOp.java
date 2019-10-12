@@ -54,7 +54,7 @@ public class TankTeleOp extends OpMode {
         x_right = robot.x_right;
         y_left = robot.y_left;
 
-        /* old reverse code
+        /* reverse code
         x_left = gamepad1.left_stick_x;
         if (!reverse) {
             x_right = gamepad1.right_stick_x;
@@ -89,6 +89,7 @@ public class TankTeleOp extends OpMode {
 
 
         //telemetry is used to show on the driver controller phone what the code sees
+        //use method instead? telemetry.addString(robot.reverseSensor(reverse));
         if (reverse) {
             telemetry.addData("F/R:", "REVERSE");
         }else {
