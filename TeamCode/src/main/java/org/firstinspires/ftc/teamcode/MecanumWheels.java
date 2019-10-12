@@ -19,6 +19,13 @@ public class MecanumWheels {
     double yLeft;
     double xRight;
 
+    String chassis;
+
+    MecanumWheels (String chassisName) {
+        String chassisMessy = chassisName;
+        chassis = chassisMessy.toLowerCase();
+    }
+
     public void initialize(DcMotor frontLeft, DcMotor frontRight,DcMotor backLeft, DcMotor backRight ) {
       //assign the passed in Motors to the class fields for later use
       this.frontLeft = frontLeft;
@@ -36,8 +43,8 @@ public class MecanumWheels {
         backLeft.setPower(backLeftPower);
     }
 
-    public void setPowerFromGamepad(boolean reverse, double power,double left_stick_x,
-                                    double right_stick_x,double left_stick_y) {
+    public void setPowerFromGamepad(boolean reverse, double power, double left_stick_x,
+                                        double right_stick_x,double left_stick_y) {
         xLeft=left_stick_x;
         if (!reverse) {
             xRight = right_stick_x;
@@ -47,10 +54,20 @@ public class MecanumWheels {
             yLeft = left_stick_y;
         }
 
-        frontRightPower = (yLeft - xRight + xLeft) * power; //-right
-        frontLeftPower = (yLeft + xRight - xLeft) * power; //-right
-        backRightPower = (yLeft + xRight + xLeft) * power; //-right
-        backLeftPower = (yLeft - xRight - xLeft) * power;
+        if (chassis == "tank") {
+            frontRightPower = (yLeft - xRight + xLeft) * power; //-right
+            frontLeftPower = (yLeft + xRight - xLeft) * power; //-right
+            backRightPower = (yLeft + xRight + xLeft) * power; //-right
+            backLeftPower = (yLeft - xRight - xLeft) * power;
+
+        }
+        else if (chassis == "gobilda") {
+            frontRightPower = (-yLeft - xRight - xLeft) * power; //-right
+            frontLeftPower = (yLeft - xRight - xLeft) * power; //-right
+            backRightPower = (-yLeft - xRight + xLeft) * power; //-right
+            backLeftPower = (yLeft - xRight + xLeft) * power;
+
+        }
 
         setPower(frontRightPower, frontLeftPower, backRightPower, backLeftPower);
 

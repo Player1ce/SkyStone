@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 //@Disabled
 public class TankTeleOp extends OpMode {
     private TeleOpMethods robot = new TeleOpMethods();
-    final  MecanumWheels mecanumWheels=new MecanumWheels();
+    final  MecanumWheels mecanumWheels=new MecanumWheels("tank");
     private ButtonOneShot reverseButtonLogic = new ButtonOneShot();
     private ButtonOneShot powerChangeButtonLogic = new ButtonOneShot();
     private ButtonOneShot hookServoButtonLogic = new ButtonOneShot();

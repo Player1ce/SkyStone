@@ -11,20 +11,17 @@ import com.qualcomm.robotcore.util.Hardware;
 @TeleOp(name="GoBildaChassisTeleop", group="Skystone")
 //@Disabled
 public class GoBildaChassisTeleop extends OpMode {
-    private RobotMethods robot = new TeleOpMethods();
+
+    private TeleOpMethods robot = new TeleOpMethods();
+    final MecanumWheels mecanumWheels = new MecanumWheels("gobilda");
+    private ButtonOneShot reverseButtonLogic = new ButtonOneShot();
+    private ButtonOneShot powerChangeButtonLogic = new ButtonOneShot();
 
     boolean reverse = false;
-
-    //all motors are declared; letting the code know that these motors exist
-
-
-
-    //constants delcared; used to allow us to decrease available motor power which yields greater precision
-    final double CONSTANT = 1.0;
-    final double ELEVATOR_SPEED = .6;
-    final double INTAKE_SPEED = .7;
-
-    int counterLid;
+    boolean highPower = true;
+    final double HIGH_POWER = 1.0;
+    final double NORMAL_POWER = 0.5;
+    final double spoolConstant = 1.0;
 
     double x_left;
     double x_right;
@@ -34,8 +31,8 @@ public class GoBildaChassisTeleop extends OpMode {
     double frontLeftPower; //-right
     double backRightPower; //-right
     double backLeftPower;
-    double spoolPower;
 
+    //DcMotor spool;
 
     public void init() {
         //attaching configuration names to each motor; each one of these names must match the name
@@ -45,54 +42,36 @@ public class GoBildaChassisTeleop extends OpMode {
 
         //spool = hardwareMap.dcMotor.get("spool");
 
-        //making servo configuration names
-
-
-
-        //attaching configuration names to limit switches;
-        counterLid = 0;
     }
 
     public void loop() {
-        x_left = gamepad1.left_stick_x;
-
-        if (!reverse) {
-            x_right = gamepad1.right_stick_x;
-            y_left = -gamepad1.left_stick_y;
-        } else {
-            x_right = -gamepad1.right_stick_x;
-            y_left = gamepad1.left_stick_y;
+        if (reverseButtonLogic.isPressed(gamepad1.b)) {
+            reverse = !reverse;
+        }
+        if (powerChangeButtonLogic.isPressed(gamepad1.a)) {
+            highPower = !highPower;
         }
 
+        telemetry.addData("x_left:", mecanumWheels.xLeft);
+        telemetry.addData("x_right:", mecanumWheels.xRight);
+        telemetry.addData("y_left:", mecanumWheels.yLeft);
 
-        frontRightPower = (-y_left - x_right - x_left) * CONSTANT; //-right
-        frontLeftPower = (y_left - x_right - x_left) * CONSTANT; //-right
-        backRightPower = (-y_left - x_right + x_left) * CONSTANT; //-right
-        backLeftPower = (y_left - x_right + x_left) * CONSTANT;
+        //if high power, use the high power constant, else use the normal power constant
+        double power = highPower?HIGH_POWER:NORMAL_POWER;
 
-        robot.setPower(frontRightPower, frontLeftPower, backRightPower, backLeftPower);
+        telemetry.addData("Power:", power);
+
+        mecanumWheels.setPowerFromGamepad(reverse, power, gamepad1.left_stick_x,
+                gamepad1.left_stick_x, gamepad1.left_stick_y);
 
 
         //telemetry is used to show on the driver controller phone what the code sees
-        //this particular telemetry shows the state of the top and bottom limit switch which wil/ either be true
-        //or false since limit switches are booleans
         if (reverse) {
             telemetry.addData("F/R:", "REVERSE");
         } else {
             telemetry.addData("F/R:", "FORWARD");
         }
         telemetry.update();
-
-        /*
-        //hook controller
-        if (gamepad1.left_bumper) {
-            leftHook.setPosition(1);
-            rightHook.setPosition(1);
-        } else if (gamepad1.left_trigger == 1) {
-            leftHook.setPosition(0);
-            rightHook.setPosition(0);
-        }
-        */
 
         /*
         // Spool control: left for up, right for dowm.
