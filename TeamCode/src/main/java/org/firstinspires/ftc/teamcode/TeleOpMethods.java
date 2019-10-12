@@ -59,4 +59,13 @@ public class TeleOpMethods extends BasicRobotMethods {
         backRight.setPower(backRightPower);
         backLeft.setPower(backLeftPower);
     }
+
+    pubilc String reverseSensor(boolean reverse) {
+        if (reverse) {
+            return("F/R: REVERSE");
+        }else {
+            return("F/R: FORWARD");
+        }
+    }
+
 }

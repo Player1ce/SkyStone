@@ -71,4 +71,6 @@ public interface RobotMethods {
 
     void setPowerVars(Gamepad gamepad1, boolean reverse);
 
+    String reverseSense(boolean reverse);
+
 }
