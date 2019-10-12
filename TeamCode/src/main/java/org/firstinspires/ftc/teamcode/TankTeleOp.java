@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DigitalChannel;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 
@@ -13,31 +13,41 @@ import com.qualcomm.robotcore.hardware.Servo;
 //@Disabled
 public class TankTeleOp extends OpMode {
     private TeleOpMethods robot = new TeleOpMethods();
-    private ButtonOneShot aButtonLogic = new ButtonOneShot();
+    final  MecanumWheels mecanumWheels=new MecanumWheels();
+    private ButtonOneShot reverseButtonLogic = new ButtonOneShot();
+    private ButtonOneShot powerChangeButtonLogic = new ButtonOneShot();
+    private ButtonOneShot hookServoButtonLogic = new ButtonOneShot();
 
     Servo hookServo;
 
     boolean reverse = false;
-    final double CONSTANT = 1.0;
+    boolean highPower = true;
+    boolean hookServoEnable = false;
+    final double HIGH_POWER = 1.0;
+    final double NORMAL_POWER = 0.5;
     final double spoolConstant = 1.0;
 
     //DcMotor spool;
 
-    double x_left;
-    double x_right;
-    double y_left;
-
-    double frontRightPower; //-right
-    double frontLeftPower; //-right
-    double backRightPower; //-right
-    double backLeftPower;
 
     public void init() {
         //attaching configuration names to each motor; each one of these names must match the name
         //of the motor in the configuration profile on the phone (spaces and capitalization matter)
         //or else an error will occur
         robot.InitializeHardware(this);
-        hookServo = hardwareMap.servo.get ("hookServo");
+
+        hookServo=hardwareMap.servo.get("hookServo");
+
+        DcMotor frontRight = hardwareMap.dcMotor.get("frontRight");
+        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        DcMotor frontLeft = hardwareMap.dcMotor.get("frontLeft");
+        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        DcMotor backRight = hardwareMap.dcMotor.get("backRight");
+        DcMotor backLeft = hardwareMap.dcMotor.get("backLeft");
+
+        mecanumWheels.initialize(frontLeft, frontRight, backLeft, backRight);
 
         //spool setup
         //spool = hardwareMap.dcMotor.get("spool");
@@ -45,48 +55,36 @@ public class TankTeleOp extends OpMode {
 
     public void loop() {
 
-        //TODO test this for functionality. Is it worth it?
-        robot.setPowerVars(gamepad1, reverse);
-        telemetry.addData("x_left:", robot.x_left);
-        telemetry.addData("x_right:", robot.x_right);
-        telemetry.addData("y_left:", robot.y_left);
-        x_left = robot.x_left;
-        x_right = robot.x_right;
-        y_left = robot.y_left;
-
-        /* reverse code
-        x_left = gamepad1.left_stick_x;
-        if (!reverse) {
-            x_right = gamepad1.right_stick_x;
-            y_left = -gamepad1.left_stick_y;
-        } else {
-            x_right = -gamepad1.right_stick_x;
-            y_left = gamepad1.left_stick_y;
+        if (reverseButtonLogic.isPressed(gamepad1.b)) {
+            reverse = !reverse;
         }
-         */
-
-        frontRightPower = (y_left - x_right + x_left) * CONSTANT; //-right
-        frontLeftPower = (y_left + x_right - x_left) * CONSTANT; //-right
-        backRightPower = (y_left + x_right + x_left) * CONSTANT; //-right
-        backLeftPower = (y_left - x_right - x_left) * CONSTANT;
-
-        robot.setPower(frontRightPower, frontLeftPower, backRightPower, backLeftPower);
-
-
-        //TODO: Test for values and functionality
-        telemetry.addData("hookServo Position", hookServo.getPosition());
-        if (gamepad1.x)  {
+        if (powerChangeButtonLogic.isPressed(gamepad1.a)) {
+            highPower = !highPower;
+        }
+        if (hookServoButtonLogic.isPressed(gamepad1.x)) {
+            hookServoEnable = !hookServoEnable;
+        }
+        if (hookServoEnable)  {
             hookServo.setPosition(0);
             //hookServo.setPosition(.47);
         }
-        else if (gamepad1.y)  {
+        else   {
             hookServo.setPosition(1);
         }
 
-        if (aButtonLogic.isPressed(gamepad1.a)) {
-            reverse = !reverse;
-        }
+        telemetry.addData("hookServo Position", hookServo.getPosition());
 
+        telemetry.addData("x_left:", mecanumWheels.xLeft);
+        telemetry.addData("x_right:", mecanumWheels.xRight);
+        telemetry.addData("y_left:", mecanumWheels.yLeft);
+
+        //if high power, use the high power constant, else use the normal power constant
+        double power = highPower?HIGH_POWER:NORMAL_POWER;
+
+        telemetry.addData("Power:", power);
+
+        mecanumWheels.setPowerFromGamepad(reverse,power,gamepad1.left_stick_x,
+                gamepad1.right_stick_x,gamepad1.left_stick_y);
 
         //telemetry is used to show on the driver controller phone what the code sees
         //use method instead? telemetry.addString(robot.reverseSensor(reverse));
