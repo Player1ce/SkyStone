@@ -38,6 +38,8 @@ public class TankTeleOp extends OpMode {
 
         hookServo=hardwareMap.servo.get("hookServo");
 
+        //TODO why is this here. The Iniliatialize hardware method should take care of this.
+
         DcMotor frontRight = hardwareMap.dcMotor.get("frontRight");
         frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
@@ -66,10 +68,11 @@ public class TankTeleOp extends OpMode {
         }
         if (hookServoEnable)  {
             hookServo.setPosition(0);
-            //hookServo.setPosition(.47);
+
         }
         else   {
             hookServo.setPosition(1);
+            //hookServo.setPosition(.47);
         }
 
         telemetry.addData("hookServo Position", hookServo.getPosition());

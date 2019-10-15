@@ -22,8 +22,7 @@ public class MecanumWheels {
     String chassis;
 
     MecanumWheels (String chassisName) {
-        String chassisMessy = chassisName;
-        chassis = chassisMessy.toLowerCase();
+        chassis = chassisName.toLowerCase();
     }
 
     public void initialize(DcMotor frontLeft, DcMotor frontRight,DcMotor backLeft, DcMotor backRight ) {
