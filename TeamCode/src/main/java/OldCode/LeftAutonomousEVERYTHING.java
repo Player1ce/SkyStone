@@ -3,14 +3,15 @@ package OldCode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
+import org.firstinspires.ftc.teamcode.BasicRobotMethods;
 import org.firstinspires.ftc.teamcode.OdometryMethods;
 import org.firstinspires.ftc.teamcode.RobotMethods;
+import org.firstinspires.ftc.teamcode.TeleOpMethods;
 
 @Disabled
 @Autonomous(name= "LeftAutonomousEVERYTHING", group="FINAL Rover Ruckus")
 public class LeftAutonomousEVERYTHING extends AutonomousMethods {
-    private RobotMethods robotMethods=new OdometryMethods();
-
+    public BasicRobotMethods robotMethods = new TeleOpMethods();
     public void runOpMode() throws InterruptedException {
         //robotMethods.InitializeHardware(this);
 

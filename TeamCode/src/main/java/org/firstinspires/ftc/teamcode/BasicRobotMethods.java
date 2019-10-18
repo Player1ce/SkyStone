@@ -538,5 +538,10 @@ public abstract class BasicRobotMethods implements RobotMethods{
 
     }
 
+    @Override
+    public String reverseSense(boolean reverse) {
+        return "false";
+    }
+
 
 }

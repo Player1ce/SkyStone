@@ -38,7 +38,7 @@ public class TankTeleOp extends OpMode {
 
         hookServo=hardwareMap.servo.get("hookServo");
 
-        //TODO why is this here. The Iniliatialize hardware method should take care of this.
+        //TODO why is this here. The Initialize hardware method should take care of this.
 
         DcMotor frontRight = hardwareMap.dcMotor.get("frontRight");
         frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -90,7 +90,7 @@ public class TankTeleOp extends OpMode {
                 gamepad1.right_stick_x,gamepad1.left_stick_y);
 
         //telemetry is used to show on the driver controller phone what the code sees
-        //use method instead? telemetry.addString(robot.reverseSensor(reverse));
+        //use method instead? telemetry.addString(robot.reverseSense(reverse));
         if (reverse) {
             telemetry.addData("F/R:", "REVERSE");
         }else {
