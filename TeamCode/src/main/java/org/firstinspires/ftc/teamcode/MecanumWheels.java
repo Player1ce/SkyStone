@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 public class MecanumWheels {
     DcMotor frontLeft;
     DcMotor frontRight;
@@ -71,4 +73,81 @@ public class MecanumWheels {
         setPower(frontRightPower, frontLeftPower, backRightPower, backLeftPower);
 
     }
+
+    public void setZeroPowerBrakeBehavior() {
+        frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+
+    }
+
+    private void sleep(long ms) {
+        try {
+            Thread.sleep(ms);
+        }
+        catch (InterruptedException e){}
+    }
+
+    public void ResetEncoders() {
+        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        sleep(50);
+
+        frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
+    public double getAverageEncoderPos() {
+        double averagePos= (Math.abs(frontLeft.getCurrentPosition())+Math.abs(frontRight.getCurrentPosition())+
+                Math.abs(backLeft.getCurrentPosition())+Math.abs(backRight.getCurrentPosition()))/4;
+
+        return averagePos;
+    }
+
+    public void ForwardMoveInches(Telemetry telemetry,double MotorPower, double Inches,double ticksToInches) {
+
+        ResetEncoders();
+
+        backRight.setPower(MotorPower);
+        frontLeft.setPower(MotorPower);
+        backLeft.setPower(MotorPower);
+        frontRight.setPower(MotorPower);
+
+        double averagePos=getAverageEncoderPos();
+
+        double dest=ticksToInches*Inches;
+
+        while (averagePos < dest){
+           telemetry.addData("Moving Forward","Moving Forward");
+            telemetry.addData("avg encoder value:", averagePos*ticksToInches);
+            telemetry.addData("F/L encoder value:", frontLeft.getCurrentPosition()*ticksToInches);
+            telemetry.addData("F/R encoder value:", frontRight.getCurrentPosition()*ticksToInches);
+            telemetry.addData("B/L encoder value:", backLeft.getCurrentPosition()*ticksToInches);
+            telemetry.addData("B/R encoder value:", backRight.getCurrentPosition()*ticksToInches);
+            telemetry.addData("encoder target:", Inches);
+            telemetry.update();
+
+            averagePos= getAverageEncoderPos();
+        }
+
+        StopMotors();
+
+        sleep(5000);
+    }
+
+
+    public void StopMotors(){
+        frontLeft.setPower(0);
+        frontRight.setPower(0);
+        backLeft.setPower(0);
+        backRight.setPower(0);
+    }
+
 }
