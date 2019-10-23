@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.util.Hardware;
 @TeleOp(name="GoBildaChassisTeleop", group="Skystone")
 //@Disabled
 public class GoBildaChassisTeleop extends OpMode {
+    public TeleOpMethods robot = new TeleOpMethods("gobilda");
     final MecanumWheels mecanumWheels = new MecanumWheels("gobilda");
     private ButtonOneShot reverseButtonLogic = new ButtonOneShot();
     private ButtonOneShot powerChangeButtonLogic = new ButtonOneShot();
