@@ -1,16 +1,22 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-public class MecanumWheels {
+public class AutoMethods {
+    LinearOpMode linearOpMode;
+    OpMode opMode;
     DcMotor frontLeft;
     DcMotor frontRight;
     DcMotor backLeft;
     DcMotor backRight;
-
+    Servo hookServo;
 
     double frontRightPower; //-right
     double frontLeftPower; //-right
@@ -23,54 +29,39 @@ public class MecanumWheels {
 
     String chassis;
 
-    MecanumWheels (String chassisName) {
+    final double WHEEL_DIAMETER = 6;
+    final double DRIVE_WHEEL_GEAR_RATIO = 1;
+
+    AutoMethods(String chassisName) {
         chassis = chassisName.toLowerCase();
     }
 
-    public void initialize(DcMotor frontLeft, DcMotor frontRight,DcMotor backLeft, DcMotor backRight ) {
-      //assign the passed in Motors to the class fields for later use
-      this.frontLeft = frontLeft;
-      this.frontRight = frontRight;
-      this.backLeft = backLeft;
-      this.backRight = backRight;
+    public void InitializeHardware(OpMode opMode){
+        HardwareMap hardwareMap = opMode.hardwareMap;
 
-    }
+        frontRight = hardwareMap.dcMotor.get("frontRight");
+        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
+        frontLeft = hardwareMap.dcMotor.get("frontLeft");
+        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
 
-    public void setPower (double frontRightPower, double frontLeftPower, double backRightPower, double backLeftPower) {
-        frontRight.setPower(frontRightPower);
-        frontLeft.setPower(frontLeftPower);
-        backRight.setPower(backRightPower);
-        backLeft.setPower(backLeftPower);
-    }
+        backRight = hardwareMap.dcMotor.get("backRight");
 
-    public void setPowerFromGamepad(boolean reverse, double power, double left_stick_x,
-                                        double right_stick_x,double left_stick_y) {
-        xLeft=left_stick_x;
-        if (!reverse) {
-            xRight = right_stick_x;
-            yLeft = -left_stick_y;
-        } else {
-            xRight = -right_stick_x;
-            yLeft = left_stick_y;
-        }
+        backLeft = hardwareMap.dcMotor.get("backLeft");
+
+        //spool = hardwareMap.dcMotor.get("spool");
 
         if (chassis == "tank") {
-            frontRightPower = (yLeft - xRight + xLeft) * power; //-right
-            frontLeftPower = (yLeft + xRight - xLeft) * power; //-right
-            backRightPower = (yLeft + xRight + xLeft) * power; //-right
-            backLeftPower = (yLeft - xRight - xLeft) * power;
-
+            hookServo=hardwareMap.servo.get("hookServo");
         }
-        else if (chassis == "gobilda") {
-            frontRightPower = (-yLeft - xRight - xLeft) * power; //-right
-            frontLeftPower = (yLeft - xRight - xLeft) * power; //-right
-            backRightPower = (-yLeft - xRight + xLeft) * power; //-right
-            backLeftPower = (yLeft - xRight + xLeft) * power;
+    }
 
-        }
-
-        setPower(frontRightPower, frontLeftPower, backRightPower, backLeftPower);
+    public void initialize(DcMotor frontLeft, DcMotor frontRight,DcMotor backLeft, DcMotor backRight ) {
+        //assign the passed in Motors to the class fields for later use
+        this.frontLeft = frontLeft;
+        this.frontRight = frontRight;
+        this.backLeft = backLeft;
+        this.backRight = backRight;
 
     }
 
@@ -83,12 +74,19 @@ public class MecanumWheels {
 
     }
 
+    public void executeAutonomousLogic() {
+        double ticksToInches=288/(Math.PI*6.125);
+        this.ForwardMoveInches(telemetry, NORMAL_POWER, 20, ticksToInches);
+
+    }
+
     private void sleep(long ms) {
         try {
             Thread.sleep(ms);
         }
         catch (InterruptedException e){}
     }
+
 
     public void ResetEncoders() {
         frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -111,7 +109,7 @@ public class MecanumWheels {
         return averagePos;
     }
 
-    public void ForwardMoveInches(Telemetry telemetry,double MotorPower, double Inches,double ticksToInches) {
+    public void ForwardMoveInches(Telemetry telemetry, double MotorPower, double Inches, double ticksToInches) {
 
         ResetEncoders();
 
@@ -144,11 +142,15 @@ public class MecanumWheels {
     }
 
 
-    public void StopMotors(){
-        frontLeft.setPower(0);
-        frontRight.setPower(0);
-        backLeft.setPower(0);
-        backRight.setPower(0);
+    public void moveHook(String position){
+        String fixedPosition = position.toLowerCase();
+        if (fixedPosition.equals("up"))  {
+            hookServo.setPosition(.47);
+        }
+        else if (fixedPosition.equals("down"))  {
+            hookServo.setPosition(1);
+        }
     }
+
 
 }

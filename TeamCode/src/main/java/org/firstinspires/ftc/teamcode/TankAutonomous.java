@@ -22,6 +22,8 @@ public class TankAutonomous extends LinearOpMode {
 
         hookServo=hardwareMap.servo.get("hookServo");
 
+
+        //TODO remove lines 27-34 the motors are initialized with a method
         DcMotor frontRight = hardwareMap.dcMotor.get("frontRight");
         frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
@@ -33,6 +35,7 @@ public class TankAutonomous extends LinearOpMode {
 
         mecanumWheels.initialize(frontLeft, frontRight, backLeft, backRight);
         mecanumWheels.setZeroPowerBrakeBehavior();
+
         waitForStart();
         robot.startTime();
 
@@ -44,16 +47,12 @@ public class TankAutonomous extends LinearOpMode {
 
     }
 
-
+    //TODO create this method above the loop?
     protected void executeAutonomousLogic() {
         double ticksToInches=288/(Math.PI*6.125);
         mecanumWheels.ForwardMoveInches(telemetry, NORMAL_POWER, 20, ticksToInches);
 
-
-
     }
-
-
 
 
 }
