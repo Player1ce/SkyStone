@@ -11,8 +11,6 @@ import com.qualcomm.robotcore.util.Hardware;
 @TeleOp(name="GoBildaChassisTeleop", group="Skystone")
 //@Disabled
 public class GoBildaChassisTeleop extends OpMode {
-
-    private TeleOpMethods robot = new TeleOpMethods();
     final MecanumWheels mecanumWheels = new MecanumWheels("gobilda");
     private ButtonOneShot reverseButtonLogic = new ButtonOneShot();
     private ButtonOneShot powerChangeButtonLogic = new ButtonOneShot();
@@ -38,7 +36,7 @@ public class GoBildaChassisTeleop extends OpMode {
         //attaching configuration names to each motor; each one of these names must match the name
         //of the motor in the configuration profile on the phone (spaces and capitalization matter)
         //or else an error will occur
-        robot.InitializeHardware(this);
+        mecanumWheels.InitializeHardware(this);
 
         //spool = hardwareMap.dcMotor.get("spool");
 

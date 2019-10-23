@@ -10,8 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class AutoMethods {
-    LinearOpMode linearOpMode;
-    OpMode opMode;
+    MecanumWheels wheels = new MecanumWheels(this.chassis);
     DcMotor frontLeft;
     DcMotor frontRight;
     DcMotor backLeft;
@@ -23,46 +22,22 @@ public class AutoMethods {
     double backRightPower; //-right
     double backLeftPower;
 
-    double xLeft;
-    double yLeft;
-    double xRight;
+    final double HIGH_POWER = 1.0;
+    final double NORMAL_POWER = 0.5;
 
     String chassis;
 
     final double WHEEL_DIAMETER = 6;
     final double DRIVE_WHEEL_GEAR_RATIO = 1;
 
+    long startTime;
+
     AutoMethods(String chassisName) {
         chassis = chassisName.toLowerCase();
     }
 
-    public void InitializeHardware(OpMode opMode){
-        HardwareMap hardwareMap = opMode.hardwareMap;
-
-        frontRight = hardwareMap.dcMotor.get("frontRight");
-        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        frontLeft = hardwareMap.dcMotor.get("frontLeft");
-        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        backRight = hardwareMap.dcMotor.get("backRight");
-
-        backLeft = hardwareMap.dcMotor.get("backLeft");
-
-        //spool = hardwareMap.dcMotor.get("spool");
-
-        if (chassis == "tank") {
-            hookServo=hardwareMap.servo.get("hookServo");
-        }
-    }
-
-    public void initialize(DcMotor frontLeft, DcMotor frontRight,DcMotor backLeft, DcMotor backRight ) {
-        //assign the passed in Motors to the class fields for later use
-        this.frontLeft = frontLeft;
-        this.frontRight = frontRight;
-        this.backLeft = backLeft;
-        this.backRight = backRight;
-
+    public void startTime() {
+        startTime = System.currentTimeMillis();
     }
 
     public void setZeroPowerBrakeBehavior() {
@@ -74,12 +49,6 @@ public class AutoMethods {
 
     }
 
-    public void executeAutonomousLogic() {
-        double ticksToInches=288/(Math.PI*6.125);
-        this.ForwardMoveInches(telemetry, NORMAL_POWER, 20, ticksToInches);
-
-    }
-
     private void sleep(long ms) {
         try {
             Thread.sleep(ms);
@@ -87,38 +56,16 @@ public class AutoMethods {
         catch (InterruptedException e){}
     }
 
-
-    public void ResetEncoders() {
-        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        sleep(50);
-
-        frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-    }
-
-    public double getAverageEncoderPos() {
-        double averagePos= (Math.abs(frontLeft.getCurrentPosition())+Math.abs(frontRight.getCurrentPosition())+
-                Math.abs(backLeft.getCurrentPosition())+Math.abs(backRight.getCurrentPosition()))/4;
-
-        return averagePos;
-    }
-
     public void ForwardMoveInches(Telemetry telemetry, double MotorPower, double Inches, double ticksToInches) {
 
-        ResetEncoders();
+        wheels.ResetEncoders();
 
         backRight.setPower(MotorPower);
         frontLeft.setPower(MotorPower);
         backLeft.setPower(MotorPower);
         frontRight.setPower(MotorPower);
 
-        double averagePos=getAverageEncoderPos();
+        double averagePos=wheels.getAverageEncoderPos();
 
         double dest=ticksToInches*Inches;
 
@@ -133,10 +80,10 @@ public class AutoMethods {
             telemetry.addData("encoder target:", Inches);
             telemetry.update();
 
-            averagePos= getAverageEncoderPos();
+            averagePos= wheels.getAverageEncoderPos();
         }
 
-        StopMotors();
+        wheels.StopMotors();
 
         sleep(5000);
     }
