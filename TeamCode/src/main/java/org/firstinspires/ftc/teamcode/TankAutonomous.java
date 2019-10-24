@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 @Autonomous(name = "TankAutonomous", group="Skystone")
 public class TankAutonomous extends LinearOpMode {
-    private TeleOpMethods robot = new TeleOpMethods();
+    private AutoMethods auto = new AutoMethods("tank");
     final  MecanumWheels mecanumWheels=new MecanumWheels("tank");
     final double HIGH_POWER = 1.0;
     final double NORMAL_POWER = 0.5;
@@ -17,11 +17,13 @@ public class TankAutonomous extends LinearOpMode {
     Servo hookServo;
 
     public void runOpMode() {
-        robot.InitializeHardware(this);
+        mecanumWheels.InitializeHardware(this);
         //robot.InitializeIMU();
 
         hookServo=hardwareMap.servo.get("hookServo");
 
+
+        //TODO remove lines 27-34 the motors are initialized with a method
         DcMotor frontRight = hardwareMap.dcMotor.get("frontRight");
         frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
@@ -32,9 +34,10 @@ public class TankAutonomous extends LinearOpMode {
         DcMotor backLeft = hardwareMap.dcMotor.get("backLeft");
 
         mecanumWheels.initialize(frontLeft, frontRight, backLeft, backRight);
-        mecanumWheels.setZeroPowerBrakeBehavior();
+        auto.setZeroPowerBrakeBehavior();
+
         waitForStart();
-        robot.startTime();
+        auto.startTime();
 
         //robot.moveHook("up");
 
@@ -44,16 +47,12 @@ public class TankAutonomous extends LinearOpMode {
 
     }
 
-
+    //TODO create this method above the loop?
     protected void executeAutonomousLogic() {
         double ticksToInches=288/(Math.PI*6.125);
-        mecanumWheels.ForwardMoveInches(telemetry, NORMAL_POWER, 20, ticksToInches);
-
-
+        auto.ForwardMoveInches(telemetry, NORMAL_POWER, 20, ticksToInches);
 
     }
-
-
 
 
 }
