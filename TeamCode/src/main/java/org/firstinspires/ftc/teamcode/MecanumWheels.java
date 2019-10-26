@@ -23,7 +23,7 @@ public class MecanumWheels {
 
     String chassis;
 
-    MecanumWheels (String chassisName) {
+    public MecanumWheels (String chassisName) {
         chassis = chassisName.toLowerCase();
     }
 
@@ -115,17 +115,21 @@ public class MecanumWheels {
 
         ResetEncoders();
 
-        backRight.setPower(MotorPower);
-        frontLeft.setPower(MotorPower);
-        backLeft.setPower(MotorPower);
-        frontRight.setPower(MotorPower);
-
         double averagePos=getAverageEncoderPos();
 
         double dest=ticksToInches*Inches;
 
         while (averagePos < dest){
-           telemetry.addData("Moving Forward","Moving Forward");
+            double distance=Math.abs(averagePos-dest);
+
+            double power=calculateProportionalMotorPower(0.05,distance,MotorPower,0.2);
+
+            backRight.setPower(power);
+            frontLeft.setPower(power);
+            backLeft.setPower(power);
+            frontRight.setPower(power);
+
+            telemetry.addData("Moving Forward","Moving Forward "+power);
             telemetry.addData("avg encoder value:", averagePos*ticksToInches);
             telemetry.addData("F/L encoder value:", frontLeft.getCurrentPosition()*ticksToInches);
             telemetry.addData("F/R encoder value:", frontRight.getCurrentPosition()*ticksToInches);
@@ -140,6 +144,22 @@ public class MecanumWheels {
         StopMotors();
 
         sleep(5000);
+    }
+
+    /**
+     * Calculates the ramped power using this proportional gain formula:
+     *
+     * outPower=min(maxPower,(gain*error)+minPower)
+     *
+     * @param gain - the scaling factor
+     * @param errorDistance - The distance between current position and target position.
+     * @param maxMotorPower - the max power we want to use
+     * @param minMotorPower - the min power we want to use at the destination
+     */
+    public static final double calculateProportionalMotorPower(double gain,double errorDistance,double maxMotorPower,double minMotorPower) {
+        double suggestedPower=(gain*errorDistance)+minMotorPower;
+
+        return Math.min(maxMotorPower,suggestedPower);
     }
 
 
