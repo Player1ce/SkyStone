@@ -8,11 +8,10 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 
 
-@SuppressWarnings("StatementWithEmptyBody")
 @TeleOp(name="Tank TeleOp", group="Skystone")
 //@Disabled
 public class TankTeleOp extends OpMode {
-    private TeleOpMethods robot = new TeleOpMethods();
+    public TeleOpMethods robot = new TeleOpMethods("tank");
     final  MecanumWheels mecanumWheels=new MecanumWheels("tank");
     private ButtonOneShot reverseButtonLogic = new ButtonOneShot();
     private ButtonOneShot powerChangeButtonLogic = new ButtonOneShot();
@@ -34,7 +33,7 @@ public class TankTeleOp extends OpMode {
         //attaching configuration names to each motor; each one of these names must match the name
         //of the motor in the configuration profile on the phone (spaces and capitalization matter)
         //or else an error will occur
-        robot.InitializeHardware(this);
+        mecanumWheels.InitializeHardware(this);
 
         hookServo=hardwareMap.servo.get("hookServo");
 
