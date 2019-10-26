@@ -11,12 +11,11 @@ import org.firstinspires.ftc.teamcode.TeleOpMethods;
 @Disabled
 @Autonomous(name= "LeftAutonomousEVERYTHING", group="FINAL Rover Ruckus")
 public class LeftAutonomousEVERYTHING extends AutonomousMethods {
-    public BasicRobotMethods robotMethods = new TeleOpMethods();
     public void runOpMode() throws InterruptedException {
         //robotMethods.InitializeHardware(this);
 
         InitializeHardware();
-        robotMethods.InitializeIMU();
+        InitializeIMU();
         //TODO: robotMethods.InitializeDetector();
 
 
