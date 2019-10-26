@@ -13,3 +13,27 @@
 
 // Include common definitions from above.
 apply from: '../build.common.gradle'
+
+//adds junit support
+dependencies {
+    // Unit testing dependencies
+    testImplementation 'junit:junit:4.12'
+}
+
+//allows build to x86 virtual device.
+android {
+    buildToolsVersion = '29.0.2'
+    defaultConfig {
+        generatedDensities = []
+        applicationId = "org.nativescript.testapp"
+    }
+
+    splits {
+        abi {
+            enable true //enables the ABIs split mechanism
+            reset() //reset the list of ABIs to be included to an empty string
+            include 'arm64-v8a', 'armeabi-v7a', 'x86'
+            universalApk true
+        }
+    }
+}
