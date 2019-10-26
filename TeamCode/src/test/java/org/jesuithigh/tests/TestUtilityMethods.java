@@ -1,6 +1,6 @@
 package org.jesuithigh.tests;
 
-import org.firstinspires.ftc.teamcode.MecanumWheels;
+import org.firstinspires.ftc.teamcode.*;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -24,6 +24,30 @@ public class TestUtilityMethods {
         //test that min power works
         Assert.assertEquals(0.3,MecanumWheels.calculateProportionalMotorPower(0.05,0.0,1,0.3),0.000001);
 
+    }
+
+    @Test
+    public void testButtonOneShot() {
+        //tests the logic for one shot buttons
+        ButtonOneShot buttonLogic=new ButtonOneShot();
+
+        Assert.assertFalse(buttonLogic.isPressed(false));
+
+        //now hold button down (only initial press should return true)
+        Assert.assertTrue(buttonLogic.isPressed(true));
+        for (int i=0;i<20;i++) {
+            Assert.assertFalse(buttonLogic.isPressed(true));
+        }
+        //release button
+        Assert.assertFalse(buttonLogic.isPressed(false));
+
+        //now hold button down (only initial press should return true)
+        Assert.assertTrue(buttonLogic.isPressed(true));
+        for (int i=0;i<20;i++) {
+            Assert.assertFalse(buttonLogic.isPressed(true));
+        }
+        //release button
+        Assert.assertFalse(buttonLogic.isPressed(false));
     }
 
 
