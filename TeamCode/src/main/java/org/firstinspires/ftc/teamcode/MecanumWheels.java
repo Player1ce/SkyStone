@@ -1,11 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
@@ -14,7 +10,6 @@ public class MecanumWheels {
     DcMotor frontRight;
     DcMotor backLeft;
     DcMotor backRight;
-    Servo hookServo;
 
 
     double frontRightPower; //-right
@@ -28,28 +23,8 @@ public class MecanumWheels {
 
     String chassis;
 
-    MecanumWheels (String chassisName) {
+    public MecanumWheels (String chassisName) {
         chassis = chassisName.toLowerCase();
-    }
-
-    public void InitializeHardware(OpMode opMode){
-        HardwareMap hardwareMap = opMode.hardwareMap;
-
-        frontRight = hardwareMap.dcMotor.get("frontRight");
-        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        frontLeft = hardwareMap.dcMotor.get("frontLeft");
-        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        backRight = hardwareMap.dcMotor.get("backRight");
-
-        backLeft = hardwareMap.dcMotor.get("backLeft");
-
-        //spool = hardwareMap.dcMotor.get("spool");
-
-        if (chassis == "tank") {
-            hookServo=hardwareMap.servo.get("hookServo");
-        }
     }
 
     public void initialize(DcMotor frontLeft, DcMotor frontRight,DcMotor backLeft, DcMotor backRight ) {
@@ -80,14 +55,14 @@ public class MecanumWheels {
             yLeft = left_stick_y;
         }
 
-        if (chassis.equals("tank")) {
+        if (chassis == "tank") {
             frontRightPower = (yLeft - xRight + xLeft) * power; //-right
             frontLeftPower = (yLeft + xRight - xLeft) * power; //-right
             backRightPower = (yLeft + xRight + xLeft) * power; //-right
             backLeftPower = (yLeft - xRight - xLeft) * power;
 
         }
-        else if (chassis.equals("gobilda")) {
+        else if (chassis == "gobilda") {
             frontRightPower = (-yLeft - xRight - xLeft) * power; //-right
             frontLeftPower = (yLeft - xRight - xLeft) * power; //-right
             backRightPower = (-yLeft - xRight + xLeft) * power; //-right
@@ -96,6 +71,15 @@ public class MecanumWheels {
         }
 
         setPower(frontRightPower, frontLeftPower, backRightPower, backLeftPower);
+
+    }
+
+    public void setZeroPowerBrakeBehavior() {
+        frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
 
     }
 
@@ -127,7 +111,58 @@ public class MecanumWheels {
         return averagePos;
     }
 
-    //TODO Is this necessary in teleop?
+    public void ForwardMoveInches(Telemetry telemetry,double MotorPower, double Inches,double ticksToInches) {
+
+        ResetEncoders();
+
+        double averagePos=getAverageEncoderPos();
+
+        double dest=ticksToInches*Inches;
+
+        while (averagePos < dest){
+            double distance=Math.abs(averagePos-dest);
+
+            double power=calculateProportionalMotorPower(0.05,distance,MotorPower,0.2);
+
+            backRight.setPower(power);
+            frontLeft.setPower(power);
+            backLeft.setPower(power);
+            frontRight.setPower(power);
+
+            telemetry.addData("Moving Forward","Moving Forward "+power);
+            telemetry.addData("avg encoder value:", averagePos*ticksToInches);
+            telemetry.addData("F/L encoder value:", frontLeft.getCurrentPosition()*ticksToInches);
+            telemetry.addData("F/R encoder value:", frontRight.getCurrentPosition()*ticksToInches);
+            telemetry.addData("B/L encoder value:", backLeft.getCurrentPosition()*ticksToInches);
+            telemetry.addData("B/R encoder value:", backRight.getCurrentPosition()*ticksToInches);
+            telemetry.addData("encoder target:", Inches);
+            telemetry.update();
+
+            averagePos= getAverageEncoderPos();
+        }
+
+        StopMotors();
+
+        sleep(5000);
+    }
+
+    /**
+     * Calculates the ramped power using this proportional gain formula:
+     *
+     * outPower=min(maxPower,(gain*error)+minPower)
+     *
+     * @param gain - the scaling factor
+     * @param errorDistance - The distance between current position and target position.
+     * @param maxMotorPower - the max power we want to use
+     * @param minMotorPower - the min power we want to use at the destination
+     */
+    public static final double calculateProportionalMotorPower(double gain,double errorDistance,double maxMotorPower,double minMotorPower) {
+        double suggestedPower=(gain*errorDistance)+minMotorPower;
+
+        return Math.min(maxMotorPower,suggestedPower);
+    }
+
+
     public void StopMotors(){
         frontLeft.setPower(0);
         frontRight.setPower(0);
