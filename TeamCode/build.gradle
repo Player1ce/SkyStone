@@ -14,11 +14,16 @@
 // Include common definitions from above.
 apply from: '../build.common.gradle'
 
+android {
+    buildToolsVersion = '29.0.2'
+}
+
 //adds junit support
 dependencies {
     // Unit testing dependencies
     testImplementation 'junit:junit:4.12'
 }
+
 
 //allows build to x86 virtual device.
 android {

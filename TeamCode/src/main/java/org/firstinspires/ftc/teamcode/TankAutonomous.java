@@ -17,7 +17,7 @@ public class TankAutonomous extends LinearOpMode {
     Servo hookServo;
 
     public void runOpMode() {
-        robot.InitializeHardware(this);
+       // robot.InitializeHardware(this);
         //robot.InitializeIMU();
 
         hookServo=hardwareMap.servo.get("hookServo");
@@ -36,24 +36,37 @@ public class TankAutonomous extends LinearOpMode {
         waitForStart();
         robot.startTime();
 
-        //robot.moveHook("up");
-
-        hookServo.setPosition(25);
+        moveHook(ServoPosition.UP);
 
         executeAutonomousLogic();
 
     }
 
+    public void moveHook(ServoPosition position){
+        if (position==ServoPosition.UP)  {
+            hookServo.setPosition(.47);
+        }
+        else  {
+            hookServo.setPosition(0);
+        }
+    }
 
     protected void executeAutonomousLogic() {
         double ticksToInches=288/(Math.PI*6.125);
-        mecanumWheels.ForwardMoveInches(telemetry, NORMAL_POWER, 20, ticksToInches);
+        /*mecanumWheels.ForwardMoveInches(telemetry, 0.5, 30, ticksToInches);
 
 
+        moveHook(ServoPosition.DOWN);
+
+        sleep(1000);
+        mecanumWheels.BackwardMoveInches(telemetry,-0.5,29,ticksToInches);
+
+        sleep(10000);
+         */
+
+        mecanumWheels.crabDrive("left", 1, 5000);
+    }
 
     }
 
 
-
-
-}

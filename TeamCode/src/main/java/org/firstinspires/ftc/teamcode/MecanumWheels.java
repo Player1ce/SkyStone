@@ -17,6 +17,12 @@ public class MecanumWheels {
     double backRightPower; //-right
     double backLeftPower;
 
+    double autoFrontRightPower;
+    double autoFrontLeftPower;
+    double autoBackRightPower;
+    double autoBackLeftPower;
+
+
     double xLeft;
     double yLeft;
     double xRight;
@@ -74,6 +80,7 @@ public class MecanumWheels {
 
     }
 
+
     public void setZeroPowerBrakeBehavior() {
         frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -111,7 +118,19 @@ public class MecanumWheels {
         return averagePos;
     }
 
+
     public void ForwardMoveInches(Telemetry telemetry,double MotorPower, double Inches,double ticksToInches) {
+        MoveInches(telemetry,MotorPower,0.1,Inches,ticksToInches);
+    }
+
+
+    public void BackwardMoveInches(Telemetry telemetry,double MotorPower, double Inches,double ticksToInches) {
+        MoveInches(telemetry,MotorPower,-.1,Inches,ticksToInches);
+    }
+
+
+
+    protected void MoveInches(Telemetry telemetry,double MotorPower, double MinMotorPower,double Inches,double ticksToInches) {
 
         ResetEncoders();
 
@@ -122,7 +141,7 @@ public class MecanumWheels {
         while (averagePos < dest){
             double distance=Math.abs(averagePos-dest);
 
-            double power=calculateProportionalMotorPower(0.05,distance,MotorPower,0.2);
+            double power=calculateProportionalMotorPower(0.0015,distance,MotorPower,MinMotorPower);
 
             backRight.setPower(power);
             frontLeft.setPower(power);
@@ -130,11 +149,12 @@ public class MecanumWheels {
             frontRight.setPower(power);
 
             telemetry.addData("Moving Forward","Moving Forward "+power);
-            telemetry.addData("avg encoder value:", averagePos*ticksToInches);
-            telemetry.addData("F/L encoder value:", frontLeft.getCurrentPosition()*ticksToInches);
+           // telemetry.addData("avg encoder value:", averagePos);
+            telemetry.addData("distance:", distance);
+           /* telemetry.addData("F/L encoder value:", frontLeft.getCurrentPosition()*ticksToInches);
             telemetry.addData("F/R encoder value:", frontRight.getCurrentPosition()*ticksToInches);
             telemetry.addData("B/L encoder value:", backLeft.getCurrentPosition()*ticksToInches);
-            telemetry.addData("B/R encoder value:", backRight.getCurrentPosition()*ticksToInches);
+            telemetry.addData("B/R encoder value:", backRight.getCurrentPosition()*ticksToInches);*/
             telemetry.addData("encoder target:", Inches);
             telemetry.update();
 
@@ -143,7 +163,21 @@ public class MecanumWheels {
 
         StopMotors();
 
-        sleep(5000);
+    }
+
+    public void crabDrive (String direction, double motorpower, long time) {
+        double crab;
+        String sanitizedDirection = direction.toLowerCase();
+        if (sanitizedDirection.equals("left")) {
+            crab = -1;
+        }
+        else {
+            crab = 1;
+        }
+        setPowerFromGamepad(false, motorpower, 0, crab, 0);
+        sleep(time);
+
+        StopMotors();
     }
 
     /**

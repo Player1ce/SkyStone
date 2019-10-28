@@ -21,6 +21,10 @@ public class TestUtilityMethods {
         Assert.assertEquals(0.5,MecanumWheels.calculateProportionalMotorPower(0.05,4,1,0.3),0.000001);
         Assert.assertEquals(0.7,MecanumWheels.calculateProportionalMotorPower(0.1,4,1,0.3),0.000001);
 
+       // Assert.assertEquals(0.325,MecanumWheels.calculateProportionalMotorPower(0.005,50,0.5,0.2),0.000001);
+      //  Assert.assertEquals(0.325,MecanumWheels.calculateProportionalMotorPower(0.0025,30,0.5,0.2),0.000001);
+
+
         //test that min power works
         Assert.assertEquals(0.3,MecanumWheels.calculateProportionalMotorPower(0.05,0.0,1,0.3),0.000001);
 
