@@ -8,11 +8,14 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-public class TeleOpMethods extends BasicRobotMethods {
+public class TeleOpMethods {
     DcMotor frontLeft;
     DcMotor frontRight;
     DcMotor backLeft;
     DcMotor backRight;
+    Servo hookServo;
+    Servo rampServo;
+
     BNO055IMU imu;
 
     double x_right;
@@ -23,7 +26,14 @@ public class TeleOpMethods extends BasicRobotMethods {
     final int NR40_PPR = 1120;
     final double DRIVE_WHEEL_GEAR_RATIO = 1;
 
-    @Override
+    long startTime;
+
+    String chassis;
+
+    public TeleOpMethods (String ChassisName) {
+        chassis = ChassisName.toLowerCase();
+    }
+
     public void InitializeHardware(OpMode opMode){
         HardwareMap hardwareMap = opMode.hardwareMap;
 
@@ -36,6 +46,11 @@ public class TeleOpMethods extends BasicRobotMethods {
         backRight = hardwareMap.dcMotor.get("backRight");
 
         backLeft = hardwareMap.dcMotor.get("backLeft");
+
+        if (chassis.equals("tank")) {
+            hookServo = hardwareMap.servo.get("hookServo");
+            rampServo = hardwareMap.servo.get("rampServo");
+        }
 
         //spool = hardwareMap.dcMotor.get("spool");
     }
@@ -66,6 +81,10 @@ public class TeleOpMethods extends BasicRobotMethods {
         }else {
             return("F/R: FORWARD");
         }
+    }
+
+    public void startTime() {
+        startTime = System.currentTimeMillis();
     }
 
 }

@@ -8,21 +8,27 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 @Autonomous(name = "TankAutonomous", group="Skystone")
 public class TankAutonomous extends LinearOpMode {
-    private TeleOpMethods robot = new TeleOpMethods();
+    private TeleOpMethods robot = new TeleOpMethods("tank");
     final  MecanumWheels mecanumWheels=new MecanumWheels("tank");
     final double HIGH_POWER = 1.0;
     final double NORMAL_POWER = 0.5;
-
+    DcMotor frontLeft;
+    DcMotor frontRight;
+    DcMotor backLeft;
+    DcMotor backRight;
 
     Servo hookServo;
+    Servo rampServo;
 
     public void runOpMode() {
-       // robot.InitializeHardware(this);
-        //robot.InitializeIMU();
+        robot.InitializeHardware(this);
 
+        /*TODO remove if this works
         hookServo=hardwareMap.servo.get("hookServo");
+        rampServo=hardwareMap.servo.get("rampServo");
 
         DcMotor frontRight = hardwareMap.dcMotor.get("frontRight");
+
         frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
         DcMotor frontLeft = hardwareMap.dcMotor.get("frontLeft");
@@ -30,8 +36,9 @@ public class TankAutonomous extends LinearOpMode {
 
         DcMotor backRight = hardwareMap.dcMotor.get("backRight");
         DcMotor backLeft = hardwareMap.dcMotor.get("backLeft");
+         */
 
-        mecanumWheels.initialize(frontLeft, frontRight, backLeft, backRight);
+        mecanumWheels.initialize(frontLeft, frontRight, backLeft, backRight, hookServo, rampServo);
         mecanumWheels.setZeroPowerBrakeBehavior();
         waitForStart();
         robot.startTime();

@@ -12,13 +12,19 @@ import com.qualcomm.robotcore.hardware.Servo;
 @TeleOp(name="Tank TeleOp", group="Skystone")
 //@Disabled
 public class TankTeleOp extends OpMode {
-    private TeleOpMethods robot = new TeleOpMethods();
+    private TeleOpMethods robot = new TeleOpMethods("tank");
     final  MecanumWheels mecanumWheels=new MecanumWheels("tank");
     private ButtonOneShot reverseButtonLogic = new ButtonOneShot();
     private ButtonOneShot powerChangeButtonLogic = new ButtonOneShot();
     private ButtonOneShot hookServoButtonLogic = new ButtonOneShot();
 
+    DcMotor frontLeft;
+    DcMotor frontRight;
+    DcMotor backLeft;
+    DcMotor backRight;
+
     Servo hookServo;
+    Servo rampServo;
 
     boolean reverse = false;
     boolean highPower = true;
@@ -36,10 +42,9 @@ public class TankTeleOp extends OpMode {
         //or else an error will occur
         robot.InitializeHardware(this);
 
-        hookServo=hardwareMap.servo.get("hookServo");
 
-        //TODO why is this here. The Initialize hardware method should take care of this.
 
+        /*TODO why is this here. The Initialize hardware method should take care of this.
         DcMotor frontRight = hardwareMap.dcMotor.get("frontRight");
         frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
@@ -49,7 +54,10 @@ public class TankTeleOp extends OpMode {
         DcMotor backRight = hardwareMap.dcMotor.get("backRight");
         DcMotor backLeft = hardwareMap.dcMotor.get("backLeft");
 
-        mecanumWheels.initialize(frontLeft, frontRight, backLeft, backRight);
+        hookServo=hardwareMap.servo.get("hookServo");
+        rampServo=hardwareMap.servo.get("rampServo");
+        */
+        mecanumWheels.initialize(frontLeft, frontRight, backLeft, backRight, hookServo, rampServo);
 
         //spool setup
         //spool = hardwareMap.dcMotor.get("spool");
@@ -75,11 +83,16 @@ public class TankTeleOp extends OpMode {
             //hookServo.setPosition(.47);
         }
 
-        telemetry.addData("hookServo Position", hookServo.getPosition());
+        //rampservo tests
+        //rampServo.setPosition(.16); //down
+        rampServo.setPosition(0.4);
 
+        telemetry.addData("hookServo Position", hookServo.getPosition());
+        telemetry.addData("rampServo Position:", rampServo.getPosition());
         telemetry.addData("x_left:", mecanumWheels.xLeft);
         telemetry.addData("x_right:", mecanumWheels.xRight);
         telemetry.addData("y_left:", mecanumWheels.yLeft);
+
 
         //if high power, use the high power constant, else use the normal power constant
         double power = highPower?HIGH_POWER:NORMAL_POWER;

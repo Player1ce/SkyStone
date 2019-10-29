@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
@@ -10,6 +11,9 @@ public class MecanumWheels {
     DcMotor frontRight;
     DcMotor backLeft;
     DcMotor backRight;
+
+    Servo hookServo;
+    Servo rampServo;
 
 
     double frontRightPower; //-right
@@ -33,13 +37,14 @@ public class MecanumWheels {
         chassis = chassisName.toLowerCase();
     }
 
-    public void initialize(DcMotor frontLeft, DcMotor frontRight,DcMotor backLeft, DcMotor backRight ) {
+    public void initialize(DcMotor frontLeft, DcMotor frontRight,DcMotor backLeft, DcMotor backRight, Servo hookServo, Servo rampServo) {
       //assign the passed in Motors to the class fields for later use
       this.frontLeft = frontLeft;
       this.frontRight = frontRight;
       this.backLeft = backLeft;
       this.backRight = backRight;
-
+      this.hookServo = hookServo;
+      this.rampServo = rampServo;
     }
 
 
