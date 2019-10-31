@@ -26,6 +26,8 @@ dependencies {
 
 
 //allows build to x86 virtual device.
+
+/*
 android {
     buildToolsVersion = '29.0.2'
     defaultConfig {
@@ -41,4 +43,6 @@ android {
             universalApk true
         }
     }
+
 }
+*/

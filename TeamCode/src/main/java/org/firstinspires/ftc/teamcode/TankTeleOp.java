@@ -58,14 +58,16 @@ public class TankTeleOp extends OpMode {
         DcMotor backRight = hardwareMap.dcMotor.get("backRight");
         DcMotor backLeft = hardwareMap.dcMotor.get("backLeft");
 
-        //DcMotor leftIntake = hardwareMap.dcMotor.get("leftIntake");
-        //DcMotor rightIntake = hardwareMap.dcMotor.get("rightIntake");
+        DcMotor leftIntake = hardwareMap.dcMotor.get("leftIntake");
+        DcMotor rightIntake = hardwareMap.dcMotor.get("rightIntake");
+
 
 
         hookServo=hardwareMap.servo.get("hookServo");
         rampServo=hardwareMap.servo.get("rampServo");
 
         mecanumWheels.initialize(frontLeft, frontRight, backLeft, backRight, hookServo, rampServo, leftIntake, rightIntake);
+        mecanumWheels.setIntakeBrakes();
 
         //spool setup
         //spool = hardwareMap.dcMotor.get("spool");
@@ -100,17 +102,17 @@ public class TankTeleOp extends OpMode {
             rampServo.setPosition(.16);
         }
 
-        /*
-        while (gamepad1.left_trigger > 0 && gamepad1.right_trigger == 0) {
-            leftIntake.setPower(1);
-            rightIntake.setPower(1);
-        }
-        while (gamepad1.right_trigger > 0 && gamepad1.left_trigger == 0) {
-            leftIntake.setPower(-1);
-            rightIntake.setPower(-1);
+        if (gamepad1.left_trigger > .5 && gamepad1.right_trigger == 0) {
+            mecanumWheels.leftIntake.setPower(-1);
+            mecanumWheels.rightIntake.setPower(1);
+        } else if (gamepad1.right_trigger > .5 && gamepad1.left_trigger == 0) {
+            mecanumWheels.leftIntake.setPower(1);
+            mecanumWheels.rightIntake.setPower(-1);
+        } else {
+            mecanumWheels.leftIntake.setPower(0);
+            mecanumWheels.rightIntake.setPower(0);
         }
 
-         */
 
         //rampServo tests
         //rampServo.setPosition(.16); //down

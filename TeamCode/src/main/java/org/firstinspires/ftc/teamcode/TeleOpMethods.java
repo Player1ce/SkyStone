@@ -13,6 +13,8 @@ public class TeleOpMethods {
     DcMotor frontRight;
     DcMotor backLeft;
     DcMotor backRight;
+    DcMotor leftIntake;
+    DcMotor rightIntake;
     Servo hookServo;
     Servo rampServo;
 
@@ -50,6 +52,8 @@ public class TeleOpMethods {
         if (chassis.equals("tank")) {
             hookServo = hardwareMap.servo.get("hookServo");
             rampServo = hardwareMap.servo.get("rampServo");
+            leftIntake = hardwareMap.dcMotor.get("leftIntake");
+            rightIntake = hardwareMap.dcMotor.get("rightIntake");
         }
 
         //spool = hardwareMap.dcMotor.get("spool");

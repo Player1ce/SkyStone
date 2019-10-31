@@ -57,6 +57,7 @@ public class MecanumWheels {
         frontLeft.setPower(frontLeftPower);
         backRight.setPower(backRightPower);
         backLeft.setPower(backLeftPower);
+
     }
 
     public void setPowerFromGamepad(boolean reverse, double power, double left_stick_x,
@@ -96,7 +97,11 @@ public class MecanumWheels {
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+    }
 
+    public void setIntakeBrakes() {
+        leftIntake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightIntake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     private void sleep(long ms) {
