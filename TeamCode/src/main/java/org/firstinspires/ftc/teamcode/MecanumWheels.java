@@ -11,6 +11,8 @@ public class MecanumWheels {
     DcMotor frontRight;
     DcMotor backLeft;
     DcMotor backRight;
+    DcMotor leftIntake;
+    DcMotor rightIntake;
 
     Servo hookServo;
     Servo rampServo;
@@ -37,7 +39,7 @@ public class MecanumWheels {
         chassis = chassisName.toLowerCase();
     }
 
-    public void initialize(DcMotor frontLeft, DcMotor frontRight,DcMotor backLeft, DcMotor backRight, Servo hookServo, Servo rampServo) {
+    public void initialize(DcMotor frontLeft, DcMotor frontRight,DcMotor backLeft, DcMotor backRight, Servo hookServo, Servo rampServo, DcMotor leftIntake, DcMotor rightIntake) {
       //assign the passed in Motors to the class fields for later use
       this.frontLeft = frontLeft;
       this.frontRight = frontRight;
@@ -45,6 +47,8 @@ public class MecanumWheels {
       this.backRight = backRight;
       this.hookServo = hookServo;
       this.rampServo = rampServo;
+      this.leftIntake = leftIntake;
+      this.rightIntake = rightIntake;
     }
 
 

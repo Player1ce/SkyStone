@@ -23,7 +23,6 @@ public class TankAutonomous extends LinearOpMode {
     public void runOpMode() {
         robot.InitializeHardware(this);
 
-        /*TODO remove if this works
         hookServo=hardwareMap.servo.get("hookServo");
         rampServo=hardwareMap.servo.get("rampServo");
 
@@ -36,9 +35,11 @@ public class TankAutonomous extends LinearOpMode {
 
         DcMotor backRight = hardwareMap.dcMotor.get("backRight");
         DcMotor backLeft = hardwareMap.dcMotor.get("backLeft");
-         */
 
-        mecanumWheels.initialize(frontLeft, frontRight, backLeft, backRight, hookServo, rampServo);
+        DcMotor leftIntake = hardwareMap.dcMotor.get("leftIntake");
+        DcMotor rightIntake = hardwareMap.dcMotor.get("rightIntake");
+
+        mecanumWheels.initialize(frontLeft, frontRight, backLeft, backRight, hookServo, rampServo, leftIntake, rightIntake);
         mecanumWheels.setZeroPowerBrakeBehavior();
         waitForStart();
         robot.startTime();
@@ -51,7 +52,7 @@ public class TankAutonomous extends LinearOpMode {
 
     public void moveHook(ServoPosition position){
         if (position==ServoPosition.UP)  {
-            hookServo.setPosition(.47);
+            hookServo.setPosition(.4);
         }
         else  {
             hookServo.setPosition(0);

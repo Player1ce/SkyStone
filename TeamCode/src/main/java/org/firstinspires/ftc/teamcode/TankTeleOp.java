@@ -17,11 +17,14 @@ public class TankTeleOp extends OpMode {
     private ButtonOneShot reverseButtonLogic = new ButtonOneShot();
     private ButtonOneShot powerChangeButtonLogic = new ButtonOneShot();
     private ButtonOneShot hookServoButtonLogic = new ButtonOneShot();
+    private ButtonOneShot rampServoButtonLogic = new ButtonOneShot();
 
     DcMotor frontLeft;
     DcMotor frontRight;
     DcMotor backLeft;
     DcMotor backRight;
+    DcMotor leftIntake;
+    DcMotor rightIntake;
 
     Servo hookServo;
     Servo rampServo;
@@ -29,6 +32,7 @@ public class TankTeleOp extends OpMode {
     boolean reverse = false;
     boolean highPower = true;
     boolean hookServoEnable = false;
+    boolean rampServoUp = true;
     final double HIGH_POWER = 1.0;
     final double NORMAL_POWER = 0.5;
     final double spoolConstant = 1.0;
@@ -44,7 +48,7 @@ public class TankTeleOp extends OpMode {
 
 
 
-        /*TODO why is this here. The Initialize hardware method should take care of this.
+        //TODO why is this here. The Initialize hardware method should take care of this.
         DcMotor frontRight = hardwareMap.dcMotor.get("frontRight");
         frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
@@ -54,10 +58,14 @@ public class TankTeleOp extends OpMode {
         DcMotor backRight = hardwareMap.dcMotor.get("backRight");
         DcMotor backLeft = hardwareMap.dcMotor.get("backLeft");
 
+        //DcMotor leftIntake = hardwareMap.dcMotor.get("leftIntake");
+        //DcMotor rightIntake = hardwareMap.dcMotor.get("rightIntake");
+
+
         hookServo=hardwareMap.servo.get("hookServo");
         rampServo=hardwareMap.servo.get("rampServo");
-        */
-        mecanumWheels.initialize(frontLeft, frontRight, backLeft, backRight, hookServo, rampServo);
+
+        mecanumWheels.initialize(frontLeft, frontRight, backLeft, backRight, hookServo, rampServo, leftIntake, rightIntake);
 
         //spool setup
         //spool = hardwareMap.dcMotor.get("spool");
@@ -79,13 +87,34 @@ public class TankTeleOp extends OpMode {
 
         }
         else   {
-            hookServo.setPosition(1);
+            hookServo.setPosition(.6);
             //hookServo.setPosition(.47);
         }
+        if (rampServoButtonLogic.isPressed(gamepad1.y)) {
+            rampServoUp = !rampServoUp;
+        }
+        if (rampServoUp) {
+            rampServo.setPosition(.4);
+        }
+        else {
+            rampServo.setPosition(.16);
+        }
 
-        //rampservo tests
+        /*
+        while (gamepad1.left_trigger > 0 && gamepad1.right_trigger == 0) {
+            leftIntake.setPower(1);
+            rightIntake.setPower(1);
+        }
+        while (gamepad1.right_trigger > 0 && gamepad1.left_trigger == 0) {
+            leftIntake.setPower(-1);
+            rightIntake.setPower(-1);
+        }
+
+         */
+
+        //rampServo tests
         //rampServo.setPosition(.16); //down
-        rampServo.setPosition(0.4);
+        //rampServo.setPosition(0.4); /up (mid)
 
         telemetry.addData("hookServo Position", hookServo.getPosition());
         telemetry.addData("rampServo Position:", rampServo.getPosition());
@@ -109,6 +138,13 @@ public class TankTeleOp extends OpMode {
         }else {
             telemetry.addData("F/R:", "FORWARD");
         }
+        if (rampServoUp) {
+            telemetry.addData("RampServo:", "UP");
+        }
+        else {
+            telemetry.addData("RampServo Position:", "DOWN");
+        }
+
         telemetry.update();
 
 
