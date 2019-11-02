@@ -66,7 +66,8 @@ public class TankTeleOp extends OpMode {
         hookServo=hardwareMap.servo.get("hookServo");
         rampServo=hardwareMap.servo.get("rampServo");
 
-        mecanumWheels.initialize(frontLeft, frontRight, backLeft, backRight, hookServo, rampServo, leftIntake, rightIntake);
+        mecanumWheels.initialize(frontLeft, frontRight, backLeft, backRight,
+                hookServo, rampServo, leftIntake, rightIntake);
         mecanumWheels.setIntakeBrakes();
 
         //spool setup
@@ -86,7 +87,6 @@ public class TankTeleOp extends OpMode {
         }
         if (hookServoEnable)  {
             hookServo.setPosition(0);
-
         }
         else   {
             hookServo.setPosition(.6);
@@ -101,22 +101,18 @@ public class TankTeleOp extends OpMode {
         else {
             rampServo.setPosition(.16);
         }
-
         if (gamepad1.left_trigger > .5 && gamepad1.right_trigger == 0) {
             mecanumWheels.leftIntake.setPower(-1);
             mecanumWheels.rightIntake.setPower(1);
-        } else if (gamepad1.right_trigger > .5 && gamepad1.left_trigger == 0) {
+        }
+        else if (gamepad1.right_trigger > .5 && gamepad1.left_trigger == 0) {
             mecanumWheels.leftIntake.setPower(1);
             mecanumWheels.rightIntake.setPower(-1);
-        } else {
+        }
+        else {
             mecanumWheels.leftIntake.setPower(0);
             mecanumWheels.rightIntake.setPower(0);
         }
-
-
-        //rampServo tests
-        //rampServo.setPosition(.16); //down
-        //rampServo.setPosition(0.4); /up (mid)
 
         telemetry.addData("hookServo Position", hookServo.getPosition());
         telemetry.addData("rampServo Position:", rampServo.getPosition());
