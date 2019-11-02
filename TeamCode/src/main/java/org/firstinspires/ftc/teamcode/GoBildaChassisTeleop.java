@@ -19,6 +19,8 @@ public class GoBildaChassisTeleop extends OpMode {
 
     boolean reverse = false;
     boolean highPower = true;
+
+    final double power = 0.5;
     final double HIGH_POWER = 1.0;
     final double NORMAL_POWER = 0.5;
     final double spoolConstant = 1.0;
@@ -42,6 +44,21 @@ public class GoBildaChassisTeleop extends OpMode {
 
         //spool = hardwareMap.dcMotor.get("spool");
 
+        //TODO why is this here. The Initialize hardware method should take care of this.
+        DcMotor frontRight = hardwareMap.dcMotor.get("frontRight");
+        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        DcMotor frontLeft = hardwareMap.dcMotor.get("frontLeft");
+        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        DcMotor backRight = hardwareMap.dcMotor.get("backRight");
+        DcMotor backLeft = hardwareMap.dcMotor.get("backLeft");
+
+
+
+        mecanumWheels.initialize(frontLeft, frontRight, backLeft, backRight,
+                null, null, null, null);
+
     }
 
     public void loop() {
@@ -56,13 +73,13 @@ public class GoBildaChassisTeleop extends OpMode {
         telemetry.addData("x_right:", mecanumWheels.xRight);
         telemetry.addData("y_left:", mecanumWheels.yLeft);
 
-        //if high power, use the high power constant, else use the normal power constant
-        double power = highPower?HIGH_POWER:NORMAL_POWER;
+        //TODO Uncomment if high power, use the high power constant, else use the normal power constant
+        //double power = highPower?HIGH_POWER:NORMAL_POWER;
 
         telemetry.addData("Power:", power);
 
         mecanumWheels.setPowerFromGamepad(reverse, power, gamepad1.left_stick_x,
-                gamepad1.left_stick_x, gamepad1.left_stick_y);
+                gamepad1.right_stick_x, gamepad1.left_stick_y);
 
 
         //telemetry is used to show on the driver controller phone what the code sees

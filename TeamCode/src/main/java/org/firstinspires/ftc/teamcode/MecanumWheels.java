@@ -79,8 +79,8 @@ public class MecanumWheels {
 
         }
         else if (chassis == "gobilda") {
-            frontRightPower = (-yLeft - xRight - xLeft) * power; //-right
-            frontLeftPower = (yLeft - xRight - xLeft) * power; //-right
+            frontRightPower = (yLeft - xRight - xLeft) * power; //-right
+            frontLeftPower = (yLeft + xRight + xLeft) * power; //-right
             backRightPower = (-yLeft - xRight + xLeft) * power; //-right
             backLeftPower = (yLeft - xRight + xLeft) * power;
 

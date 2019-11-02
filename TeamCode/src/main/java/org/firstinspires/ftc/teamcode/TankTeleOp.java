@@ -37,6 +37,8 @@ public class TankTeleOp extends OpMode {
     final double NORMAL_POWER = 0.5;
     final double spoolConstant = 1.0;
 
+    double rampPosition;
+
     //DcMotor spool;
 
 
@@ -72,6 +74,8 @@ public class TankTeleOp extends OpMode {
 
         //spool setup
         //spool = hardwareMap.dcMotor.get("spool");
+        rampPosition = 0.4;
+        rampServo.setPosition(rampPosition);
     }
 
     public void loop() {
@@ -92,14 +96,20 @@ public class TankTeleOp extends OpMode {
             hookServo.setPosition(.6);
             //hookServo.setPosition(.47);
         }
-        if (rampServoButtonLogic.isPressed(gamepad1.y)) {
+        if (rampServoButtonLogic.isPressed(gamepad1.left_bumper)) {
             rampServoUp = !rampServoUp;
         }
-        if (rampServoUp) {
-            rampServo.setPosition(.4);
+        if (gamepad1.left_bumper) {
+            if (rampPosition < 1) {
+                rampPosition = rampPosition + 0.001;
+            }
+            rampServo.setPosition(rampPosition);
         }
-        else {
-            rampServo.setPosition(.16);
+        if (gamepad1.right_bumper) {
+            if (rampPosition > .001) {
+                rampPosition = rampPosition - 0.001;
+            }
+            rampServo.setPosition(rampPosition);
         }
         if (gamepad1.left_trigger > .5 && gamepad1.right_trigger == 0) {
             mecanumWheels.leftIntake.setPower(-1);
