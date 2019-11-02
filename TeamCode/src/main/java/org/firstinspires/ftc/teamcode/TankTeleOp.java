@@ -29,8 +29,8 @@ public class TankTeleOp extends OpMode {
     Servo hookServo;
     Servo rampServo;
 
-    boolean reverse = false;
-    boolean highPower = true;
+    boolean reverse = true;
+    boolean highPower = false;
     boolean hookServoEnable = false;
     boolean rampServoUp = true;
     final double HIGH_POWER = 1.0;
@@ -50,7 +50,7 @@ public class TankTeleOp extends OpMode {
 
 
 
-        //TODO why is this here. The Initialize hardware method should take care of this.
+        /*//TODO why is this here. The Initialize hardware method should take care of this.
         DcMotor frontRight = hardwareMap.dcMotor.get("frontRight");
         frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
@@ -62,7 +62,7 @@ public class TankTeleOp extends OpMode {
 
         DcMotor leftIntake = hardwareMap.dcMotor.get("leftIntake");
         DcMotor rightIntake = hardwareMap.dcMotor.get("rightIntake");
-
+         */
 
 
         hookServo=hardwareMap.servo.get("hookServo");
@@ -142,9 +142,9 @@ public class TankTeleOp extends OpMode {
         //telemetry is used to show on the driver controller phone what the code sees
         //use method instead? telemetry.addString(robot.reverseSense(reverse));
         if (reverse) {
-            telemetry.addData("F/R:", "REVERSE");
-        }else {
             telemetry.addData("F/R:", "FORWARD");
+        }else {
+            telemetry.addData("F/R:", "REVERSE");
         }
         if (rampServoUp) {
             telemetry.addData("RampServo:", "UP");
