@@ -74,7 +74,8 @@ public class TankTeleOp extends OpMode {
 
         //TODO I changed servos and intake to null for a full functionality test.
         //set up variables in respective classes.
-        mecanumWheels.initialize(robot.frontLeft, robot.frontRight, robot.backLeft, robot.backRight);
+        mecanumWheels.initialize(mecanumWheels.frontLeft, mecanumWheels.frontRight,
+                mecanumWheels.backLeft, mecanumWheels.backRight);
         servos.setServoVars(servos.rampServo, servos.hookServo);
         intake.setIntakeVars(intake.leftIntake, intake.rightIntake);
 

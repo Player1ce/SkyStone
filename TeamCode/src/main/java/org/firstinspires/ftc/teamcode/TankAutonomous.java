@@ -9,20 +9,18 @@ import com.qualcomm.robotcore.hardware.Servo;
 @Autonomous(name = "TankAutonomous", group="Skystone")
 public class TankAutonomous extends LinearOpMode {
     private TeleOpMethods robot = new TeleOpMethods("tank");
-    final  MecanumWheels mecanumWheels=new MecanumWheels("tank");
+    private final  MecanumWheels mecanumWheels = new MecanumWheels("tank");
+    private final ServoMethods servos = new ServoMethods("tank");
+    private final IntakeMethods intake = new IntakeMethods("tank");
     final double HIGH_POWER = 1.0;
     final double NORMAL_POWER = 0.5;
-    DcMotor frontLeft;
-    DcMotor frontRight;
-    DcMotor backLeft;
-    DcMotor backRight;
 
-    Servo hookServo;
-    Servo rampServo;
 
     public void runOpMode() {
-        robot.InitializeHardware(this);
-
+        mecanumWheels.initializeWheels(this);
+        servos.initializeServos(this);
+        servos.initializeServos(this);
+        /*
         hookServo=hardwareMap.servo.get("hookServo");
         rampServo=hardwareMap.servo.get("rampServo");
 
@@ -38,8 +36,10 @@ public class TankAutonomous extends LinearOpMode {
 
         DcMotor leftIntake = hardwareMap.dcMotor.get("leftIntake");
         DcMotor rightIntake = hardwareMap.dcMotor.get("rightIntake");
+         */
 
-        mecanumWheels.initialize(frontLeft, frontRight, backLeft, backRight, hookServo, rampServo, leftIntake, rightIntake);
+        mecanumWheels.initialize(mecanumWheels.frontLeft, mecanumWheels.frontRight,
+                mecanumWheels.backLeft, mecanumWheels.backRight);
         mecanumWheels.setZeroPowerBrakeBehavior();
         waitForStart();
         robot.startTime();
@@ -52,10 +52,10 @@ public class TankAutonomous extends LinearOpMode {
 
     public void moveHook(ServoPosition position){
         if (position==ServoPosition.UP)  {
-            hookServo.setPosition(.4);
+            servos.hookServo.setPosition(.4);
         }
         else  {
-            hookServo.setPosition(0);
+            servos.hookServo.setPosition(0);
         }
     }
 
