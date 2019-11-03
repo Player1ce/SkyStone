@@ -7,8 +7,6 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 
-
-@SuppressWarnings("StatementWithEmptyBody")
 @TeleOp(name="Tank TeleOp", group="Skystone")
 //@Disabled
 public class TankTeleOp extends OpMode {
@@ -44,9 +42,10 @@ public class TankTeleOp extends OpMode {
 
 
     public void init() {
-        //attaching configuration names to each motor; each one of these names must match the name
-        //of the motor in the configuration profile on the phone (spaces and capitalization matter)
-        //or else an error will occur
+        /* attaching configuration names to each motor; each one of these names must match the name
+        of the motor in the configuration profile on the phone (spaces and capitalization matter)
+        or else an error will occur
+        */
         robot.InitializeHardware(this);
         servos.initializeServos(this);
         intake.initializeIntake(this);
@@ -82,6 +81,7 @@ public class TankTeleOp extends OpMode {
 
         intake.setIntakeBrakes();
 
+        //rampServo setup
         rampPosition = 0.4;
         servos.rampServo.setPosition(rampPosition);
     }
@@ -89,15 +89,15 @@ public class TankTeleOp extends OpMode {
     public void loop() {
 
         //drive train --------------------------------
-        //if high power, use the high power constant, else use the normal power constant
         if (powerChangeButtonLogic.isPressed(gamepad1.a)) {
             highPower = !highPower;
         }
         if (reverseButtonLogic.isPressed(gamepad1.b)) {
             reverse = !reverse;
         }
+        //if high power, use the high power constant, else use the normal power constant
         double power = highPower ? HIGH_POWER : NORMAL_POWER;
-        //motor power setup
+
         mecanumWheels.setPowerFromGamepad(reverse, power,gamepad1.left_stick_x,
                 gamepad1.right_stick_x,gamepad1.left_stick_y);
 
@@ -106,7 +106,7 @@ public class TankTeleOp extends OpMode {
         if (hookServoButtonLogic.isPressed(gamepad1.x)) {
             hookServoEnable = !hookServoEnable;
         }
-        //hook movement control
+        //hook movement control this might not be a good thing to make a method.
         servos.hookControl(hookServoEnable);
 
 
@@ -114,6 +114,7 @@ public class TankTeleOp extends OpMode {
         if (rampServoButtonLogic.isPressed(gamepad1.left_bumper)) {
             rampServoUp = !rampServoUp;
         }
+        //ramp movement control
         if (gamepad1.left_bumper) {
             if (rampPosition < .5) {
                 rampPosition = rampPosition + 0.003;
