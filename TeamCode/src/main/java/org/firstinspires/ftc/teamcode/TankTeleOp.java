@@ -14,6 +14,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class TankTeleOp extends OpMode {
     private TeleOpMethods robot = new TeleOpMethods("tank");
     final  MecanumWheels mecanumWheels=new MecanumWheels("tank");
+    final ServoMethods servos = new ServoMethods("tank");
+    final IntakeMethods intake = new IntakeMethods("tank");
     private ButtonOneShot reverseButtonLogic = new ButtonOneShot();
     private ButtonOneShot powerChangeButtonLogic = new ButtonOneShot();
     private ButtonOneShot hookServoButtonLogic = new ButtonOneShot();
@@ -47,33 +49,36 @@ public class TankTeleOp extends OpMode {
         //of the motor in the configuration profile on the phone (spaces and capitalization matter)
         //or else an error will occur
         robot.InitializeHardware(this);
+        servos.initializeServos(this);
+        intake.initializeIntake(this);
 
-
-
-        //TODO why is this here. The Initialize hardware method should take care of this.
-        DcMotor frontRight = hardwareMap.dcMotor.get("frontRight");
+        //TODO we might want to use the variables initialized in the top instead of initializing them here.
+        //TODO the change tests using the already initialized variables.
+        //TODO to remove this we need to refference the class where the servo motor etc... is initialized
+        frontRight = hardwareMap.dcMotor.get("frontRight");
         frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        DcMotor frontLeft = hardwareMap.dcMotor.get("frontLeft");
+        frontLeft = hardwareMap.dcMotor.get("frontLeft");
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        DcMotor backRight = hardwareMap.dcMotor.get("backRight");
-        DcMotor backLeft = hardwareMap.dcMotor.get("backLeft");
+        backRight = hardwareMap.dcMotor.get("backRight");
+        backLeft = hardwareMap.dcMotor.get("backLeft");
 
-        DcMotor leftIntake = hardwareMap.dcMotor.get("leftIntake");
-        DcMotor rightIntake = hardwareMap.dcMotor.get("rightIntake");
-
-
+        leftIntake = hardwareMap.dcMotor.get("leftIntake");
+        rightIntake = hardwareMap.dcMotor.get("rightIntake");
 
         hookServo=hardwareMap.servo.get("hookServo");
         rampServo=hardwareMap.servo.get("rampServo");
 
+        //TODO I changed servos and intake to null for a full functionality test.
+        //set up variables in respective classes.
         mecanumWheels.initialize(frontLeft, frontRight, backLeft, backRight,
-                hookServo, rampServo, leftIntake, rightIntake);
-        mecanumWheels.setIntakeBrakes();
+                null, null, null, null);
+        servos.setServoVars(rampServo, hookServo);
+        intake.setIntakeVars(leftIntake, rightIntake);
 
-        //spool setup
-        //spool = hardwareMap.dcMotor.get("spool");
+        intake.setIntakeBrakes();
+
         rampPosition = 0.4;
         rampServo.setPosition(rampPosition);
     }
@@ -100,28 +105,29 @@ public class TankTeleOp extends OpMode {
             rampServoUp = !rampServoUp;
         }
         if (gamepad1.left_bumper) {
-            if (rampPosition < 1) {
-                rampPosition = rampPosition + 0.001;
+            if (rampPosition < .5) {
+                rampPosition = rampPosition + 0.003;
             }
             rampServo.setPosition(rampPosition);
         }
         if (gamepad1.right_bumper) {
-            if (rampPosition > .001) {
-                rampPosition = rampPosition - 0.001;
+            if (rampPosition > 0) {
+                rampPosition = rampPosition - 0.003;
             }
             rampServo.setPosition(rampPosition);
         }
-        if (gamepad1.left_trigger > .5 && gamepad1.right_trigger == 0) {
-            mecanumWheels.leftIntake.setPower(-1);
-            mecanumWheels.rightIntake.setPower(1);
+        //TODO test getting intake power from the gamepad triggers level of depression.
+        if (gamepad1.left_trigger > .01 && gamepad1.right_trigger == 0) {
+            intake.leftIntake.setPower(-1);
+            intake.rightIntake.setPower(1);
         }
-        else if (gamepad1.right_trigger > .5 && gamepad1.left_trigger == 0) {
-            mecanumWheels.leftIntake.setPower(1);
-            mecanumWheels.rightIntake.setPower(-1);
+        else if (gamepad1.right_trigger > .01 && gamepad1.left_trigger == 0) {
+            intake.leftIntake.setPower(1);
+            intake.rightIntake.setPower(-1);
         }
         else {
-            mecanumWheels.leftIntake.setPower(0);
-            mecanumWheels.rightIntake.setPower(0);
+            intake.leftIntake.setPower(0);
+            intake.rightIntake.setPower(0);
         }
 
         telemetry.addData("hookServo Position", hookServo.getPosition());
