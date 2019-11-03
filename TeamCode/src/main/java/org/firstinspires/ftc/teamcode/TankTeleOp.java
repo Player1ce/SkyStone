@@ -34,8 +34,8 @@ public class TankTeleOp extends OpMode {
      */
 
     //TODO correct starting cars for drive
-    private boolean reverse = false;
-    private boolean highPower = true;
+    private boolean reverse = true;
+    private boolean highPower = false;
     private boolean hookServoEnable = false;
     private boolean rampServoUp = true;
     private final double HIGH_POWER = 1.0;
@@ -153,6 +153,7 @@ public class TankTeleOp extends OpMode {
         telemetry.addData("y_left:", mecanumWheels.yLeft);
         telemetry.addData("Power:", power);
 
+        //TODO correct this telemetry
         if (reverse) {
             telemetry.addData("F/R:", "REVERSE");
         }else {
