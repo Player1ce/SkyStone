@@ -1,6 +1,10 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.graphics.Path;
+
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -42,7 +46,20 @@ public class MecanumWheels {
         chassis = chassisName.toLowerCase();
     }
 
-    public void initialize(DcMotor frontLeft, DcMotor frontRight,DcMotor backLeft, DcMotor backRight, Servo hookServo, Servo rampServo, DcMotor leftIntake, DcMotor rightIntake) {
+    public void initializeWheels (OpMode opMode) {
+        frontRight = opMode.hardwareMap.dcMotor.get("frontRight");
+        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        frontLeft = opMode.hardwareMap.dcMotor.get("frontLeft");
+        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        backRight = opMode.hardwareMap.dcMotor.get("backRight");
+
+        backLeft = opMode.hardwareMap.dcMotor.get("backLeft");
+    }
+
+    // removed for structural changes (Servo hookServo, Servo rampServo, DcMotor leftIntake, DcMotor rightIntake)
+    public void initialize(DcMotor frontLeft, DcMotor frontRight,DcMotor backLeft, DcMotor backRight) {
       //assign the passed in Motors to the class fields for later use
       this.frontLeft = frontLeft;
       this.frontRight = frontRight;

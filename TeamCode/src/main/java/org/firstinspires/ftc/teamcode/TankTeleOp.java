@@ -46,7 +46,7 @@ public class TankTeleOp extends OpMode {
         of the motor in the configuration profile on the phone (spaces and capitalization matter)
         or else an error will occur
         */
-        robot.InitializeHardware(this);
+        mecanumWheels.initializeWheels(this);
         servos.initializeServos(this);
         intake.initializeIntake(this);
 
@@ -74,8 +74,7 @@ public class TankTeleOp extends OpMode {
 
         //TODO I changed servos and intake to null for a full functionality test.
         //set up variables in respective classes.
-        mecanumWheels.initialize(robot.frontLeft, robot.frontRight, robot.backLeft, robot.backRight,
-                null, null, null, null);
+        mecanumWheels.initialize(robot.frontLeft, robot.frontRight, robot.backLeft, robot.backRight);
         servos.setServoVars(servos.rampServo, servos.hookServo);
         intake.setIntakeVars(intake.leftIntake, intake.rightIntake);
 
