@@ -13,14 +13,15 @@ import com.qualcomm.robotcore.hardware.Servo;
 //@Disabled
 public class TankTeleOp extends OpMode {
     private TeleOpMethods robot = new TeleOpMethods("tank");
-    final  MecanumWheels mecanumWheels=new MecanumWheels("tank");
-    final ServoMethods servos = new ServoMethods("tank");
-    final IntakeMethods intake = new IntakeMethods("tank");
+    private final  MecanumWheels mecanumWheels = new MecanumWheels("tank");
+    private final ServoMethods servos = new ServoMethods("tank");
+    private final IntakeMethods intake = new IntakeMethods("tank");
     private ButtonOneShot reverseButtonLogic = new ButtonOneShot();
     private ButtonOneShot powerChangeButtonLogic = new ButtonOneShot();
     private ButtonOneShot hookServoButtonLogic = new ButtonOneShot();
     private ButtonOneShot rampServoButtonLogic = new ButtonOneShot();
 
+    /*
     DcMotor frontLeft;
     DcMotor frontRight;
     DcMotor backLeft;
@@ -30,18 +31,16 @@ public class TankTeleOp extends OpMode {
 
     Servo hookServo;
     Servo rampServo;
+     */
 
-    boolean reverse = false;
-    boolean highPower = true;
-    boolean hookServoEnable = false;
-    boolean rampServoUp = true;
-    final double HIGH_POWER = 1.0;
-    final double NORMAL_POWER = 0.5;
-    final double spoolConstant = 1.0;
-
-    double rampPosition;
-
-    //DcMotor spool;
+    //TODO correct starting cars for drive
+    private boolean reverse = false;
+    private boolean highPower = true;
+    private boolean hookServoEnable = false;
+    private boolean rampServoUp = true;
+    private final double HIGH_POWER = 1.0;
+    private final double NORMAL_POWER = 0.5;
+    private double rampPosition;
 
 
     public void init() {
@@ -52,9 +51,12 @@ public class TankTeleOp extends OpMode {
         servos.initializeServos(this);
         intake.initializeIntake(this);
 
-        //TODO we might want to use the variables initialized in the top instead of initializing them here.
-        //TODO the change tests using the already initialized variables.
-        //TODO to remove this we need to refference the class where the servo motor etc... is initialized
+        /*TODO we might want to use the variables initialized in the top instead of initializing them here.
+           the change tests using the already initialized variables.
+           to remove this we need to reference the class where the servo motor etc... is initialized
+        */
+
+        /*
         frontRight = hardwareMap.dcMotor.get("frontRight");
         frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
@@ -69,38 +71,46 @@ public class TankTeleOp extends OpMode {
 
         hookServo=hardwareMap.servo.get("hookServo");
         rampServo=hardwareMap.servo.get("rampServo");
+        */
 
         //TODO I changed servos and intake to null for a full functionality test.
         //set up variables in respective classes.
-        mecanumWheels.initialize(frontLeft, frontRight, backLeft, backRight,
+        mecanumWheels.initialize(robot.frontLeft, robot.frontRight, robot.backLeft, robot.backRight,
                 null, null, null, null);
-        servos.setServoVars(rampServo, hookServo);
-        intake.setIntakeVars(leftIntake, rightIntake);
+        servos.setServoVars(servos.rampServo, servos.hookServo);
+        intake.setIntakeVars(intake.leftIntake, intake.rightIntake);
 
         intake.setIntakeBrakes();
 
         rampPosition = 0.4;
-        rampServo.setPosition(rampPosition);
+        servos.rampServo.setPosition(rampPosition);
     }
 
     public void loop() {
 
-        if (reverseButtonLogic.isPressed(gamepad1.b)) {
-            reverse = !reverse;
-        }
+        //drive train --------------------------------
+        //if high power, use the high power constant, else use the normal power constant
         if (powerChangeButtonLogic.isPressed(gamepad1.a)) {
             highPower = !highPower;
         }
+        if (reverseButtonLogic.isPressed(gamepad1.b)) {
+            reverse = !reverse;
+        }
+        double power = highPower ? HIGH_POWER : NORMAL_POWER;
+        //motor power setup
+        mecanumWheels.setPowerFromGamepad(reverse, power,gamepad1.left_stick_x,
+                gamepad1.right_stick_x,gamepad1.left_stick_y);
+
+
+        //hook servo -------------------------------
         if (hookServoButtonLogic.isPressed(gamepad1.x)) {
             hookServoEnable = !hookServoEnable;
         }
-        if (hookServoEnable)  {
-            hookServo.setPosition(0);
-        }
-        else   {
-            hookServo.setPosition(.6);
-            //hookServo.setPosition(.47);
-        }
+        //hook movement control
+        servos.hookControl(hookServoEnable);
+
+
+        //ramp servo -------------------------------
         if (rampServoButtonLogic.isPressed(gamepad1.left_bumper)) {
             rampServoUp = !rampServoUp;
         }
@@ -108,14 +118,17 @@ public class TankTeleOp extends OpMode {
             if (rampPosition < .5) {
                 rampPosition = rampPosition + 0.003;
             }
-            rampServo.setPosition(rampPosition);
+            servos.rampServo.setPosition(rampPosition);
         }
         if (gamepad1.right_bumper) {
             if (rampPosition > 0) {
                 rampPosition = rampPosition - 0.003;
             }
-            rampServo.setPosition(rampPosition);
+            servos.rampServo.setPosition(rampPosition);
         }
+
+
+        //intake ----------------------------------
         //TODO test getting intake power from the gamepad triggers level of depression.
         if (gamepad1.left_trigger > .01 && gamepad1.right_trigger == 0) {
             intake.leftIntake.setPower(-1);
@@ -130,45 +143,31 @@ public class TankTeleOp extends OpMode {
             intake.rightIntake.setPower(0);
         }
 
-        telemetry.addData("hookServo Position", hookServo.getPosition());
-        telemetry.addData("rampServo Position:", rampServo.getPosition());
+
+        //telemetry ------------------------------
+        //telemetry is used to show on the driver controller phone what the code sees
+        telemetry.addData("hookServo Position", servos.hookServo.getPosition());
+        telemetry.addData("rampServo Position:", servos.rampServo.getPosition());
         telemetry.addData("x_left:", mecanumWheels.xLeft);
         telemetry.addData("x_right:", mecanumWheels.xRight);
         telemetry.addData("y_left:", mecanumWheels.yLeft);
-
-
-        //if high power, use the high power constant, else use the normal power constant
-        double power = highPower?HIGH_POWER:NORMAL_POWER;
-
         telemetry.addData("Power:", power);
 
-        mecanumWheels.setPowerFromGamepad(reverse,power,gamepad1.left_stick_x,
-                gamepad1.right_stick_x,gamepad1.left_stick_y);
-
-        //telemetry is used to show on the driver controller phone what the code sees
-        //use method instead? telemetry.addString(robot.reverseSense(reverse));
         if (reverse) {
             telemetry.addData("F/R:", "REVERSE");
         }else {
             telemetry.addData("F/R:", "FORWARD");
         }
+
+        /* not important in current system
         if (rampServoUp) {
             telemetry.addData("RampServo:", "UP");
         }
         else {
             telemetry.addData("RampServo Position:", "DOWN");
         }
-
-        telemetry.update();
-
-
-        /* spool code. Uncomment when we add it or to test a motor.
-        if (gamepad1.right_trigger > 0) {
-            spool.setPower(gamepad1.right_trigger * spoolConstant);
-        } else if (gamepad1.left_trigger > 0) {
-            spool.setPower(gamepad1.left_trigger * spoolConstant);
-        }
          */
+        telemetry.update();
     }
 
 }

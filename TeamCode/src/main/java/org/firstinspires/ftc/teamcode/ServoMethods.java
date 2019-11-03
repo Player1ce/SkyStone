@@ -21,5 +21,14 @@ public class ServoMethods {
         hookServo = opmode.hardwareMap.servo.get("hookServo");
         rampServo = opmode.hardwareMap.servo.get("rampServo");
     }
+    public void hookControl (boolean enabled) {
+        if (enabled)  {
+            hookServo.setPosition(0);
+        }
+        else   {
+            hookServo.setPosition(.6);
+            //hookServo.setPosition(.47);
+        }
+    }
 
 }
