@@ -14,25 +14,18 @@ public class GoBildaChassisTeleop extends OpMode {
 
     private TeleOpMethods robot = new TeleOpMethods("gobilda");
     final MecanumWheels mecanumWheels = new MecanumWheels("gobilda");
+    private final ServoMethods servos = new ServoMethods("gobilda");
+    private final IntakeMethods intake = new IntakeMethods("gobilda");
     private ButtonOneShot reverseButtonLogic = new ButtonOneShot();
     private ButtonOneShot powerChangeButtonLogic = new ButtonOneShot();
 
-    boolean reverse = false;
-    boolean highPower = true;
+    private boolean reverse = false;
+    private boolean highPower = true;
 
-    final double power = 0.5;
-    final double HIGH_POWER = 1.0;
-    final double NORMAL_POWER = 0.5;
-    final double spoolConstant = 1.0;
+    private final double power = 0.5;
+    private double HIGH_POWER = 1.0;
+    private double NORMAL_POWER = 0.5;
 
-    double x_left;
-    double x_right;
-    double y_left;
-
-    double frontRightPower; //-right
-    double frontLeftPower; //-right
-    double backRightPower; //-right
-    double backLeftPower;
 
     //DcMotor spool;
 
@@ -40,11 +33,13 @@ public class GoBildaChassisTeleop extends OpMode {
         //attaching configuration names to each motor; each one of these names must match the name
         //of the motor in the configuration profile on the phone (spaces and capitalization matter)
         //or else an error will occur
-        robot.InitializeHardware(this);
+        mecanumWheels.initializeWheels(this);
+        servos.initializeServos(this);
+        intake.initializeIntake(this);
 
-        //spool = hardwareMap.dcMotor.get("spool");
 
         //TODO why is this here. The Initialize hardware method should take care of this.
+        /*
         DcMotor frontRight = hardwareMap.dcMotor.get("frontRight");
         frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
@@ -53,52 +48,41 @@ public class GoBildaChassisTeleop extends OpMode {
 
         DcMotor backRight = hardwareMap.dcMotor.get("backRight");
         DcMotor backLeft = hardwareMap.dcMotor.get("backLeft");
+        */
 
 
-
-        mecanumWheels.initialize(frontLeft, frontRight, backLeft, backRight,
-                null, null, null, null);
+        mecanumWheels.initialize(mecanumWheels.frontLeft, mecanumWheels.frontRight,
+                mecanumWheels.backLeft, mecanumWheels.backRight);
 
     }
 
     public void loop() {
+        //drive train ------------------------
         if (reverseButtonLogic.isPressed(gamepad1.b)) {
             reverse = !reverse;
         }
         if (powerChangeButtonLogic.isPressed(gamepad1.a)) {
             highPower = !highPower;
         }
-
-        telemetry.addData("x_left:", mecanumWheels.xLeft);
-        telemetry.addData("x_right:", mecanumWheels.xRight);
-        telemetry.addData("y_left:", mecanumWheels.yLeft);
-
-        //TODO Uncomment if high power, use the high power constant, else use the normal power constant
-        //double power = highPower?HIGH_POWER:NORMAL_POWER;
-
-        telemetry.addData("Power:", power);
+        //if high power, use the high power constant, else use the normal power constant
+        double power = highPower ? HIGH_POWER : NORMAL_POWER;
 
         mecanumWheels.setPowerFromGamepad(reverse, power, gamepad1.left_stick_x,
                 gamepad1.right_stick_x, gamepad1.left_stick_y);
 
 
         //telemetry is used to show on the driver controller phone what the code sees
+        telemetry.addData("x_left:", mecanumWheels.xLeft);
+        telemetry.addData("x_right:", mecanumWheels.xRight);
+        telemetry.addData("y_left:", mecanumWheels.yLeft);
+        telemetry.addData("Power:", power);
+        //reverse telemetry
         if (reverse) {
             telemetry.addData("F/R:", "REVERSE");
         } else {
             telemetry.addData("F/R:", "FORWARD");
         }
         telemetry.update();
-
-        /*
-        // Spool control: left for up, right for dowm.
-        //WARNING: Be very careful with the speed here. The motor power is set based on how far the trigger is pulled.
-        if (gamepad1.right_trigger > 0) {
-            spool.setPower(gamepad1.right_trigger);
-        } else if (gamepad1.left_trigger > 0) {
-            spool.setPower(-gamepad1.left_trigger)
-        }
-        */
 
     }
 
