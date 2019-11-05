@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.util.Hardware;
 public class GoBildaChassisTeleop extends OpMode {
 
     private TeleOpMethods robot = new TeleOpMethods("gobilda");
-    final MecanumWheels mecanumWheels = new MecanumWheels("gobilda");
+    private final MecanumWheels mecanumWheels = new MecanumWheels("gobilda");
     private final ServoMethods servos = new ServoMethods("gobilda");
     private final IntakeMethods intake = new IntakeMethods("gobilda");
     private ButtonOneShot reverseButtonLogic = new ButtonOneShot();
@@ -22,7 +22,6 @@ public class GoBildaChassisTeleop extends OpMode {
     private boolean reverse = false;
     private boolean highPower = true;
 
-    private final double power = 0.5;
     private double HIGH_POWER = 1.0;
     private double NORMAL_POWER = 0.5;
 
