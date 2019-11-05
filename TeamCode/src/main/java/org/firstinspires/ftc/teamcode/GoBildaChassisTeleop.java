@@ -20,7 +20,7 @@ public class GoBildaChassisTeleop extends OpMode {
     boolean reverse = false;
     boolean highPower = true;
 
-    final double power = 0.5;
+    final double power = 1;
     final double HIGH_POWER = 1.0;
     final double NORMAL_POWER = 0.5;
     final double spoolConstant = 1.0;

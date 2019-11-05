@@ -1,11 +1,16 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.graphics.Color;
+
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
+import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.Servo;
-
+import com.qualcomm.robotcore.hardware.SwitchableLight;
 
 
 @SuppressWarnings("StatementWithEmptyBody")
@@ -29,8 +34,8 @@ public class TankTeleOp extends OpMode {
     Servo hookServo;
     Servo rampServo;
 
-    boolean reverse = false;
-    boolean highPower = true;
+    boolean reverse = true;
+    boolean highPower = false;
     boolean hookServoEnable = false;
     boolean rampServoUp = true;
     final double HIGH_POWER = 1.0;
@@ -41,6 +46,7 @@ public class TankTeleOp extends OpMode {
 
     //DcMotor spool;
 
+    ColorSensor colorSensor;
 
     public void init() {
         //attaching configuration names to each motor; each one of these names must match the name
@@ -48,7 +54,13 @@ public class TankTeleOp extends OpMode {
         //or else an error will occur
         robot.InitializeHardware(this);
 
+        colorSensor = hardwareMap.get(ColorSensor.class, "frontColorSensor");
 
+        // If possible, turn the light on in the beginning (it might already be on anyway,
+        // we just make sure it is if we can).
+        if (colorSensor instanceof SwitchableLight) {
+            ((SwitchableLight)colorSensor).enableLight(true);
+        }
 
         //TODO why is this here. The Initialize hardware method should take care of this.
         DcMotor frontRight = hardwareMap.dcMotor.get("frontRight");
@@ -80,6 +92,7 @@ public class TankTeleOp extends OpMode {
 
     public void loop() {
 
+
         if (reverseButtonLogic.isPressed(gamepad1.b)) {
             reverse = !reverse;
         }
@@ -96,26 +109,27 @@ public class TankTeleOp extends OpMode {
             hookServo.setPosition(.6);
             //hookServo.setPosition(.47);
         }
-        if (rampServoButtonLogic.isPressed(gamepad1.left_bumper)) {
+        //gamepad 2 functions
+        if (rampServoButtonLogic.isPressed(gamepad2.left_bumper)) {
             rampServoUp = !rampServoUp;
         }
-        if (gamepad1.left_bumper) {
-            if (rampPosition < 1) {
-                rampPosition = rampPosition + 0.001;
+        if (gamepad2.left_bumper) {
+            if (rampPosition < .5) {
+                rampPosition = rampPosition + 0.003;
             }
             rampServo.setPosition(rampPosition);
         }
-        if (gamepad1.right_bumper) {
+        if (gamepad2.right_bumper) {
             if (rampPosition > .001) {
-                rampPosition = rampPosition - 0.001;
+                rampPosition = rampPosition - 0.003;
             }
             rampServo.setPosition(rampPosition);
         }
-        if (gamepad1.left_trigger > .5 && gamepad1.right_trigger == 0) {
+        if (gamepad2.left_trigger > .5 && gamepad2.right_trigger == 0) {
             mecanumWheels.leftIntake.setPower(-1);
             mecanumWheels.rightIntake.setPower(1);
         }
-        else if (gamepad1.right_trigger > .5 && gamepad1.left_trigger == 0) {
+        else if (gamepad2.right_trigger > .5 && gamepad2.left_trigger == 0) {
             mecanumWheels.leftIntake.setPower(1);
             mecanumWheels.rightIntake.setPower(-1);
         }
@@ -123,6 +137,7 @@ public class TankTeleOp extends OpMode {
             mecanumWheels.leftIntake.setPower(0);
             mecanumWheels.rightIntake.setPower(0);
         }
+        //up .5 down .05 output .35
 
         telemetry.addData("hookServo Position", hookServo.getPosition());
         telemetry.addData("rampServo Position:", rampServo.getPosition());
@@ -142,19 +157,23 @@ public class TankTeleOp extends OpMode {
         //telemetry is used to show on the driver controller phone what the code sees
         //use method instead? telemetry.addString(robot.reverseSense(reverse));
         if (reverse) {
-            telemetry.addData("F/R:", "REVERSE");
-        }else {
             telemetry.addData("F/R:", "FORWARD");
+        }else {
+            telemetry.addData("F/R:", "REVERSE");
         }
-        if (rampServoUp) {
-            telemetry.addData("RampServo:", "UP");
-        }
-        else {
-            telemetry.addData("RampServo Position:", "DOWN");
-        }
+        telemetry.addData("rampServoPosition:", rampPosition);
+
+        /*
+        Color sensor diagnostics
+
+        telemetry.addLine()
+                .addData("r", colorSensor.red())
+                .addData("g",  colorSensor.green())
+                .addData("b",  colorSensor.blue());
+
 
         telemetry.update();
-
+*/
 
         /* spool code. Uncomment when we add it or to test a motor.
         if (gamepad1.right_trigger > 0) {
