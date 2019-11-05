@@ -64,6 +64,8 @@ public class TankAutonomous extends LinearOpMode {
 
         executeAutonomousLogic();
 
+
+
     }
 
     public void moveHook(ServoPosition position){
@@ -114,8 +116,15 @@ public class TankAutonomous extends LinearOpMode {
         moveHook(ServoPosition.UP);
 
         mecanumWheels.crabDrive("right", 0.7, 2200);
-        mecanumWheels.ForwardMoveInches(telemetry, 0.5, 11, ticksToInches);
+        mecanumWheels.ForwardMoveInches(telemetry, 0.5, 13, ticksToInches);
         mecanumWheels.crabDrive("left",0.7,1700);
+
+        sleep(500);
+
+        mecanumWheels.setPowerFromGamepad(false, .7, 100, 0, 0 );
+        sleep(500);
+
+
 
     }
 
