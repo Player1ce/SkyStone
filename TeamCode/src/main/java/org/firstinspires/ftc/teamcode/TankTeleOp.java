@@ -19,17 +19,6 @@ public class TankTeleOp extends OpMode {
     private ButtonOneShot hookServoButtonLogic = new ButtonOneShot();
     private ButtonOneShot rampServoButtonLogic = new ButtonOneShot();
 
-    /*
-    DcMotor frontLeft;
-    DcMotor frontRight;
-    DcMotor backLeft;
-    DcMotor backRight;
-    DcMotor leftIntake;
-    DcMotor rightIntake;
-
-    Servo hookServo;
-    Servo rampServo;
-     */
 
     //TODO correct starting cars for drive
     private boolean reverse = true;
@@ -53,23 +42,6 @@ public class TankTeleOp extends OpMode {
         /*TODO we might want to use the variables initialized in the top instead of initializing them here.
            the change tests using the already initialized variables.
            to remove this we need to reference the class where the servo motor etc... is initialized
-        */
-
-        /*
-        frontRight = hardwareMap.dcMotor.get("frontRight");
-        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        frontLeft = hardwareMap.dcMotor.get("frontLeft");
-        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        backRight = hardwareMap.dcMotor.get("backRight");
-        backLeft = hardwareMap.dcMotor.get("backLeft");
-
-        leftIntake = hardwareMap.dcMotor.get("leftIntake");
-        rightIntake = hardwareMap.dcMotor.get("rightIntake");
-
-        hookServo=hardwareMap.servo.get("hookServo");
-        rampServo=hardwareMap.servo.get("rampServo");
         */
 
         //TODO I changed servos and intake to null for a full functionality test.
