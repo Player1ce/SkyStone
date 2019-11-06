@@ -127,7 +127,7 @@ public class TankAutonomousBlue extends LinearOpMode {
 
         mecanumWheels.setPowerFromGamepad(false, .7, 10, 0, 0);
 
-        sleep(1000);
+        sleep(1100);
 
         mecanumWheels.StopMotors();
 

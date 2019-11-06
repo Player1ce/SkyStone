@@ -112,7 +112,7 @@ public class TankAutonomousRed extends LinearOpMode {
         moveHook(ServoPosition.DOWN);
 
         sleep(1000);
-        mecanumWheels.BackwardMoveInches(telemetry, -0.5, 28.5, ticksToInches);
+        mecanumWheels.BackwardMoveInches(telemetry, -0.5, 30, ticksToInches);
 
         sleep(1000);
 
@@ -130,7 +130,7 @@ public class TankAutonomousRed extends LinearOpMode {
 
         mecanumWheels.setPowerFromGamepad(false, .7, -10, 0, 0);
 
-        sleep(1000);
+        sleep(1050);
 
         mecanumWheels.StopMotors();
 
@@ -145,6 +145,10 @@ public class TankAutonomousRed extends LinearOpMode {
             i += 1;
             if (i == 18) {
                 rampServo.setPosition(.2);
+            }
+
+            if (i == 35) {
+                return;
             }
         }
 
