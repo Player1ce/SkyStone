@@ -37,7 +37,7 @@ public class TankTeleOp extends OpMode {
 
     boolean directRampControl = false;
     boolean reverse = true;
-    boolean highPower = false;
+    boolean highPower = true;
     boolean hookServoEnable = false;
     boolean rampServoUp = false;
     final double HIGH_POWER = 1.0;
@@ -139,13 +139,13 @@ public class TankTeleOp extends OpMode {
         }
 
 
-        if (gamepad2.left_trigger > .5 && gamepad2.right_trigger == 0) {
-            mecanumWheels.leftIntake.setPower(-1);
-            mecanumWheels.rightIntake.setPower(1);
+        if (gamepad2.left_trigger > 0) {
+            mecanumWheels.leftIntake.setPower(-gamepad2.left_trigger * .7);
+            mecanumWheels.rightIntake.setPower(gamepad2.left_trigger * .7);
         }
-        else if (gamepad2.right_trigger > .5 && gamepad2.left_trigger == 0) {
-            mecanumWheels.leftIntake.setPower(1);
-            mecanumWheels.rightIntake.setPower(-1);
+        else if (gamepad2.right_trigger > 0) {
+            mecanumWheels.leftIntake.setPower(gamepad2.right_trigger * .7);
+            mecanumWheels.rightIntake.setPower(-gamepad2.right_trigger * .7);
         }
         else {
             mecanumWheels.leftIntake.setPower(0);
@@ -158,7 +158,8 @@ public class TankTeleOp extends OpMode {
         telemetry.addData("x_left:", mecanumWheels.xLeft);
         telemetry.addData("x_right:", mecanumWheels.xRight);
         telemetry.addData("y_left:", mecanumWheels.yLeft);
-
+        telemetry.addData("intakeleft", gamepad2.left_trigger);
+        telemetry.addData("intakeright", gamepad2.right_trigger);
 
         //if high power, use the high power constant, else use the normal power constant
         double power = highPower?HIGH_POWER:NORMAL_POWER;
