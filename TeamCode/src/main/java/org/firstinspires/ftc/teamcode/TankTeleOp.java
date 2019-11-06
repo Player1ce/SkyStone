@@ -23,6 +23,7 @@ public class TankTeleOp extends OpMode {
     private ButtonOneShot powerChangeButtonLogic = new ButtonOneShot();
     private ButtonOneShot hookServoButtonLogic = new ButtonOneShot();
     private ButtonOneShot rampServoButtonLogic = new ButtonOneShot();
+    private ButtonOneShot rampDirectControl = new ButtonOneShot();
 
     DcMotor frontLeft;
     DcMotor frontRight;
@@ -34,10 +35,11 @@ public class TankTeleOp extends OpMode {
     Servo hookServo;
     Servo rampServo;
 
+    boolean directRampControl = false;
     boolean reverse = true;
     boolean highPower = false;
     boolean hookServoEnable = false;
-    boolean rampServoUp = true;
+    boolean rampServoUp = false;
     final double HIGH_POWER = 1.0;
     final double NORMAL_POWER = 0.5;
     final double spoolConstant = 1.0;
@@ -86,8 +88,6 @@ public class TankTeleOp extends OpMode {
 
         //spool setup
         //spool = hardwareMap.dcMotor.get("spool");
-        rampPosition = 0.4;
-        rampServo.setPosition(rampPosition);
     }
 
     public void loop() {
@@ -113,24 +113,29 @@ public class TankTeleOp extends OpMode {
         if (rampServoButtonLogic.isPressed(gamepad2.y)) {
             rampServoUp = !rampServoUp;
         }
-        /*
-        if (rampServoUp) {
-            rampServo.setPosition(.35);
-        } else {
-            rampServo.setPosition(.1);
+        if (rampDirectControl.isPressed(gamepad2.b)) {
+            directRampControl = !directRampControl;
         }
-        */
-        if (gamepad2.left_bumper) {
-            if (rampPosition < .5) {
-                rampPosition = rampPosition + 0.003;
+        if (!directRampControl) {
+            if (rampServoUp) {
+                rampServo.setPosition(.38);
+            } else {
+                rampServo.setPosition(.29);
             }
-            rampServo.setPosition(rampPosition);
         }
-        if (gamepad2.right_bumper) {
-            if (rampPosition > .001) {
-                rampPosition = rampPosition - 0.003;
+        if (directRampControl) {
+            if (gamepad2.left_bumper) {
+                if (rampPosition < .5) {
+                    rampPosition = rampPosition + 0.003;
+                }
+                rampServo.setPosition(rampPosition);
             }
-            rampServo.setPosition(rampPosition);
+            if (gamepad2.right_bumper) {
+                if (rampPosition > .001) {
+                    rampPosition = rampPosition - 0.003;
+                }
+                rampServo.setPosition(rampPosition);
+            }
         }
 
 
