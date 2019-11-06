@@ -110,9 +110,16 @@ public class TankTeleOp extends OpMode {
             //hookServo.setPosition(.47);
         }
         //gamepad 2 functions
-        if (rampServoButtonLogic.isPressed(gamepad2.left_bumper)) {
+        if (rampServoButtonLogic.isPressed(gamepad2.y)) {
             rampServoUp = !rampServoUp;
         }
+        /*
+        if (rampServoUp) {
+            rampServo.setPosition(.35);
+        } else {
+            rampServo.setPosition(.1);
+        }
+        */
         if (gamepad2.left_bumper) {
             if (rampPosition < .5) {
                 rampPosition = rampPosition + 0.003;
@@ -125,6 +132,8 @@ public class TankTeleOp extends OpMode {
             }
             rampServo.setPosition(rampPosition);
         }
+
+
         if (gamepad2.left_trigger > .5 && gamepad2.right_trigger == 0) {
             mecanumWheels.leftIntake.setPower(-1);
             mecanumWheels.rightIntake.setPower(1);
