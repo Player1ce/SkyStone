@@ -30,12 +30,6 @@ public class MecanumWheels {
     double backRightPower; //-right
     double backLeftPower;
 
-    double autoFrontRightPower;
-    double autoFrontLeftPower;
-    double autoBackRightPower;
-    double autoBackLeftPower;
-
-
     double xLeft;
     double yLeft;
     double xRight;
