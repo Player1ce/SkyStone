@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.SwitchableLight;
 
+
+@Autonomous(name = "TankAutonomousRed", group="Skystone")
 public class TankAutonomousRed extends LinearOpMode {
     private TeleOpMethods robot = new TeleOpMethods("tank");
     final  MecanumWheels mecanumWheels=new MecanumWheels("tank");
