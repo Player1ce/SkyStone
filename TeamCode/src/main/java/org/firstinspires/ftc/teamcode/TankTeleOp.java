@@ -31,6 +31,7 @@ public class TankTeleOp extends OpMode {
     private boolean highPower = true;
     private boolean hookServoEnable = false;
     private boolean rampServoUp = false;
+    private boolean directRampControl = false;
     private final double HIGH_POWER = 1.0;
     private final double NORMAL_POWER = 0.5;
     private double rampPosition;
@@ -45,6 +46,14 @@ public class TankTeleOp extends OpMode {
         mecanumWheels.initializeWheels(this);
         servos.initializeServos(this);
         intake.initializeIntake(this);
+
+        colorSensor = hardwareMap.get(ColorSensor.class, "frontColorSensor");
+
+        // If possible, turn the light on in the beginning (it might already be on anyway,
+        // we just make sure it is if we can).
+        if (colorSensor instanceof SwitchableLight) {
+            ((SwitchableLight)colorSensor).enableLight(true);
+        }
 
         /*TODO we might want to use the variables initialized in the top instead of initializing them here.
            the change tests using the already initialized variables.
@@ -88,7 +97,10 @@ public class TankTeleOp extends OpMode {
             servos.hookServo.setPosition(.6);
             //hookServo.setPosition(.47);
         }
-        //gamepad 2 functions
+
+        //gamepad 2 functions-------------------
+
+        //ramp servo control -------------------
         if (rampServoButtonLogic.isPressed(gamepad2.y)) {
             rampServoUp = !rampServoUp;
         }
@@ -117,7 +129,7 @@ public class TankTeleOp extends OpMode {
             }
         }
 
-
+        //intake control ----------------------------
         if (gamepad2.left_trigger > 0) {
             intake.leftIntake.setPower(-gamepad2.left_trigger * .7);
             intake.rightIntake.setPower(gamepad2.left_trigger * .7);
@@ -130,7 +142,6 @@ public class TankTeleOp extends OpMode {
             intake.leftIntake.setPower(0);
             intake.rightIntake.setPower(0);
         }
-        //up .5 down .05 output .35
 
 
         //telemetry ------------------------------
@@ -162,15 +173,7 @@ public class TankTeleOp extends OpMode {
 
 
         telemetry.update();
-*/
-
-        /* spool code. Uncomment when we add it or to test a motor.
-        if (gamepad1.right_trigger > 0) {
-            spool.setPower(gamepad1.right_trigger * spoolConstant);
-        } else if (gamepad1.left_trigger > 0) {
-            spool.setPower(gamepad1.left_trigger * spoolConstant);
-        }
-         */
+        */
         telemetry.update();
     }
 
