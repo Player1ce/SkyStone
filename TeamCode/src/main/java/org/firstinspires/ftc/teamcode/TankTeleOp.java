@@ -12,101 +12,80 @@ import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.SwitchableLight;
 
-
-@SuppressWarnings("StatementWithEmptyBody")
 @TeleOp(name="Tank TeleOp", group="Skystone")
 //@Disabled
 public class TankTeleOp extends OpMode {
     private TeleOpMethods robot = new TeleOpMethods("tank");
-    final  MecanumWheels mecanumWheels=new MecanumWheels("tank");
+    private final  MecanumWheels mecanumWheels = new MecanumWheels("tank");
+    private final ServoMethods servos = new ServoMethods("tank");
+    private final IntakeMethods intake = new IntakeMethods("tank");
     private ButtonOneShot reverseButtonLogic = new ButtonOneShot();
     private ButtonOneShot powerChangeButtonLogic = new ButtonOneShot();
     private ButtonOneShot hookServoButtonLogic = new ButtonOneShot();
     private ButtonOneShot rampServoButtonLogic = new ButtonOneShot();
     private ButtonOneShot rampDirectControl = new ButtonOneShot();
 
-    DcMotor frontLeft;
-    DcMotor frontRight;
-    DcMotor backLeft;
-    DcMotor backRight;
-    DcMotor leftIntake;
-    DcMotor rightIntake;
 
-    Servo hookServo;
-    Servo rampServo;
-
-    boolean directRampControl = false;
-    boolean reverse = true;
-    boolean highPower = true;
-    boolean hookServoEnable = false;
-    boolean rampServoUp = false;
-    final double HIGH_POWER = 1.0;
-    final double NORMAL_POWER = 0.5;
-    final double spoolConstant = 1.0;
-
-    double rampPosition;
-
-    //DcMotor spool;
+    //TODO correct starting cars for drive
+    private boolean reverse = true;
+    private boolean highPower = true;
+    private boolean hookServoEnable = false;
+    private boolean rampServoUp = false;
+    private final double HIGH_POWER = 1.0;
+    private final double NORMAL_POWER = 0.5;
+    private double rampPosition;
 
     ColorSensor colorSensor;
 
     public void init() {
-        //attaching configuration names to each motor; each one of these names must match the name
-        //of the motor in the configuration profile on the phone (spaces and capitalization matter)
-        //or else an error will occur
-        robot.InitializeHardware(this);
+        /* attaching configuration names to each motor; each one of these names must match the name
+        of the motor in the configuration profile on the phone (spaces and capitalization matter)
+        or else an error will occur
+        */
+        mecanumWheels.initializeWheels(this);
+        servos.initializeServos(this);
+        intake.initializeIntake(this);
 
-        colorSensor = hardwareMap.get(ColorSensor.class, "frontColorSensor");
+        /*TODO we might want to use the variables initialized in the top instead of initializing them here.
+           the change tests using the already initialized variables.
+           to remove this we need to reference the class where the servo motor etc... is initialized
+        */
 
-        // If possible, turn the light on in the beginning (it might already be on anyway,
-        // we just make sure it is if we can).
-        if (colorSensor instanceof SwitchableLight) {
-            ((SwitchableLight)colorSensor).enableLight(true);
-        }
+        //TODO I changed servos and intake to null for a full functionality test.
+        //set up variables in respective classes.
+        mecanumWheels.initialize(mecanumWheels.frontLeft, mecanumWheels.frontRight,
+                mecanumWheels.backLeft, mecanumWheels.backRight);
+        servos.setServoVars(servos.rampServo, servos.hookServo);
+        intake.setIntakeVars(intake.leftIntake, intake.rightIntake);
 
-        //TODO why is this here. The Initialize hardware method should take care of this.
-        DcMotor frontRight = hardwareMap.dcMotor.get("frontRight");
-        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        DcMotor frontLeft = hardwareMap.dcMotor.get("frontLeft");
-        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        DcMotor backRight = hardwareMap.dcMotor.get("backRight");
-        DcMotor backLeft = hardwareMap.dcMotor.get("backLeft");
-
-        DcMotor leftIntake = hardwareMap.dcMotor.get("leftIntake");
-        DcMotor rightIntake = hardwareMap.dcMotor.get("rightIntake");
-
-
-
-        hookServo=hardwareMap.servo.get("hookServo");
-        rampServo=hardwareMap.servo.get("rampServo");
-
-        mecanumWheels.initialize(frontLeft, frontRight, backLeft, backRight,
-                hookServo, rampServo, leftIntake, rightIntake);
-        mecanumWheels.setIntakeBrakes();
-
-        //spool setup
-        //spool = hardwareMap.dcMotor.get("spool");
+        intake.setIntakeBrakes();
     }
 
     public void loop() {
 
-
-        if (reverseButtonLogic.isPressed(gamepad1.b)) {
-            reverse = !reverse;
-        }
+        //drive train --------------------------------
         if (powerChangeButtonLogic.isPressed(gamepad1.a)) {
             highPower = !highPower;
         }
+        if (reverseButtonLogic.isPressed(gamepad1.b)) {
+            reverse = !reverse;
+        }
+        //if high power, use the high power constant, else use the normal power constant
+        double power = highPower ? HIGH_POWER : NORMAL_POWER;
+
+        mecanumWheels.setPowerFromGamepad(reverse, power,gamepad1.left_stick_x,
+                gamepad1.right_stick_x,gamepad1.left_stick_y);
+
+
+        //hook servo -------------------------------
         if (hookServoButtonLogic.isPressed(gamepad1.x)) {
             hookServoEnable = !hookServoEnable;
         }
         if (hookServoEnable)  {
-            hookServo.setPosition(0);
+            servos.hookServo.setPosition(0);
         }
         else   {
-            hookServo.setPosition(.6);
+            servos.hookServo.setPosition(.6);
             //hookServo.setPosition(.47);
         }
         //gamepad 2 functions
@@ -118,9 +97,9 @@ public class TankTeleOp extends OpMode {
         }
         if (!directRampControl) {
             if (rampServoUp) {
-                rampServo.setPosition(.38);
+                servos.rampServo.setPosition(.38);
             } else {
-                rampServo.setPosition(.29);
+                servos.rampServo.setPosition(.29);
             }
         }
         if (directRampControl) {
@@ -128,49 +107,44 @@ public class TankTeleOp extends OpMode {
                 if (rampPosition < .5) {
                     rampPosition = rampPosition + 0.003;
                 }
-                rampServo.setPosition(rampPosition);
+                servos.rampServo.setPosition(rampPosition);
             }
             if (gamepad2.right_bumper) {
                 if (rampPosition > .001) {
                     rampPosition = rampPosition - 0.003;
                 }
-                rampServo.setPosition(rampPosition);
+                servos.rampServo.setPosition(rampPosition);
             }
         }
 
 
         if (gamepad2.left_trigger > 0) {
-            mecanumWheels.leftIntake.setPower(-gamepad2.left_trigger * .7);
-            mecanumWheels.rightIntake.setPower(gamepad2.left_trigger * .7);
+            intake.leftIntake.setPower(-gamepad2.left_trigger * .7);
+            intake.rightIntake.setPower(gamepad2.left_trigger * .7);
         }
         else if (gamepad2.right_trigger > 0) {
-            mecanumWheels.leftIntake.setPower(gamepad2.right_trigger * .7);
-            mecanumWheels.rightIntake.setPower(-gamepad2.right_trigger * .7);
+            intake.leftIntake.setPower(gamepad2.right_trigger * .7);
+            intake.rightIntake.setPower(-gamepad2.right_trigger * .7);
         }
         else {
-            mecanumWheels.leftIntake.setPower(0);
-            mecanumWheels.rightIntake.setPower(0);
+            intake.leftIntake.setPower(0);
+            intake.rightIntake.setPower(0);
         }
         //up .5 down .05 output .35
 
-        telemetry.addData("hookServo Position", hookServo.getPosition());
-        telemetry.addData("rampServo Position:", rampServo.getPosition());
+
+        //telemetry ------------------------------
+        //telemetry is used to show on the driver controller phone what the code sees
+        telemetry.addData("hookServo Position", servos.hookServo.getPosition());
+        telemetry.addData("rampServo Position:", servos.rampServo.getPosition());
         telemetry.addData("x_left:", mecanumWheels.xLeft);
         telemetry.addData("x_right:", mecanumWheels.xRight);
         telemetry.addData("y_left:", mecanumWheels.yLeft);
         telemetry.addData("intakeleft", gamepad2.left_trigger);
         telemetry.addData("intakeright", gamepad2.right_trigger);
-
-        //if high power, use the high power constant, else use the normal power constant
-        double power = highPower?HIGH_POWER:NORMAL_POWER;
-
         telemetry.addData("Power:", power);
 
-        mecanumWheels.setPowerFromGamepad(reverse,power,gamepad1.left_stick_x,
-                gamepad1.right_stick_x,gamepad1.left_stick_y);
-
-        //telemetry is used to show on the driver controller phone what the code sees
-        //use method instead? telemetry.addString(robot.reverseSense(reverse));
+        //TODO correct this telemetry
         if (reverse) {
             telemetry.addData("F/R:", "FORWARD");
         }else {
@@ -197,6 +171,7 @@ public class TankTeleOp extends OpMode {
             spool.setPower(gamepad1.left_trigger * spoolConstant);
         }
          */
+        telemetry.update();
     }
 
 }
