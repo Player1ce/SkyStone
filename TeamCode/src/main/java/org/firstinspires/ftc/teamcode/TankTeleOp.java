@@ -18,13 +18,14 @@ public class TankTeleOp extends OpMode {
     private ButtonOneShot powerChangeButtonLogic = new ButtonOneShot();
     private ButtonOneShot hookServoButtonLogic = new ButtonOneShot();
     private ButtonOneShot rampServoButtonLogic = new ButtonOneShot();
-
+    private ButtonOneShot rampDirectControl = new ButtonOneShot();
 
     //TODO correct starting cars for drive
     private boolean reverse = true;
-    private boolean highPower = false;
+    private boolean highPower = true;
     private boolean hookServoEnable = false;
-    private boolean rampServoUp = true;
+    private boolean rampServoUp = false;
+    private boolean directRampControl = false;
     private final double HIGH_POWER = 1.0;
     private final double NORMAL_POWER = 0.5;
     private double rampPosition;
@@ -39,10 +40,13 @@ public class TankTeleOp extends OpMode {
         servos.initializeServos(this);
         intake.initializeIntake(this);
 
-        /*TODO we might want to use the variables initialized in the top instead of initializing them here.
-           the change tests using the already initialized variables.
-           to remove this we need to reference the class where the servo motor etc... is initialized
-        */
+        colorSensor = hardwareMap.get(ColorSensor.class, "frontColorSensor");
+
+        // If possible, turn the light on in the beginning (it might already be on anyway,
+        // we just make sure it is if we can).
+        if (colorSensor instanceof SwitchableLight) {
+            ((SwitchableLight)colorSensor).enableLight(true);
+        }
 
         //TODO I changed servos and intake to null for a full functionality test.
         //set up variables in respective classes.
@@ -52,10 +56,6 @@ public class TankTeleOp extends OpMode {
         intake.setIntakeVars(intake.leftIntake, intake.rightIntake);
 
         intake.setIntakeBrakes();
-
-        //rampServo setup
-        rampPosition = 0.4;
-        servos.rampServo.setPosition(rampPosition);
     }
 
     public void loop() {
@@ -78,38 +78,53 @@ public class TankTeleOp extends OpMode {
         if (hookServoButtonLogic.isPressed(gamepad1.x)) {
             hookServoEnable = !hookServoEnable;
         }
-        //hook movement control this might not be a good thing to make a method.
-        servos.hookControl(hookServoEnable);
+        if (hookServoEnable)  {
+            servos.hookServo.setPosition(0);
+        }
+        else   {
+            servos.hookServo.setPosition(.6);
+            //hookServo.setPosition(.47);
+        }
 
+        //gamepad 2 functions-------------------
 
-        //ramp servo -------------------------------
-        if (rampServoButtonLogic.isPressed(gamepad1.left_bumper)) {
+        //ramp servo control -------------------
+        if (rampServoButtonLogic.isPressed(gamepad2.y)) {
             rampServoUp = !rampServoUp;
         }
-        //ramp movement control
-        if (gamepad1.left_bumper) {
-            if (rampPosition < .5) {
-                rampPosition = rampPosition + 0.003;
-            }
-            servos.rampServo.setPosition(rampPosition);
+        if (rampDirectControl.isPressed(gamepad2.b)) {
+            directRampControl = !directRampControl;
         }
-        if (gamepad1.right_bumper) {
-            if (rampPosition > 0) {
-                rampPosition = rampPosition - 0.003;
+        if (!directRampControl) {
+            if (rampServoUp) {
+                servos.rampServo.setPosition(.38);
+            } else {
+                servos.rampServo.setPosition(.29);
             }
-            servos.rampServo.setPosition(rampPosition);
+        }
+        if (directRampControl) {
+            if (gamepad2.left_bumper) {
+                if (rampPosition < .5) {
+                    rampPosition = rampPosition + 0.003;
+                }
+                servos.rampServo.setPosition(rampPosition);
+            }
+            if (gamepad2.right_bumper) {
+                if (rampPosition > .001) {
+                    rampPosition = rampPosition - 0.003;
+                }
+                servos.rampServo.setPosition(rampPosition);
+            }
         }
 
-
-        //intake ----------------------------------
-        //TODO test getting intake power from the gamepad triggers level of depression.
-        if (gamepad1.left_trigger > .01 && gamepad1.right_trigger == 0) {
-            intake.leftIntake.setPower(-1);
-            intake.rightIntake.setPower(1);
+        //intake control ----------------------------
+        if (gamepad2.left_trigger > 0) {
+            intake.leftIntake.setPower(-gamepad2.left_trigger * .7);
+            intake.rightIntake.setPower(gamepad2.left_trigger * .7);
         }
-        else if (gamepad1.right_trigger > .01 && gamepad1.left_trigger == 0) {
-            intake.leftIntake.setPower(1);
-            intake.rightIntake.setPower(-1);
+        else if (gamepad2.right_trigger > 0) {
+            intake.leftIntake.setPower(gamepad2.right_trigger * .7);
+            intake.rightIntake.setPower(-gamepad2.right_trigger * .7);
         }
         else {
             intake.leftIntake.setPower(0);
@@ -141,6 +156,17 @@ public class TankTeleOp extends OpMode {
             telemetry.addData("RampServo Position:", "DOWN");
         }
          */
+        telemetry.addData("rampServoPosition:", rampPosition);
+
+        /*
+        Color sensor diagnostics
+
+        telemetry.addLine()
+                .addData("r", colorSensor.red())
+                .addData("g",  colorSensor.green())
+                .addData("b",  colorSensor.blue());
+        */
+
         telemetry.update();
     }
 

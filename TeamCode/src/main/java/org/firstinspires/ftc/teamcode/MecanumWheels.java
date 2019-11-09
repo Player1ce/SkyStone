@@ -41,6 +41,7 @@ public class MecanumWheels {
     }
 
     public void initializeWheels (OpMode opMode) {
+        //compress using this.frontRight = ...;
         frontRight = opMode.hardwareMap.dcMotor.get("frontRight");
         frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
@@ -50,21 +51,15 @@ public class MecanumWheels {
         backRight = opMode.hardwareMap.dcMotor.get("backRight");
 
         backLeft = opMode.hardwareMap.dcMotor.get("backLeft");
+
     }
 
-    // removed for structural changes (Servo hookServo, Servo rampServo, DcMotor leftIntake, DcMotor rightIntake)
     public void initialize(DcMotor frontLeft, DcMotor frontRight,DcMotor backLeft, DcMotor backRight) {
       //assign the passed in Motors to the class fields for later use
       this.frontLeft = frontLeft;
       this.frontRight = frontRight;
       this.backLeft = backLeft;
       this.backRight = backRight;
-      /*other class
-      this.hookServo = hookServo;
-      this.rampServo = rampServo;
-      this.leftIntake = leftIntake;
-      this.rightIntake = rightIntake;
-       */
     }
 
 
