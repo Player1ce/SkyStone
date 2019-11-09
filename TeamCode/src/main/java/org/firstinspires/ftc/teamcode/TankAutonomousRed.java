@@ -16,6 +16,7 @@ public class TankAutonomousRed extends LinearOpMode {
     final double HIGH_POWER = 1.0;
     final double NORMAL_POWER = 0.5;
     double i;
+    long startTime;
 
     DcMotor frontLeft;
     DcMotor frontRight;
@@ -91,8 +92,8 @@ public class TankAutonomousRed extends LinearOpMode {
         int redBaseline = colors[0];
         int blueBaseline = colors[2];
 
-        int redTarget = redBaseline + 10;
-        int blueTarget = blueBaseline + 7;
+        int redTarget = redBaseline + 7;
+        int blueTarget = blueBaseline + 4;
 
         telemetry.addData("Baseline Colors", colors[0] + "  " + colors[1] + "   " + colors[2]);
         telemetry.update();
@@ -118,6 +119,8 @@ public class TankAutonomousRed extends LinearOpMode {
 
         moveHook(ServoPosition.UP);
 
+        sleep(500);
+
         mecanumWheels.crabDrive("left", 0.7, 2500);
         mecanumWheels.ForwardMoveInches(telemetry, 0.5, 13, ticksToInches);
         mecanumWheels.crabDrive("right", 0.7, 2000);
@@ -138,7 +141,9 @@ public class TankAutonomousRed extends LinearOpMode {
 
         mecanumWheels.setPowerFromGamepad(true, .7, 0, 0, 10);
 
-        while (colorSensor.red() < redTarget && colorSensor.blue() < blueTarget) {
+        startTime = System.currentTimeMillis();
+
+        while (colorSensor.red() < redTarget && colorSensor.blue() < blueTarget && System.currentTimeMillis()-startTime <1400) {
             telemetry.addData("Colors", "-> " + colors[0] + "  " + colors[1] + "   " + colors[2]);
             telemetry.update();
             sleep(10);
