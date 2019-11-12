@@ -1,6 +1,10 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.graphics.Path;
+
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -11,23 +15,11 @@ public class MecanumWheels {
     DcMotor frontRight;
     DcMotor backLeft;
     DcMotor backRight;
-    DcMotor leftIntake;
-    DcMotor rightIntake;
-
-    Servo hookServo;
-    Servo rampServo;
-
 
     double frontRightPower; //-right
     double frontLeftPower; //-right
     double backRightPower; //-right
     double backLeftPower;
-
-    double autoFrontRightPower;
-    double autoFrontLeftPower;
-    double autoBackRightPower;
-    double autoBackLeftPower;
-
 
     double xLeft;
     double yLeft;
@@ -39,18 +31,19 @@ public class MecanumWheels {
         chassis = chassisName.toLowerCase();
     }
 
-    public void initialize(DcMotor frontLeft, DcMotor frontRight,DcMotor backLeft, DcMotor backRight, Servo hookServo, Servo rampServo, DcMotor leftIntake, DcMotor rightIntake) {
-      //assign the passed in Motors to the class fields for later use
-      this.frontLeft = frontLeft;
-      this.frontRight = frontRight;
-      this.backLeft = backLeft;
-      this.backRight = backRight;
-      this.hookServo = hookServo;
-      this.rampServo = rampServo;
-      this.leftIntake = leftIntake;
-      this.rightIntake = rightIntake;
-    }
+    public void initializeWheels (OpMode opMode) {
+        //compress using this.frontRight = ...;
+        frontRight = opMode.hardwareMap.dcMotor.get("frontRight");
+        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
+        frontLeft = opMode.hardwareMap.dcMotor.get("frontLeft");
+        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        backRight = opMode.hardwareMap.dcMotor.get("backRight");
+
+        backLeft = opMode.hardwareMap.dcMotor.get("backLeft");
+
+    }
 
     public void setPower (double frontRightPower, double frontLeftPower, double backRightPower, double backLeftPower) {
         frontRight.setPower(frontRightPower);
@@ -97,11 +90,6 @@ public class MecanumWheels {
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-    }
-
-    public void setIntakeBrakes() {
-        leftIntake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightIntake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     private void sleep(long ms) {

@@ -36,6 +36,7 @@ public class TeleOpMethods {
         chassis = ChassisName.toLowerCase();
     }
 
+    /*
     public void InitializeHardware(OpMode opMode){
         HardwareMap hardwareMap = opMode.hardwareMap;
 
@@ -58,6 +59,7 @@ public class TeleOpMethods {
 
         //spool = hardwareMap.dcMotor.get("spool");
     }
+     */
 
     public void setPowerVars(Gamepad gamepad1, boolean reverse) {
         x_left = gamepad1.left_stick_x;
