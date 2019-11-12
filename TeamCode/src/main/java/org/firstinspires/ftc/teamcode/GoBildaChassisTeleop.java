@@ -3,10 +3,6 @@ package org.firstinspires.ftc.teamcode;
 //imports all different classes needed such as TeleOP, Servo, and DcMotor
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.Hardware;
 
 @TeleOp(name="GoBildaChassisTeleop", group="Skystone")
 //@Disabled
@@ -14,8 +10,8 @@ public class GoBildaChassisTeleop extends OpMode {
 
     private TeleOpMethods robot = new TeleOpMethods("gobilda");
     private final MecanumWheels mecanumWheels = new MecanumWheels("gobilda");
-    private final HookMethods hookServo = new HookMethods("tank");
-    private final IntakeMethods intake = new IntakeMethods("gobilda");
+    private final FoundationHook hookServo = new FoundationHook("tank");
+    private final SkystoneIntake intake = new SkystoneIntake("gobilda");
     private ButtonOneShot reverseButtonLogic = new ButtonOneShot();
     private ButtonOneShot powerChangeButtonLogic = new ButtonOneShot();
 

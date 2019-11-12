@@ -2,16 +2,13 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Servo;
 
 @Autonomous(name = "TankAutonomous", group="Skystone")
 public class TankAutonomous extends LinearOpMode {
     private TeleOpMethods robot = new TeleOpMethods("tank");
     private final  MecanumWheels mecanumWheels = new MecanumWheels("tank");
-    private final HookMethods hookServo = new HookMethods("tank");
-    private final IntakeMethods intake = new IntakeMethods("tank");
+    private final FoundationHook hookServo = new FoundationHook("tank");
+    private final SkystoneIntake intake = new SkystoneIntake("tank");
     final double HIGH_POWER = 1.0;
     final double NORMAL_POWER = 0.5;
 

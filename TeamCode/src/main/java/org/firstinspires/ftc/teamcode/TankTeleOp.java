@@ -1,16 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
-import android.graphics.Color;
-
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.ColorSensor;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
-import com.qualcomm.robotcore.hardware.NormalizedRGBA;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.SwitchableLight;
 
 
 @TeleOp(name="Tank TeleOp", group="Skystone")
@@ -18,8 +9,8 @@ import com.qualcomm.robotcore.hardware.SwitchableLight;
 public class TankTeleOp extends OpMode {
     private TeleOpMethods robot = new TeleOpMethods("tank");
     private final  MecanumWheels mecanumWheels = new MecanumWheels("tank");
-    private final IntakeMethods intake = new IntakeMethods("tank");
-    private final HookMethods hookServo = new HookMethods("tank");
+    private final SkystoneIntake intake = new SkystoneIntake("tank");
+    private final FoundationHook hookServo = new FoundationHook("tank");
     private ButtonOneShot reverseButtonLogic = new ButtonOneShot();
     private ButtonOneShot powerChangeButtonLogic = new ButtonOneShot();
     private ButtonOneShot hookServoButtonLogic = new ButtonOneShot();

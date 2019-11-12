@@ -4,14 +4,14 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
-public class IntakeMethods {
+public class SkystoneIntake {
     DcMotor leftIntake;
     DcMotor rightIntake;
     Servo rampServo;
 
     String chassis;
 
-    IntakeMethods (String chassisName) {
+    SkystoneIntake(String chassisName) {
         chassis = chassisName.toLowerCase();
     }
 
