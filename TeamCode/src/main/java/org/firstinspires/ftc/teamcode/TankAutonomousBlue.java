@@ -21,6 +21,7 @@ public class TankAutonomousBlue extends LinearOpMode {
     long startTime;
 
 
+
     ColorSensor colorSensor;
 
     ColorSensorLogic frontColorSensor;
@@ -123,7 +124,7 @@ public class TankAutonomousBlue extends LinearOpMode {
 
         //added by Leefe for timeout
         startTime = System.currentTimeMillis();
-
+      
         while (colorSensor.red() < redTarget && colorSensor.blue() < blueTarget && System.currentTimeMillis()-startTime <1400) {
             telemetry.addData("Colors", "-> " + colors[0] + "  " + colors[1] + "   " + colors[2]);
             telemetry.update();

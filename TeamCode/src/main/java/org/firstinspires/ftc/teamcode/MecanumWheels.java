@@ -182,6 +182,22 @@ public class MecanumWheels {
         StopMotors();
     }
 
+    //TODO test directions
+    public void turnTime (String direction, double motorpower, long time) {
+        double turn;
+        String sanitizedDirection = direction.toLowerCase();
+        if (sanitizedDirection.equals("right")) {
+            turn = -1;
+        }
+        else {
+            turn = 1;
+        }
+        setPowerFromGamepad(false, motorpower, turn, 0, 0);
+        sleep(time);
+
+        StopMotors();
+    }
+
     /**
      * Calculates the ramped power using this proportional gain formula:
      *

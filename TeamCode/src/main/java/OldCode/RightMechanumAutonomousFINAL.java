@@ -54,7 +54,9 @@ public class RightMechanumAutonomousFINAL extends AutonomousMethods {
                 while (goldX == 0 && opModeIsActive() && System.currentTimeMillis() - startingTime < 1200) {
                     ForwardMove(.2);
                 }
-            }*/
+            }
+            */
+
             ForwardMove(.2,290);
             StopMotors();
 
