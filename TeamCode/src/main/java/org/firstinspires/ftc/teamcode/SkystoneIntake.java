@@ -18,7 +18,7 @@ public class SkystoneIntake {
     public void initializeIntake (OpMode opMode) {
         leftIntake = opMode.hardwareMap.dcMotor.get("leftIntake");
         rightIntake = opMode.hardwareMap.dcMotor.get("rightIntake");
-        rampServo = opMode.hardwareMap.servo.get("hookServo");
+        rampServo = opMode.hardwareMap.servo.get("rampServo");
     }
 
     public void setIntakeBrakes() {
