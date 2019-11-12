@@ -3,38 +3,30 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.SwitchableLight;
 
 
 @Autonomous(name = "TankAutonomousRed", group="Skystone")
 public class TankAutonomousRed extends LinearOpMode {
     private TeleOpMethods robot = new TeleOpMethods("tank");
-    final  MecanumWheels mecanumWheels=new MecanumWheels("tank");
+    private final  MecanumWheels mecanumWheels=new MecanumWheels("tank");
+    private final FoundationHook hookServo = new FoundationHook("tank");
+    private final SkystoneIntake intake = new SkystoneIntake("tank");
+
     final double HIGH_POWER = 1.0;
     final double NORMAL_POWER = 0.5;
     double i;
     long startTime;
 
-    DcMotor frontLeft;
-    DcMotor frontRight;
-    DcMotor backLeft;
-    DcMotor backRight;
-
-    Servo hookServo;
-    Servo rampServo;
 
     ColorSensor colorSensor;
 
     ColorSensorLogic frontColorSensor;
 
     public void runOpMode() {
-        robot.InitializeHardware(this);
-
-        hookServo=hardwareMap.servo.get("hookServo");
-        rampServo=hardwareMap.servo.get("rampServo");
+        mecanumWheels.initializeWheels(this);
+        intake.initializeIntake(this);
+        hookServo.initializeHook(this);
 
         colorSensor = hardwareMap.get(ColorSensor.class, "frontColorSensor");
 
@@ -46,20 +38,6 @@ public class TankAutonomousRed extends LinearOpMode {
             ((SwitchableLight)colorSensor).enableLight(true);
         }
 
-        DcMotor frontRight = hardwareMap.dcMotor.get("frontRight");
-
-        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        DcMotor frontLeft = hardwareMap.dcMotor.get("frontLeft");
-        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        DcMotor backRight = hardwareMap.dcMotor.get("backRight");
-        DcMotor backLeft = hardwareMap.dcMotor.get("backLeft");
-
-        DcMotor leftIntake = hardwareMap.dcMotor.get("leftIntake");
-        DcMotor rightIntake = hardwareMap.dcMotor.get("rightIntake");
-
-        mecanumWheels.initialize(frontLeft, frontRight, backLeft, backRight, hookServo, rampServo, leftIntake, rightIntake);
         mecanumWheels.setZeroPowerBrakeBehavior();
         waitForStart();
         robot.startTime();
@@ -68,16 +46,14 @@ public class TankAutonomousRed extends LinearOpMode {
 
         executeAutonomousLogic();
 
-
-
     }
 
     public void moveHook(ServoPosition position){
         if (position==ServoPosition.UP)  {
-            hookServo.setPosition(.4);
+            hookServo.hookServo.setPosition(.4);
         }
         else  {
-            hookServo.setPosition(0);
+            hookServo.hookServo.setPosition(0);
         }
     }
 
@@ -152,7 +128,7 @@ public class TankAutonomousRed extends LinearOpMode {
             sleep(10);
             i += 1;
             if (i == 18) {
-                rampServo.setPosition(.2);
+                intake.rampServo.setPosition(.2);
             }
 
             if (i == 35) {
