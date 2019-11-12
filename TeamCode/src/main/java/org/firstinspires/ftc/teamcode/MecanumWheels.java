@@ -11,19 +11,10 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class MecanumWheels {
-    //keyword: other class
     DcMotor frontLeft;
     DcMotor frontRight;
     DcMotor backLeft;
     DcMotor backRight;
-
-    /*other class
-    DcMotor leftIntake;
-    DcMotor rightIntake;
-    Servo hookServo;
-    Servo rampServo;
-     */
-
 
     double frontRightPower; //-right
     double frontLeftPower; //-right
@@ -53,15 +44,6 @@ public class MecanumWheels {
         backLeft = opMode.hardwareMap.dcMotor.get("backLeft");
 
     }
-
-    public void initialize(DcMotor frontLeft, DcMotor frontRight,DcMotor backLeft, DcMotor backRight) {
-      //assign the passed in Motors to the class fields for later use
-      this.frontLeft = frontLeft;
-      this.frontRight = frontRight;
-      this.backLeft = backLeft;
-      this.backRight = backRight;
-    }
-
 
     public void setPower (double frontRightPower, double frontLeftPower, double backRightPower, double backLeftPower) {
         frontRight.setPower(frontRightPower);
@@ -109,13 +91,6 @@ public class MecanumWheels {
         backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
     }
-
-    /*other class
-    public void setIntakeBrakes() {
-        leftIntake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightIntake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-    }
-     */
 
     private void sleep(long ms) {
         try {

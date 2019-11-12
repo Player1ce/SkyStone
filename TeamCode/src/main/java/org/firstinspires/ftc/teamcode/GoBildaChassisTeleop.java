@@ -14,7 +14,7 @@ public class GoBildaChassisTeleop extends OpMode {
 
     private TeleOpMethods robot = new TeleOpMethods("gobilda");
     private final MecanumWheels mecanumWheels = new MecanumWheels("gobilda");
-    private final ServoMethods servos = new ServoMethods("gobilda");
+    private final HookMethods hookServo = new HookMethods("tank");
     private final IntakeMethods intake = new IntakeMethods("gobilda");
     private ButtonOneShot reverseButtonLogic = new ButtonOneShot();
     private ButtonOneShot powerChangeButtonLogic = new ButtonOneShot();
@@ -33,26 +33,11 @@ public class GoBildaChassisTeleop extends OpMode {
         //of the motor in the configuration profile on the phone (spaces and capitalization matter)
         //or else an error will occur
         mecanumWheels.initializeWheels(this);
-        servos.initializeServos(this);
+        hookServo.initializeHook(this);
         intake.initializeIntake(this);
 
 
         //TODO why is this here. The Initialize hardware method should take care of this.
-        /*
-        DcMotor frontRight = hardwareMap.dcMotor.get("frontRight");
-        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        DcMotor frontLeft = hardwareMap.dcMotor.get("frontLeft");
-        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        DcMotor backRight = hardwareMap.dcMotor.get("backRight");
-        DcMotor backLeft = hardwareMap.dcMotor.get("backLeft");
-        */
-
-
-        mecanumWheels.initialize(mecanumWheels.frontLeft, mecanumWheels.frontRight,
-                mecanumWheels.backLeft, mecanumWheels.backRight);
-
     }
 
     public void loop() {

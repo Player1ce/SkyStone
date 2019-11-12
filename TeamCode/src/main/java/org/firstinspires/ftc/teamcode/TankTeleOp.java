@@ -1,10 +1,16 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.graphics.Color;
+
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
+import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.SwitchableLight;
 
 
 @TeleOp(name="Tank TeleOp", group="Skystone")
@@ -12,8 +18,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class TankTeleOp extends OpMode {
     private TeleOpMethods robot = new TeleOpMethods("tank");
     private final  MecanumWheels mecanumWheels = new MecanumWheels("tank");
-    private final ServoMethods servos = new ServoMethods("tank");
     private final IntakeMethods intake = new IntakeMethods("tank");
+    private final HookMethods hookServo = new HookMethods("tank");
     private ButtonOneShot reverseButtonLogic = new ButtonOneShot();
     private ButtonOneShot powerChangeButtonLogic = new ButtonOneShot();
     private ButtonOneShot hookServoButtonLogic = new ButtonOneShot();
@@ -37,23 +43,11 @@ public class TankTeleOp extends OpMode {
         or else an error will occur
         */
         mecanumWheels.initializeWheels(this);
-        servos.initializeServos(this);
+        hookServo.initializeHook(this);
         intake.initializeIntake(this);
-
-        colorSensor = hardwareMap.get(ColorSensor.class, "frontColorSensor");
-
-        // If possible, turn the light on in the beginning (it might already be on anyway,
-        // we just make sure it is if we can).
-        if (colorSensor instanceof SwitchableLight) {
-            ((SwitchableLight)colorSensor).enableLight(true);
-        }
 
         //TODO I changed servos and intake to null for a full functionality test.
         //set up variables in respective classes.
-        mecanumWheels.initialize(mecanumWheels.frontLeft, mecanumWheels.frontRight,
-                mecanumWheels.backLeft, mecanumWheels.backRight);
-        servos.setServoVars(servos.rampServo, servos.hookServo);
-        intake.setIntakeVars(intake.leftIntake, intake.rightIntake);
 
         intake.setIntakeBrakes();
     }
@@ -79,10 +73,10 @@ public class TankTeleOp extends OpMode {
             hookServoEnable = !hookServoEnable;
         }
         if (hookServoEnable)  {
-            servos.hookServo.setPosition(0);
+            hookServo.hookServo.setPosition(0);
         }
         else   {
-            servos.hookServo.setPosition(.6);
+            hookServo.hookServo.setPosition(.6);
             //hookServo.setPosition(.47);
         }
 
@@ -97,9 +91,9 @@ public class TankTeleOp extends OpMode {
         }
         if (!directRampControl) {
             if (rampServoUp) {
-                servos.rampServo.setPosition(.38);
+                intake.rampServo.setPosition(.38);
             } else {
-                servos.rampServo.setPosition(.29);
+                intake.rampServo.setPosition(.29);
             }
         }
         if (directRampControl) {
@@ -107,13 +101,13 @@ public class TankTeleOp extends OpMode {
                 if (rampPosition < .5) {
                     rampPosition = rampPosition + 0.003;
                 }
-                servos.rampServo.setPosition(rampPosition);
+                intake.rampServo.setPosition(rampPosition);
             }
             if (gamepad2.right_bumper) {
                 if (rampPosition > .001) {
                     rampPosition = rampPosition - 0.003;
                 }
-                servos.rampServo.setPosition(rampPosition);
+                intake.rampServo.setPosition(rampPosition);
             }
         }
 
@@ -134,8 +128,8 @@ public class TankTeleOp extends OpMode {
 
         //telemetry ------------------------------
         //telemetry is used to show on the driver controller phone what the code sees
-        telemetry.addData("hookServo Position", servos.hookServo.getPosition());
-        telemetry.addData("rampServo Position:", servos.rampServo.getPosition());
+        telemetry.addData("hookServo Position", hookServo.hookServo.getPosition());
+        telemetry.addData("rampServo Position:", intake.rampServo.getPosition());
         telemetry.addData("x_left:", mecanumWheels.xLeft);
         telemetry.addData("x_right:", mecanumWheels.xRight);
         telemetry.addData("y_left:", mecanumWheels.yLeft);

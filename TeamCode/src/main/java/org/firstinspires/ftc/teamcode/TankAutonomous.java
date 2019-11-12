@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class TankAutonomous extends LinearOpMode {
     private TeleOpMethods robot = new TeleOpMethods("tank");
     private final  MecanumWheels mecanumWheels = new MecanumWheels("tank");
-    private final ServoMethods servos = new ServoMethods("tank");
+    private final HookMethods hookServo = new HookMethods("tank");
     private final IntakeMethods intake = new IntakeMethods("tank");
     final double HIGH_POWER = 1.0;
     final double NORMAL_POWER = 0.5;
@@ -18,28 +18,9 @@ public class TankAutonomous extends LinearOpMode {
 
     public void runOpMode() {
         mecanumWheels.initializeWheels(this);
-        servos.initializeServos(this);
-        servos.initializeServos(this);
-        /*
-        hookServo=hardwareMap.servo.get("hookServo");
-        rampServo=hardwareMap.servo.get("rampServo");
+        intake.initializeIntake(this);
+        hookServo.initializeHook(this);
 
-        DcMotor frontRight = hardwareMap.dcMotor.get("frontRight");
-
-        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        DcMotor frontLeft = hardwareMap.dcMotor.get("frontLeft");
-        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        DcMotor backRight = hardwareMap.dcMotor.get("backRight");
-        DcMotor backLeft = hardwareMap.dcMotor.get("backLeft");
-
-        DcMotor leftIntake = hardwareMap.dcMotor.get("leftIntake");
-        DcMotor rightIntake = hardwareMap.dcMotor.get("rightIntake");
-         */
-
-        mecanumWheels.initialize(mecanumWheels.frontLeft, mecanumWheels.frontRight,
-                mecanumWheels.backLeft, mecanumWheels.backRight);
         mecanumWheels.setZeroPowerBrakeBehavior();
         waitForStart();
         robot.startTime();
@@ -52,10 +33,10 @@ public class TankAutonomous extends LinearOpMode {
 
     public void moveHook(ServoPosition position){
         if (position==ServoPosition.UP)  {
-            servos.hookServo.setPosition(.4);
+            hookServo.hookServo.setPosition(.4);
         }
         else  {
-            servos.hookServo.setPosition(0);
+            hookServo.hookServo.setPosition(0);
         }
     }
 

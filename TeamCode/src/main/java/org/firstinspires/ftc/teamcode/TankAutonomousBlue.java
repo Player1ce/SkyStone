@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.hardware.SwitchableLight;
 public class TankAutonomousBlue extends LinearOpMode {
     private TeleOpMethods robot = new TeleOpMethods("tank");
     private final  MecanumWheels mecanumWheels=new MecanumWheels("tank");
-    private final ServoMethods servos = new ServoMethods("tank");
+    private final HookMethods hookServo = new HookMethods("tank");
     private final IntakeMethods intake = new IntakeMethods("tank");
 
     final double HIGH_POWER = 1.0;
@@ -27,13 +27,7 @@ public class TankAutonomousBlue extends LinearOpMode {
     public void runOpMode() {
         mecanumWheels.initializeWheels(this);
         intake.initializeIntake(this);
-        servos.initializeServos(this);
-
-        mecanumWheels.initialize(mecanumWheels.frontLeft, mecanumWheels.frontRight,
-                mecanumWheels.backLeft, mecanumWheels.backRight);
-        servos.setServoVars(servos.rampServo, servos.hookServo);
-        intake.setIntakeVars(intake.leftIntake, intake.rightIntake);
-
+        hookServo.initializeHook(this);
 
         colorSensor = hardwareMap.get(ColorSensor.class, "frontColorSensor");
 
@@ -57,10 +51,10 @@ public class TankAutonomousBlue extends LinearOpMode {
 
     public void moveHook(ServoPosition position){
         if (position==ServoPosition.UP)  {
-            servos.hookServo.setPosition(.4);
+            hookServo.hookServo.setPosition(.4);
         }
         else  {
-            servos.hookServo.setPosition(0);
+            hookServo.hookServo.setPosition(0);
         }
     }
 
@@ -129,7 +123,7 @@ public class TankAutonomousBlue extends LinearOpMode {
             sleep(10);
             i += 1;
             if (i == 18) {
-                servos.rampServo.setPosition(.2);
+                intake.rampServo.setPosition(.2);
             }
         }
 
