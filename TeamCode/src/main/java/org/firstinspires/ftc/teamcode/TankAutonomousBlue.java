@@ -17,8 +17,9 @@ public class TankAutonomousBlue extends LinearOpMode {
 
     final double HIGH_POWER = 1.0;
     final double NORMAL_POWER = 0.5;
-
     private double i;
+    long startTime;
+
 
     ColorSensor colorSensor;
 
@@ -61,7 +62,7 @@ public class TankAutonomousBlue extends LinearOpMode {
     protected void executeAutonomousLogic() {
         double ticksToInches = 288 / (Math.PI * 6.125);
         mecanumWheels.ForwardMoveInches(telemetry, 0.5, 23, ticksToInches);
-        mecanumWheels.crabDrive("left", 0.7, 1250);
+        mecanumWheels.crabDrive("left", 0.7, 1050);
 
         //now drive until we see the red or blue plate
         int colors[] = frontColorSensor.getAverageColor(500);
@@ -69,8 +70,8 @@ public class TankAutonomousBlue extends LinearOpMode {
         int redBaseline = colors[0];
         int blueBaseline = colors[2];
 
-        int redTarget = redBaseline + 10;
-        int blueTarget = blueBaseline + 7;
+        int redTarget = redBaseline + 7;
+        int blueTarget = blueBaseline + 4;
 
         telemetry.addData("Baseline Colors", colors[0] + "  " + colors[1] + "   " + colors[2]);
         telemetry.update();
@@ -85,13 +86,16 @@ public class TankAutonomousBlue extends LinearOpMode {
         telemetry.addData("Colors", "* " + colors[0] + "  " + colors[1] + "   " + colors[2]);
         telemetry.update();
 
+        mecanumWheels.ForwardMoveInches(telemetry, 0.4, 1, ticksToInches);
+
         //mecanumWheels.ForwardMoveInches(telemetry, 0.5, 5, ticksToInches);
 
         moveHook(ServoPosition.DOWN);
 
         sleep(1000);
-
         mecanumWheels.BackwardMoveInches(telemetry, -0.5, 30, ticksToInches);
+        mecanumWheels.ForwardMoveInches(telemetry, 0.5, .5, ticksToInches);
+
 
         sleep(1000);
 
@@ -117,7 +121,10 @@ public class TankAutonomousBlue extends LinearOpMode {
 
         mecanumWheels.setPowerFromGamepad(true, .7, 0, 0, 10);
 
-        while (colorSensor.red() < redTarget && colorSensor.blue() < blueTarget) {
+        //added by Leefe for timeout
+        startTime = System.currentTimeMillis();
+
+        while (colorSensor.red() < redTarget && colorSensor.blue() < blueTarget && System.currentTimeMillis()-startTime <1400) {
             telemetry.addData("Colors", "-> " + colors[0] + "  " + colors[1] + "   " + colors[2]);
             telemetry.update();
             sleep(10);
@@ -128,6 +135,8 @@ public class TankAutonomousBlue extends LinearOpMode {
         }
 
         mecanumWheels.StopMotors();
+        //rampServo.setPosition(.2);
+
 
     }
 
