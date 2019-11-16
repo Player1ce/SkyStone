@@ -5,12 +5,19 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.SwitchableLight;
 
+import org.firstinspires.ftc.controlunits.ColorSensorLogic;
+import org.firstinspires.ftc.robotDevices.ChassisName;
+import org.firstinspires.ftc.robotDevices.FoundationHook;
+import org.firstinspires.ftc.robotDevices.MecanumWheels;
+import org.firstinspires.ftc.controlunits.ServoPosition;
+import org.firstinspires.ftc.robotDevices.SkystoneIntake;
+
 @Autonomous(name = "TankAutonomousBlueBrick", group="Skystone")
 public class TankAutonomousBlueBrick extends LinearOpMode {
-    private TeleOpMethods robot = new TeleOpMethods("tank");
-    private final MecanumWheels mecanumWheels = new MecanumWheels("tank");
-    private final FoundationHook hookServo = new FoundationHook( "tank");
-    private final SkystoneIntake intake = new SkystoneIntake("tnak");
+    private TeleOpMethods robot = new TeleOpMethods(ChassisName.TANK);
+    private final MecanumWheels mecanumWheels = new MecanumWheels(ChassisName.TANK);
+    private final FoundationHook hookServo = new FoundationHook( ChassisName.TANK);
+    private final SkystoneIntake intake = new SkystoneIntake(ChassisName.TANK);
     final double HIGH_POWER = 1.0;
     final double NORMAL_POWER = 0.5;
     double i;
@@ -54,43 +61,45 @@ public class TankAutonomousBlueBrick extends LinearOpMode {
     }
 
     protected void executeAutonomousLogic() {
-        double ticksToInches = 288 / (Math.PI * 6.125);
+        //put all code in this while loop so the bot will stop when we tell it to
+        while (opModeIsActive()) {
 
-        int colors[] = frontColorSensor.getAverageColor(500);
+            double ticksToInches = 288 / (Math.PI * 6.125);
 
-        int redBaseline = colors[0];
-        int blueBaseline = colors[2];
+            int colors[] = frontColorSensor.getAverageColor(500);
 
-        int redTarget = redBaseline + 10;
-        int blueTarget = blueBaseline + 7;
+            int redBaseline = colors[0];
+            int blueBaseline = colors[2];
 
-        mecanumWheels.ForwardMoveInches(telemetry, 0.5, 7, ticksToInches);
+            int redTarget = redBaseline + 10;
+            int blueTarget = blueBaseline + 7;
 
-        mecanumWheels.setPowerFromGamepad(false, .7, -10, 0, 0);
+            mecanumWheels.ForwardMoveInches(telemetry, 0.5, 7, ticksToInches);
 
-        sleep(1000);
+            mecanumWheels.setPowerFromGamepad(false, .7, -10, 0, 0);
 
-        mecanumWheels.StopMotors();
-
-        sleep(500);
-
-
-        mecanumWheels.setPowerFromGamepad(true, .7, 0, 0, 10);
-
-        //added by Leefe for Destrehan qualifier
-
-        while (colorSensor.red() < redTarget && colorSensor.blue() < blueTarget) {
-            telemetry.addData("Colors", "-> " + colors[0] + "  " + colors[1] + "   " + colors[2]);
-            telemetry.update();
-            sleep(10);
-            i += 1;
-            if (i == 18) {
-                intake.rampServo.setPosition(.2);
-            }
+            sleep(1000);
 
             mecanumWheels.StopMotors();
+
+            sleep(500);
+
+
+            mecanumWheels.setPowerFromGamepad(true, .7, 0, 0, 10);
+
+            //added by Leefe for Destrehan qualifier
+
+            while (colorSensor.red() < redTarget && colorSensor.blue() < blueTarget) {
+                telemetry.addData("Colors", "-> " + colors[0] + "  " + colors[1] + "   " + colors[2]);
+                telemetry.update();
+                sleep(10);
+                i += 1;
+                if (i == 18) {
+                    intake.rampServo.setPosition(.2);
+                }
+
+                mecanumWheels.StopMotors();
+            }
         }
-
-
     }
 }

@@ -1,6 +1,7 @@
 package org.jesuithigh.tests;
 
-import org.firstinspires.ftc.teamcode.*;
+import org.firstinspires.ftc.controlunits.ButtonOneShot;
+import org.firstinspires.ftc.robotDevices.MecanumWheels;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -12,7 +13,7 @@ public class TestUtilityMethods {
     @Test
     public void testDriveForwardRampDown() {
         //test that proportional controller max power works
-        Assert.assertEquals(1,MecanumWheels.calculateProportionalMotorPower(0.5,10,1,0.3),0.000001);
+        Assert.assertEquals(1, MecanumWheels.calculateProportionalMotorPower(0.5,10,1,0.3),0.000001);
 
         //test some proportional values output as expected
         Assert.assertEquals(0.325,MecanumWheels.calculateProportionalMotorPower(0.05,0.5,1,0.3),0.000001);

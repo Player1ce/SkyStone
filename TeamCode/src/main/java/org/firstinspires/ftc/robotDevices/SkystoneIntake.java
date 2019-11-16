@@ -1,18 +1,18 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.robotDevices;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class SkystoneIntake {
-    DcMotor leftIntake;
-    DcMotor rightIntake;
-    Servo rampServo;
+    public DcMotor leftIntake;
+    public DcMotor rightIntake;
+    public Servo rampServo;
 
-    String chassis;
+    private ChassisName chassis;
 
-    SkystoneIntake(String chassisName) {
-        chassis = chassisName.toLowerCase();
+    public SkystoneIntake(ChassisName name) {
+        chassis = name;
     }
 
     public void initializeIntake (OpMode opMode) {

@@ -3,14 +3,20 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.controlunits.ButtonOneShot;
+import org.firstinspires.ftc.robotDevices.ChassisName;
+import org.firstinspires.ftc.robotDevices.FoundationHook;
+import org.firstinspires.ftc.robotDevices.MecanumWheels;
+import org.firstinspires.ftc.robotDevices.SkystoneIntake;
+
 
 @TeleOp(name="Tank TeleOp", group="Skystone")
 //@Disabled
 public class TankTeleOp extends OpMode {
-    private TeleOpMethods robot = new TeleOpMethods("tank");
-    private final  MecanumWheels mecanumWheels = new MecanumWheels("tank");
-    private final SkystoneIntake intake = new SkystoneIntake("tank");
-    private final FoundationHook hookServo = new FoundationHook("tank");
+    private TeleOpMethods robot = new TeleOpMethods(ChassisName.TANK);
+    private final MecanumWheels mecanumWheels = new MecanumWheels(ChassisName.TANK);
+    private final SkystoneIntake intake = new SkystoneIntake(ChassisName.TANK);
+    private final FoundationHook hookServo = new FoundationHook(ChassisName.TANK);
     private ButtonOneShot reverseButtonLogic = new ButtonOneShot();
     private ButtonOneShot powerChangeButtonLogic = new ButtonOneShot();
     private ButtonOneShot hookServoButtonLogic = new ButtonOneShot();
@@ -59,7 +65,7 @@ public class TankTeleOp extends OpMode {
                 gamepad1.right_stick_x,gamepad1.left_stick_y);
 
 
-        //hook servo -------------------------------
+        //foundation hook -------------------------------
         if (hookServoButtonLogic.isPressed(gamepad1.x)) {
             hookServoEnable = !hookServoEnable;
         }
@@ -119,19 +125,14 @@ public class TankTeleOp extends OpMode {
 
         //telemetry ------------------------------
         //telemetry is used to show on the driver controller phone what the code sees
+        telemetry.addData("Power:", power);
+        telemetry.addData("F/R:", robot.reverseSense(reverse));
+        telemetry.addData("rampServoPosition:", rampPosition);
         telemetry.addData("hookServo Position", hookServo.hookServo.getPosition());
         telemetry.addData("rampServo Position:", intake.rampServo.getPosition());
         telemetry.addData("x_left:", mecanumWheels.xLeft);
         telemetry.addData("x_right:", mecanumWheels.xRight);
         telemetry.addData("y_left:", mecanumWheels.yLeft);
-        telemetry.addData("Power:", power);
-
-        //TODO correct this telemetry
-        if (reverse) {
-            telemetry.addData("F/R:", "REVERSE");
-        }else {
-            telemetry.addData("F/R:", "FORWARD");
-        }
 
         /* not important in current system
         if (rampServoUp) {
@@ -141,7 +142,7 @@ public class TankTeleOp extends OpMode {
             telemetry.addData("RampServo Position:", "DOWN");
         }
          */
-        telemetry.addData("rampServoPosition:", rampPosition);
+
 
         /*
         Color sensor diagnostics

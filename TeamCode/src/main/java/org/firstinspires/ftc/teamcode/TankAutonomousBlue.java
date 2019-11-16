@@ -4,13 +4,19 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.SwitchableLight;
+import org.firstinspires.ftc.controlunits.ColorSensorLogic;
+import org.firstinspires.ftc.robotDevices.ChassisName;
+import org.firstinspires.ftc.robotDevices.FoundationHook;
+import org.firstinspires.ftc.robotDevices.MecanumWheels;
+import org.firstinspires.ftc.controlunits.ServoPosition;
+import org.firstinspires.ftc.robotDevices.SkystoneIntake;
 
 @Autonomous(name = "TankAutonomousBlue", group="Skystone")
 public class TankAutonomousBlue extends LinearOpMode {
-    private TeleOpMethods robot = new TeleOpMethods("tank");
-    private final  MecanumWheels mecanumWheels=new MecanumWheels("tank");
-    private final FoundationHook hookServo = new FoundationHook("tank");
-    private final SkystoneIntake intake = new SkystoneIntake("tank");
+    private TeleOpMethods robot = new TeleOpMethods(ChassisName.TANK);
+    private final MecanumWheels mecanumWheels=new MecanumWheels(ChassisName.TANK);
+    private final FoundationHook hookServo = new FoundationHook(ChassisName.TANK);
+    private final SkystoneIntake intake = new SkystoneIntake(ChassisName.TANK);
 
     final double HIGH_POWER = 1.0;
     final double NORMAL_POWER = 0.5;
@@ -58,7 +64,9 @@ public class TankAutonomousBlue extends LinearOpMode {
     }
 
     protected void executeAutonomousLogic() {
+        //put all code in this while loop so the bot will stop when we tell it to
         while (opModeIsActive()) {
+
             double ticksToInches = 288 / (Math.PI * 6.125);
             mecanumWheels.ForwardMoveInches(telemetry, 0.5, 23, ticksToInches);
             mecanumWheels.crabDrive("left", 0.7, 1050);

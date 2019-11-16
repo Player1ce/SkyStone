@@ -1,14 +1,21 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.useless;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.robotDevices.ChassisName;
+import org.firstinspires.ftc.robotDevices.FoundationHook;
+import org.firstinspires.ftc.robotDevices.MecanumWheels;
+import org.firstinspires.ftc.controlunits.ServoPosition;
+import org.firstinspires.ftc.robotDevices.SkystoneIntake;
+import org.firstinspires.ftc.teamcode.TeleOpMethods;
+
 @Autonomous(name = "TankAutonomous", group="Skystone")
 public class TankAutonomous extends LinearOpMode {
-    private TeleOpMethods robot = new TeleOpMethods("tank");
-    private final  MecanumWheels mecanumWheels = new MecanumWheels("tank");
-    private final FoundationHook hookServo = new FoundationHook("tank");
-    private final SkystoneIntake intake = new SkystoneIntake("tank");
+    private TeleOpMethods robot = new TeleOpMethods(ChassisName.TANK);
+    private final MecanumWheels mecanumWheels = new MecanumWheels(ChassisName.TANK);
+    private final FoundationHook hookServo = new FoundationHook(ChassisName.TANK);
+    private final SkystoneIntake intake = new SkystoneIntake(ChassisName.TANK);
     final double HIGH_POWER = 1.0;
     final double NORMAL_POWER = 0.5;
 

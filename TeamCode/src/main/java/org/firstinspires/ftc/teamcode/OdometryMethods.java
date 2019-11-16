@@ -3,16 +3,29 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.robotDevices.ChassisName;
+import org.firstinspires.ftc.robotDevices.FoundationHook;
+import org.firstinspires.ftc.robotDevices.MecanumWheels;
+import org.firstinspires.ftc.robotDevices.SkystoneIntake;
+import org.firstinspires.ftc.useless.BasicRobotMethods;
+
+
 
 public class OdometryMethods extends BasicRobotMethods {
-	DcMotor horizontalEncoder;
+	//TODO use a varibale from a constructor in instance creation
+    private TeleOpMethods robot = new TeleOpMethods(ChassisName.TANK);
+    private final MecanumWheels mecanumWheels = new MecanumWheels(ChassisName.TANK);
+    private final FoundationHook hookServo = new FoundationHook(ChassisName.TANK);
+    private final SkystoneIntake intake = new SkystoneIntake(ChassisName.TANK);
+
+    DcMotor horizontalEncoder;
     DcMotor forwardEncoder;
     LinearOpMode linearOpMode;
 	
 	int forwardLeeway = 15;
     int horizonatalLeeway = 15;
 
-
+    String chassis;
 	
 	@Override
 	public void resetOdometry() {
@@ -64,16 +77,16 @@ public class OdometryMethods extends BasicRobotMethods {
 	public void forwardMoveOdometry(double MotorPower, int EncoderTarget){
 	    ResetEncoders();
         resetOdometry();
-        backRight.setPower(MotorPower);
-        frontLeft.setPower(MotorPower);
-        backLeft.setPower(MotorPower);
-        frontRight.setPower(MotorPower);
+        mecanumWheels.backRight.setPower(MotorPower);
+        mecanumWheels.frontLeft.setPower(MotorPower);
+        mecanumWheels.backLeft.setPower(MotorPower);
+        mecanumWheels.frontRight.setPower(MotorPower);
         String running = "Normal";
         boolean offPoint = true;
 
         while ((offPoint) && linearOpMode.opModeIsActive()) {
             linearOpMode.telemetry.addData("running: ", running);
-            linearOpMode.telemetry.addData("encoder value:", frontRight.getCurrentPosition());
+            linearOpMode.telemetry.addData("encoder value:", mecanumWheels.frontRight.getCurrentPosition());
             linearOpMode.telemetry.addData("encoder target:", EncoderTarget);
             linearOpMode.telemetry.update();
             int measure = Math.abs(EncoderTarget - horizontalEncoder.getCurrentPosition());
@@ -101,16 +114,16 @@ public class OdometryMethods extends BasicRobotMethods {
     public void backwardMoveOdometry(double MotorPower, int EncoderTarget) {
         ResetEncoders();
         resetOdometry();
-        backRight.setPower(-MotorPower);
-        frontLeft.setPower(-MotorPower);
-        backLeft.setPower(-MotorPower);
-        frontRight.setPower(-MotorPower);
+        mecanumWheels.backRight.setPower(-MotorPower);
+        mecanumWheels.frontLeft.setPower(-MotorPower);
+        mecanumWheels.backLeft.setPower(-MotorPower);
+        mecanumWheels.frontRight.setPower(-MotorPower);
         String running = "Normal";
         boolean offPoint = true;
 
         while ((offPoint) && linearOpMode.opModeIsActive()) {
             linearOpMode.telemetry.addData("running: ", running);
-            linearOpMode.telemetry.addData("encoder value:", frontRight.getCurrentPosition());
+            linearOpMode.telemetry.addData("encoder value:", mecanumWheels.frontRight.getCurrentPosition());
             linearOpMode.telemetry.addData("encoder target:", EncoderTarget);
             linearOpMode.telemetry.update();
             int measure = Math.abs(EncoderTarget - horizontalEncoder.getCurrentPosition());

@@ -1,34 +1,30 @@
-package org.firstinspires.ftc.teamcode;
-
-import android.graphics.Path;
+package org.firstinspires.ftc.robotDevices;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class MecanumWheels {
-    DcMotor frontLeft;
-    DcMotor frontRight;
-    DcMotor backLeft;
-    DcMotor backRight;
+    public DcMotor frontLeft;
+    public DcMotor frontRight;
+    public DcMotor backLeft;
+    public DcMotor backRight;
 
     double frontRightPower; //-right
     double frontLeftPower; //-right
     double backRightPower; //-right
     double backLeftPower;
 
-    double xLeft;
-    double yLeft;
-    double xRight;
+    public double xLeft;
+    public double yLeft;
+    public double xRight;
 
-    String chassis;
+    private ChassisName chassis;
 
-    public MecanumWheels (String chassisName) {
-        chassis = chassisName.toLowerCase();
+    public MecanumWheels (ChassisName name) {
+        chassis = name;
     }
 
     public void initializeWheels (OpMode opMode) {
@@ -64,14 +60,14 @@ public class MecanumWheels {
             yLeft = left_stick_y;
         }
 
-        if (chassis == "tank") {
+        if (chassis == ChassisName.TANK) {
             frontRightPower = (yLeft - xRight + xLeft) * power; //-right
             frontLeftPower = (yLeft + xRight - xLeft) * power; //-right
             backRightPower = (yLeft + xRight + xLeft) * power; //-right
             backLeftPower = (yLeft - xRight - xLeft) * power;
 
         }
-        else if (chassis == "gobilda") {
+        else if (chassis == ChassisName.TANK) {
             frontRightPower = (yLeft - xRight - xLeft) * power; //-right
             frontLeftPower = (yLeft + xRight + xLeft) * power; //-right
             backRightPower = (-yLeft - xRight + xLeft) * power; //-right

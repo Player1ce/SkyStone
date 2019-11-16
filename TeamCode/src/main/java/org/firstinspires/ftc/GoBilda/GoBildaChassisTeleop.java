@@ -1,17 +1,24 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.GoBilda;
 
 //imports all different classes needed such as TeleOP, Servo, and DcMotor
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.controlunits.ButtonOneShot;
+import org.firstinspires.ftc.robotDevices.ChassisName;
+import org.firstinspires.ftc.robotDevices.FoundationHook;
+import org.firstinspires.ftc.robotDevices.MecanumWheels;
+import org.firstinspires.ftc.robotDevices.SkystoneIntake;
+import org.firstinspires.ftc.teamcode.TeleOpMethods;
+
 @TeleOp(name="GoBildaChassisTeleop", group="Skystone")
 //@Disabled
 public class GoBildaChassisTeleop extends OpMode {
 
-    private TeleOpMethods robot = new TeleOpMethods("gobilda");
-    private final MecanumWheels mecanumWheels = new MecanumWheels("gobilda");
-    private final FoundationHook hookServo = new FoundationHook("tank");
-    private final SkystoneIntake intake = new SkystoneIntake("gobilda");
+    private TeleOpMethods robot = new TeleOpMethods(ChassisName.GOBILDA);
+    private final MecanumWheels mecanumWheels = new MecanumWheels(ChassisName.GOBILDA);
+    private final FoundationHook hookServo = new FoundationHook(ChassisName.GOBILDA);
+    private final SkystoneIntake intake = new SkystoneIntake(ChassisName.GOBILDA);
     private ButtonOneShot reverseButtonLogic = new ButtonOneShot();
     private ButtonOneShot powerChangeButtonLogic = new ButtonOneShot();
 
@@ -29,11 +36,6 @@ public class GoBildaChassisTeleop extends OpMode {
         //of the motor in the configuration profile on the phone (spaces and capitalization matter)
         //or else an error will occur
         mecanumWheels.initializeWheels(this);
-        hookServo.initializeHook(this);
-        intake.initializeIntake(this);
-
-
-        //TODO why is this here. The Initialize hardware method should take care of this.
     }
 
     public void loop() {
@@ -52,17 +54,9 @@ public class GoBildaChassisTeleop extends OpMode {
 
 
         //telemetry is used to show on the driver controller phone what the code sees
-        telemetry.addData("x_left:", mecanumWheels.xLeft);
-        telemetry.addData("x_right:", mecanumWheels.xRight);
-        telemetry.addData("y_left:", mecanumWheels.yLeft);
         telemetry.addData("Power:", power);
         //reverse telemetry
-        if (reverse) {
-            telemetry.addData("F/R:", "REVERSE");
-        } else {
-            telemetry.addData("F/R:", "FORWARD");
-        }
-        telemetry.update();
+        telemetry.addData("F/R:", robot.reverseSense(reverse));
 
     }
 
