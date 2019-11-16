@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.TeleOpMethods;
 
 public class MecanumWheels {
     public DcMotor frontLeft;
@@ -117,16 +118,15 @@ public class MecanumWheels {
     }
 
 
-    public void ForwardMoveInches(Telemetry telemetry,double MotorPower, double Inches,double ticksToInches) {
-        MoveInches(telemetry,MotorPower,0.1,Inches,ticksToInches);
+    //Forward backward ------------------------------
+    public void ForwardMoveInches(Telemetry telemetry,double motorPower, double Inches,double ticksToInches) {
+        MoveInches(telemetry,motorPower,0.1,Inches,ticksToInches);
     }
 
 
-    public void BackwardMoveInches(Telemetry telemetry,double MotorPower, double Inches,double ticksToInches) {
-        MoveInches(telemetry,MotorPower,-.1,Inches,ticksToInches);
+    public void BackwardMoveInches(Telemetry telemetry,double motorPower, double Inches,double ticksToInches) {
+        MoveInches(telemetry,motorPower,-.1,Inches,ticksToInches);
     }
-
-
 
     protected void MoveInches(Telemetry telemetry,double MotorPower, double MinMotorPower,double Inches,double ticksToInches) {
 
@@ -163,6 +163,7 @@ public class MecanumWheels {
 
     }
 
+    //Crab Drive --------------------
     public void crabDrive (String direction, double motorpower, long time) {
         double crab;
         String sanitizedDirection = direction.toLowerCase();
@@ -178,21 +179,23 @@ public class MecanumWheels {
         StopMotors();
     }
 
+    //Turning ----------------------
     //TODO test directions
-    public void turnTime (String direction, double motorpower, long time) {
+    public void turnSeconds (String direction, double motorpower, long time) {
         double turn;
         String sanitizedDirection = direction.toLowerCase();
         if (sanitizedDirection.equals("right")) {
-            turn = -1;
+            turn = -10;
         }
         else {
-            turn = 1;
+            turn = 10;
         }
         setPowerFromGamepad(false, motorpower, turn, 0, 0);
         sleep(time);
 
         StopMotors();
     }
+
 
     /**
      * Calculates the ramped power using this proportional gain formula:
@@ -204,6 +207,7 @@ public class MecanumWheels {
      * @param maxMotorPower - the max power we want to use
      * @param minMotorPower - the min power we want to use at the destination
      */
+
     public static final double calculateProportionalMotorPower(double gain,double errorDistance,double maxMotorPower,double minMotorPower) {
         double suggestedPower=(gain*errorDistance)+minMotorPower;
 
