@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.useless;
+package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -10,8 +10,8 @@ import org.firstinspires.ftc.controlunits.ServoPosition;
 import org.firstinspires.ftc.robotDevices.SkystoneIntake;
 import org.firstinspires.ftc.teamcode.TeleOpMethods;
 
-@Autonomous(name = "TankAutonomous", group="Skystone")
-public class TankAutonomous extends LinearOpMode {
+@Autonomous(name = "TankAutonomousTester", group="Skystone")
+public class TankAutonomousTester extends LinearOpMode {
     private TeleOpMethods robot = new TeleOpMethods(ChassisName.TANK);
     private final MecanumWheels mecanumWheels = new MecanumWheels(ChassisName.TANK);
     private final FoundationHook hookServo = new FoundationHook(ChassisName.TANK);
@@ -19,6 +19,7 @@ public class TankAutonomous extends LinearOpMode {
     final double HIGH_POWER = 1.0;
     final double NORMAL_POWER = 0.5;
 
+    //Use this class to test new methods and anything else for auto
 
     public void runOpMode() {
         mecanumWheels.initializeWheels(this);
@@ -29,35 +30,15 @@ public class TankAutonomous extends LinearOpMode {
         waitForStart();
         robot.startTime();
 
-        moveHook(ServoPosition.UP);
+        hookServo.moveHookEnum(ServoPosition.UP);
 
         executeAutonomousLogic();
 
     }
 
-    public void moveHook(ServoPosition position){
-        if (position==ServoPosition.UP)  {
-            hookServo.hookServo.setPosition(.4);
-        }
-        else  {
-            hookServo.hookServo.setPosition(0);
-        }
-    }
-
     protected void executeAutonomousLogic() {
         double ticksToInches=288/(Math.PI*6.125);
-        /*mecanumWheels.ForwardMoveInches(telemetry, 0.5, 30, ticksToInches);
 
-
-        moveHook(ServoPosition.DOWN);
-
-        sleep(1000);
-        mecanumWheels.BackwardMoveInches(telemetry,-0.5,29,ticksToInches);
-
-        sleep(10000);
-         */
-
-        mecanumWheels.crabDrive("left", 1, 5000);
     }
 
     }

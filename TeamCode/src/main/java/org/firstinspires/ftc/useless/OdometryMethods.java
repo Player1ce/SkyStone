@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.useless;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -7,6 +7,7 @@ import org.firstinspires.ftc.robotDevices.ChassisName;
 import org.firstinspires.ftc.robotDevices.FoundationHook;
 import org.firstinspires.ftc.robotDevices.MecanumWheels;
 import org.firstinspires.ftc.robotDevices.SkystoneIntake;
+import org.firstinspires.ftc.teamcode.TeleOpMethods;
 import org.firstinspires.ftc.useless.BasicRobotMethods;
 
 
