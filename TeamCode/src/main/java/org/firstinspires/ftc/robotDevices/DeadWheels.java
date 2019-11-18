@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 
-public abstract class DeadWheels {
+public class DeadWheels {
     private MecanumWheels mecanumWheels = new MecanumWheels(ChassisName.TANK);
     public DcMotor forwardEncoder = mecanumWheels.frontLeft;
     public DcMotor horizontalEncoder = mecanumWheels.frontRight;
@@ -16,18 +16,21 @@ public abstract class DeadWheels {
     //position vars
     double xPosition = horizontalEncoder.getCurrentPosition();
     double yPosition = forwardEncoder.getCurrentPosition();
-    double worldPosition[] = new double[] {xPosition, yPosition};
 
     double xTarget;
     double yTarget;
+
+    double xVariance;
+    double yVariance;
+
+    double distancex = Math.abs(xPosition - xTarget);
+    double distancey = Math.abs(yPosition - yTarget);
+    double distance = Math.sqrt(((distancex * distancex) + (distancey * distancey)));
+
+    double worldPosition[] = new double[] {xPosition, yPosition};
+
+
     double destination[] = new double[] {xTarget, yTarget};
-
-
-    double distancex = Math.abs(worldPosition[0] - destination[0]);
-    double distancey = Math.abs(worldPosition[1] - destination[1]);
-    double distance = Math.sqrt((distancex * distancex) + (distancey * distancey));
-
-
 
 
     public void initializeEncoders () {
@@ -52,9 +55,14 @@ public abstract class DeadWheels {
         horizontalEncoder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-    public void setTarget (double xTarget, double yTarget) {
-        destination[0] = xTarget;
-        destination[1] = yTarget;
+    public void setTarget (double x, double y) {
+        xTarget = x;
+        yTarget = y;
+    }
+
+    public void setVarince (double x, double y) {
+        this.xVariance = Math.abs(xTarget-x);
+        this.yVariance= Math.abs(yTarget-y);
     }
 
     protected void MoveInches(Telemetry telemetry, double MotorPower, double MinMotorPower, double Inches, double ticksToInches) {
@@ -65,7 +73,7 @@ public abstract class DeadWheels {
 
         double dest=ticksToInches*Inches;
 
-        while (worldPosition[0] < destination[0] && worldPosition[1] < destination[1]){
+        while (xPosition < xTarget){
 
             //double distance=Math.abs(averagePos-dest);
             distancey = Math.abs(worldPosition[1] - destination[1]);
