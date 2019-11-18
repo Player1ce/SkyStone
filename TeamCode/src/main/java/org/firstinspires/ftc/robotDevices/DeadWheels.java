@@ -12,10 +12,10 @@ public abstract class DeadWheels {
     public DcMotor forwardEncoder = mecanumWheels.frontLeft;
     public DcMotor horizontalEncoder = mecanumWheels.frontRight;
 
-    
+
     //position vars
-    double xPosition = forwardEncoder.getCurrentPosition();
-    double yPosition = horizontalEncoder.getCurrentPosition();
+    double xPosition = horizontalEncoder.getCurrentPosition();
+    double yPosition = forwardEncoder.getCurrentPosition();
     double worldPosition[] = new double[] {xPosition, yPosition};
 
     double xTarget;
@@ -31,8 +31,8 @@ public abstract class DeadWheels {
 
 
     public void initializeEncoders () {
-        frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        forwardEncoder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        horizontalEncoder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     private void sleep(long ms) {
@@ -43,13 +43,13 @@ public abstract class DeadWheels {
     }
 
     public void resetEncoders() {
-        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        forwardEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        horizontalEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         sleep(50);
 
-        frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        forwardEncoder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        horizontalEncoder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public void setTarget (double xTarget, double yTarget) {
@@ -70,7 +70,7 @@ public abstract class DeadWheels {
             //double distance=Math.abs(averagePos-dest);
             distancey = Math.abs(worldPosition[1] - destination[1]);
 
-            double power=wheels.calculateProportionalMotorPower(0.0015,distancey,MotorPower,MinMotorPower);
+            double power=mecanumWheels.calculateProportionalMotorPower(0.0015,distancey,MotorPower,MinMotorPower);
 
             mecanumWheels.setPower(power, power, power, power);
 
@@ -92,7 +92,8 @@ public abstract class DeadWheels {
             telemetry.update();
 
 
-            averagePos= getAverageEncoderPos();
+            xPosition = horizontalEncoder.getCurrentPosition();
+            yPosition = forwardEncoder.getCurrentPosition();
         }
 
         mecanumWheels.StopMotors();
