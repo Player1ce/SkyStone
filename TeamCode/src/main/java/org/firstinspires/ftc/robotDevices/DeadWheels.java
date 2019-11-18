@@ -1,0 +1,121 @@
+package org.firstinspires.ftc.robotDevices;
+
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
+
+public abstract class DeadWheels {
+    private MecanumWheels mecanumWheels = new MecanumWheels(ChassisName.TANK);
+    public DcMotor forwardEncoder = mecanumWheels.frontLeft;
+    public DcMotor horizontalEncoder = mecanumWheels.frontRight;
+
+    
+    //position vars
+    double xPosition = forwardEncoder.getCurrentPosition();
+    double yPosition = horizontalEncoder.getCurrentPosition();
+    double worldPosition[] = new double[] {xPosition, yPosition};
+
+    double xTarget;
+    double yTarget;
+    double destination[] = new double[] {xTarget, yTarget};
+
+
+    double distancex = Math.abs(worldPosition[0] - destination[0]);
+    double distancey = Math.abs(worldPosition[1] - destination[1]);
+    double distance = Math.sqrt((distancex * distancex) + (distancey * distancey));
+
+
+
+
+    public void initializeEncoders () {
+        frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
+    private void sleep(long ms) {
+        try {
+            Thread.sleep(ms);
+        }
+        catch (InterruptedException e){}
+    }
+
+    public void resetEncoders() {
+        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        sleep(50);
+
+        frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
+    public void setTarget (double xTarget, double yTarget) {
+        destination[0] = xTarget;
+        destination[1] = yTarget;
+    }
+
+    protected void MoveInches(Telemetry telemetry, double MotorPower, double MinMotorPower, double Inches, double ticksToInches) {
+
+        resetEncoders();
+
+        //double averagePos=getAverageEncoderPos();
+
+        double dest=ticksToInches*Inches;
+
+        while (worldPosition[0] < destination[0] && worldPosition[1] < destination[1]){
+
+            //double distance=Math.abs(averagePos-dest);
+            distancey = Math.abs(worldPosition[1] - destination[1]);
+
+            double power=wheels.calculateProportionalMotorPower(0.0015,distancey,MotorPower,MinMotorPower);
+
+            mecanumWheels.setPower(power, power, power, power);
+
+            /*
+            mecanumWheels.backRight.setPower(power);
+            frontLeft.setPower(power);
+            mecanumWheels.backLeft.setPower(power);
+            frontRight.setPower(power);
+             */
+
+            telemetry.addData("Moving Forward","Moving Forward "+power);
+            // telemetry.addData("avg encoder value:", averagePos);
+            telemetry.addData("distance:", distance);
+           /* telemetry.addData("F/L encoder value:", frontLeft.getCurrentPosition()*ticksToInches);
+            telemetry.addData("F/R encoder value:", frontRight.getCurrentPosition()*ticksToInches);
+            telemetry.addData("B/L encoder value:", backLeft.getCurrentPosition()*ticksToInches);
+            telemetry.addData("B/R encoder value:", backRight.getCurrentPosition()*ticksToInches);*/
+            telemetry.addData("encoder target:", Inches);
+            telemetry.update();
+
+
+            averagePos= getAverageEncoderPos();
+        }
+
+        mecanumWheels.StopMotors();
+
+    }
+
+
+    /*
+    public void initializeOdometry (OpMode opMode) {
+        //compress using this.frontRight = ...;
+        frontRight = opMode.hardwareMap.dcMotor.get("frontRight");
+        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        frontLeft = opMode.hardwareMap.dcMotor.get("frontLeft");
+        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+
+
+    }
+     */
+
+}
+
+
