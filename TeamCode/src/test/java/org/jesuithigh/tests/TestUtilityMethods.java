@@ -1,7 +1,7 @@
 package org.jesuithigh.tests;
 
-import org.firstinspires.ftc.controlunits.ButtonOneShot;
-import org.firstinspires.ftc.robotDevices.MecanumWheels;
+import org.firstinspires.ftc.logic.ButtonOneShot;
+import org.firstinspires.ftc.devices.MecanumWheels;
 import org.junit.Assert;
 import org.junit.Test;
 

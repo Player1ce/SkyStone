@@ -1,9 +1,9 @@
-package org.firstinspires.ftc.robotDevices;
+package org.firstinspires.ftc.devices;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.controlunits.ServoPosition;
+import org.firstinspires.ftc.logic.ServoPosition;
 
 public class FoundationHook {
 

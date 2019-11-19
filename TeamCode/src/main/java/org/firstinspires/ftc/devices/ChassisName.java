@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.robotDevices;
+package org.firstinspires.ftc.devices;
 
 public enum ChassisName {
     TANK,

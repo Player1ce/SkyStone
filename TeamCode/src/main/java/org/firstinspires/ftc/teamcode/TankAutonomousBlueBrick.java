@@ -5,12 +5,12 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.SwitchableLight;
 
-import org.firstinspires.ftc.controlunits.ColorSensorLogic;
-import org.firstinspires.ftc.robotDevices.ChassisName;
-import org.firstinspires.ftc.robotDevices.FoundationHook;
-import org.firstinspires.ftc.robotDevices.MecanumWheels;
-import org.firstinspires.ftc.controlunits.ServoPosition;
-import org.firstinspires.ftc.robotDevices.SkystoneIntake;
+import org.firstinspires.ftc.logic.ColorSensorLogic;
+import org.firstinspires.ftc.devices.ChassisName;
+import org.firstinspires.ftc.devices.FoundationHook;
+import org.firstinspires.ftc.devices.MecanumWheels;
+import org.firstinspires.ftc.logic.ServoPosition;
+import org.firstinspires.ftc.devices.SkystoneIntake;
 
 @Autonomous(name = "TankAutonomousBlueBrick", group="Skystone")
 public class TankAutonomousBlueBrick extends LinearOpMode {

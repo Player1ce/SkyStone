@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.robotDevices;
+package org.firstinspires.ftc.devices;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;

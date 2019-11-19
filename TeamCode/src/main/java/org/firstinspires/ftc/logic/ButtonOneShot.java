@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.controlunits;
+package org.firstinspires.ftc.logic;
 
 public class ButtonOneShot {
     //state variable that tracks whether the button will accept the input

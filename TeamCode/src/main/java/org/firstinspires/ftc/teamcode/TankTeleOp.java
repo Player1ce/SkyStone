@@ -3,11 +3,11 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.controlunits.ButtonOneShot;
-import org.firstinspires.ftc.robotDevices.ChassisName;
-import org.firstinspires.ftc.robotDevices.FoundationHook;
-import org.firstinspires.ftc.robotDevices.MecanumWheels;
-import org.firstinspires.ftc.robotDevices.SkystoneIntake;
+import org.firstinspires.ftc.logic.ButtonOneShot;
+import org.firstinspires.ftc.devices.ChassisName;
+import org.firstinspires.ftc.devices.FoundationHook;
+import org.firstinspires.ftc.devices.MecanumWheels;
+import org.firstinspires.ftc.devices.SkystoneIntake;
 
 
 @TeleOp(name="Tank TeleOp", group="Skystone")

@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.robotDevices.ChassisName;
+import org.firstinspires.ftc.devices.ChassisName;
 
 public class TeleOpMethods {
     DcMotor frontLeft;

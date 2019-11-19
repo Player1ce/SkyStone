@@ -3,12 +3,11 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.robotDevices.ChassisName;
-import org.firstinspires.ftc.robotDevices.FoundationHook;
-import org.firstinspires.ftc.robotDevices.MecanumWheels;
-import org.firstinspires.ftc.controlunits.ServoPosition;
-import org.firstinspires.ftc.robotDevices.SkystoneIntake;
-import org.firstinspires.ftc.teamcode.TeleOpMethods;
+import org.firstinspires.ftc.devices.ChassisName;
+import org.firstinspires.ftc.devices.FoundationHook;
+import org.firstinspires.ftc.devices.MecanumWheels;
+import org.firstinspires.ftc.logic.ServoPosition;
+import org.firstinspires.ftc.devices.SkystoneIntake;
 
 @Autonomous(name = "TankAutonomousTester", group="Skystone")
 public class TankAutonomousTester extends LinearOpMode {

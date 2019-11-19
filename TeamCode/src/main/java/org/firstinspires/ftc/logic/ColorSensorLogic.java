@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.controlunits;
+package org.firstinspires.ftc.logic;
 
 import com.qualcomm.robotcore.hardware.ColorSensor;
 
