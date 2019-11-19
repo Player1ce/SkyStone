@@ -108,6 +108,8 @@ public class TankTeleOp extends OpMode {
             }
         }
 
+
+
         //intake control ----------------------------
         if (gamepad2.left_trigger > 0) {
             intake.leftIntake.setPower(-gamepad2.left_trigger * .7);

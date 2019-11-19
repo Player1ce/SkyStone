@@ -1,9 +1,11 @@
 package org.firstinspires.ftc.devices;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.firstinspires.ftc.logic.KillOpModeException;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class MecanumWheels {
@@ -27,6 +29,8 @@ public class MecanumWheels {
         chassis = name;
     }
 
+    LinearOpMode linearOpMode;
+
     public void initializeWheels (OpMode opMode) {
         //compress using this.frontRight = ...;
         frontRight = opMode.hardwareMap.dcMotor.get("frontRight");
@@ -39,6 +43,19 @@ public class MecanumWheels {
 
         backLeft = opMode.hardwareMap.dcMotor.get("backLeft");
 
+        if (opMode instanceof LinearOpMode) {
+            linearOpMode=(LinearOpMode)opMode;
+        }
+
+    }
+
+    protected boolean opModeIsActive() {
+        if (linearOpMode==null) {
+            return true;
+        }
+        else {
+            return linearOpMode.opModeIsActive();
+        }
     }
 
     public void setPower (double frontRightPower, double frontLeftPower, double backRightPower, double backLeftPower) {
@@ -136,6 +153,8 @@ public class MecanumWheels {
         double dest=ticksToInches*Inches;
 
         while (averagePos < dest){
+            checkIsActive();
+
             double distance=Math.abs(averagePos-dest);
 
             double power=calculateProportionalMotorPower(0.0015,distance,MotorPower,MinMotorPower);
@@ -162,6 +181,22 @@ public class MecanumWheels {
 
     }
 
+    public void sleepAndCheckActive(long ms) {
+        final long targetTime=System.currentTimeMillis()+ms;
+        while (System.currentTimeMillis()<targetTime) {
+            sleep(1);
+            checkIsActive();
+        }
+    }
+
+    public void checkIsActive() {
+        if (!opModeIsActive()) {
+            StopMotors();
+            throw new KillOpModeException();
+        }
+    }
+
+
     //Crab Drive --------------------
     public void crabDrive (String direction, double motorpower, long time) {
         double crab;
@@ -173,7 +208,7 @@ public class MecanumWheels {
             crab = 1;
         }
         setPowerFromGamepad(false, motorpower, 0, crab, 0);
-        sleep(time);
+        sleepAndCheckActive(time);
 
         StopMotors();
     }
