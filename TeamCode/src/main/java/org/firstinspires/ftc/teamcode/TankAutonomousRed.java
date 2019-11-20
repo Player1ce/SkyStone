@@ -87,7 +87,7 @@ public class TankAutonomousRed extends LinearOpMode {
             while (colorSensor.red() < redTarget && colorSensor.blue() < blueTarget) {
                 telemetry.addData("Colors", "-> " + colors[0] + "  " + colors[1] + "   " + colors[2]);
                 telemetry.update();
-                sleep(10);
+                mecanumWheels.sleepAndCheckActive(10);
             }
             mecanumWheels.StopMotors();
             telemetry.addData("Colors", "* " + colors[0] + "  " + colors[1] + "   " + colors[2]);
@@ -99,33 +99,33 @@ public class TankAutonomousRed extends LinearOpMode {
 
             moveHook(ServoPosition.DOWN);
 
-            sleep(1000);
+            mecanumWheels.sleepAndCheckActive(1000);
             mecanumWheels.BackwardMoveInches(telemetry, -0.5, 31, ticksToInches);
             mecanumWheels.ForwardMoveInches(telemetry, 0.5, .5, ticksToInches);
 
-            sleep(1000);
+            mecanumWheels.sleepAndCheckActive(1000);
 
             moveHook(ServoPosition.UP);
 
-            sleep(500);
+            mecanumWheels.sleepAndCheckActive(500);
 
             mecanumWheels.crabDrive("left", 0.7, 2500);
             mecanumWheels.ForwardMoveInches(telemetry, 0.5, 13, ticksToInches);
             mecanumWheels.crabDrive("right", 0.7, 2000);
 
-            sleep(500);
+            mecanumWheels.sleepAndCheckActive(500);
 
             mecanumWheels.crabDrive("left", 0.7, 1000);
 
-            sleep(500);
+            mecanumWheels.sleepAndCheckActive(500);
 
             mecanumWheels.setPowerFromGamepad(false, .7, -10, 0, 0);
 
-            sleep(1050);
+            mecanumWheels.sleepAndCheckActive(1050);
 
             mecanumWheels.StopMotors();
 
-            sleep(500);
+            mecanumWheels.sleepAndCheckActive(500);
 
             mecanumWheels.setPowerFromGamepad(true, .7, 0, 0, 10);
 

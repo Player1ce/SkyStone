@@ -47,7 +47,7 @@ public class DeadWheels {
         forwardEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         horizontalEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        sleep(50);
+        mecanumWheels.sleepAndCheckActive(50);
 
         forwardEncoder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         horizontalEncoder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
