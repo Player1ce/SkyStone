@@ -33,6 +33,15 @@ public class Camera {
     public void initializeCamera (OpMode opMode) {
         webcamName = opMode.hardwareMap.get(WebcamName.class, "Webcam 1");
 
+        initVuforia(opMode);
+
+        initTfod(opMode);
+
+        tfod.activate();
+    }
+
+
+    private void initVuforia (OpMode opMode) {
         /*
          * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
          * We can pass Vuforia the handle to a camera preview resource (on the RC phone);
@@ -51,13 +60,7 @@ public class Camera {
 
         //  Instantiate the Vuforia engine
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
-
-        initTfod(opMode);
-
-        tfod.activate();
     }
-
-
 
     private void initTfod(OpMode opMode) {
         int tfodMonitorViewId = opMode.hardwareMap.appContext.getResources().getIdentifier(
