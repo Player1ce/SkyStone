@@ -2,27 +2,26 @@ package org.firstinspires.ftc.devices;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.logic.ChassisName;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Encoders {
+    //TODO do we need to run using encoder. Run using encoder is a PID method so it will interfere with our power setup?
+    // also, xEncoder will be sideways so it won't really relate to movement.  Finally, i think we can get position without using encoders.
+    //TODO we need to move the encoders to separate ports on the rev hub so the wheels cna run with encoders.
 
 
     ChassisName chassis = ChassisName.TANK;
     double ticksToInches;
 
-    public void setTicksToInches (ChassisName chassis) {
-        if (chassis == ChassisName.TANK) {
-            ticksToInches = 288 / (Math.PI * 6.125);
-        }
-    }
-
     public Encoders (double startX, double startY, ChassisName chassisName) {
         x = startX;
         y = startY;
         chassis = chassisName;
-        setTicksToInches(chassis);
+        if (chassis == ChassisName.TANK) {
+            ticksToInches = 288 / (Math.PI * 6.125);
+        }
     }
-
 
     private MecanumWheels wheels = new MecanumWheels(chassis);
 
@@ -39,22 +38,17 @@ public class Encoders {
     double xError;
     double yError;
 
+    /*
     double xCorrection;
     double yCorrection;
-
-
-
-    public void initializeEncoders () {
-        wheels.frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        wheels.frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-    }
+     */
 
     public double getX () {
-        return wheels.frontLeft.getCurrentPosition();
+        return xEncoder.getCurrentPosition();
     }
 
     public double getY () {
-        return wheels.frontRight.getCurrentPosition();
+        return yEncoder.getCurrentPosition();
     }
 
     public void setxTarget (double target) { xTarget = target; }
@@ -62,29 +56,45 @@ public class Encoders {
     public void setyTarget (double target) { yTarget = target; }
 
     public double correctX () {
-        if (getX() > xError) {
+        double xCorrection = 0;
+        if ((xTarget-getX()) > xError) {
             xCorrection = -1;
-        } else if (getX() < -xError) {
+        } else if ((xTarget - getX()) < -xError) {
             xCorrection = 1;
         }
         return xCorrection;
     }
 
     public double correctY() {
-        if (getY() > yError) {
+        double yCorrection = 0;
+        if ((yTarget - getY()) > yError) {
             yCorrection = -1;
-        } else if (getX() < -xError) {
+        } else if ((yTarget - getY()) < -xError) {
             yCorrection = 1;
         }
-        return xCorrection;
+        return yCorrection;
     }
 
     public boolean testPosition (double xTarget, double yTarget) {
-        if (getX() == xTarget && getY() == yTarget) {
-            return true;
-        } else {
+        if ((getX() == xTarget + xError || getX() == xTarget - xError) && (getY() == yTarget + yError || getY() == yTarget - yError)) {
             return false;
+        } else {
+            return true;
         }
+    }
+
+    public void resetPosition() {
+        wheels.frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        wheels.frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        wheels.backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        wheels.backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        wheels.sleepAndCheckActive(50);
+
+        wheels.frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        wheels.frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        wheels.backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        wheels.backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     protected void moveInchesEncoders(Telemetry telemetry,double MotorPower, double MinMotorPower,double Inches,double ticksToInches) {
@@ -97,12 +107,12 @@ public class Encoders {
         while (testPosition(xTarget, yTarget)){
             wheels.checkIsActive();
 
-            double distance=Math.abs(x-xTarget);
+            double distance=Math.abs(y-yTarget) ;
 
             //min motor power should be set to zero
             double power=wheels.calculateProportionalMotorPower(0.0015,distance,MotorPower,MinMotorPower);
 
-            wheels.setPowerFromGamepad(false, 1, 0, correctX(), power);
+            wheels.setPowerFromGamepad(false, power, 0, correctX(), correctY());
 
             /*
             wheels.backRight.setPower(power);
@@ -137,12 +147,12 @@ public class Encoders {
         while (testPosition(xTarget, yTarget)){
             wheels.checkIsActive();
 
-            double distance=Math.abs(x-xTarget) * ticksToInches;
+            double distance=Math.abs(x-xTarget);
 
             //min motor power should be set to zero
             double power=wheels.calculateProportionalMotorPower(0.0015,distance,MotorPower,MinMotorPower);
 
-            wheels.setPowerFromGamepad(false, 1, 0, power, correctY());
+            wheels.setPowerFromGamepad(false, power, 0, correctX(), correctY());
 
             /*
             wheels.backRight.setPower(power);
@@ -177,9 +187,9 @@ public class Encoders {
         wheels.ResetEncoders();
 
         setxTarget(ticksToInches*Inches);
-        setyTarget(0);
+        setyTarget(getY());
 
-        while (testPosition(xTarget, 0)){
+        while (testPosition(xTarget, getY())){
             wheels.checkIsActive();
 
             double distance=Math.abs(x-xTarget);
@@ -207,11 +217,11 @@ public class Encoders {
 
             x = getX();
             y = getY();
+            setyTarget(getY());
 
         }
 
         wheels.StopMotors();
-
 
     }
 
