@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.firstinspires.ftc.logic.ChassisName;
 import org.firstinspires.ftc.logic.KillOpModeException;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 

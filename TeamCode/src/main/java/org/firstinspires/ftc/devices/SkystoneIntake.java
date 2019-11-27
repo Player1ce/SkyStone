@@ -4,6 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.logic.ChassisName;
+
 public class SkystoneIntake {
     public DcMotor leftIntake;
     public DcMotor rightIntake;
