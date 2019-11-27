@@ -5,9 +5,33 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Encoders {
-    //TODO set up ticks to enchis for get x and get y.
 
-    ChassisName chassis;
+
+    ChassisName chassis = ChassisName.TANK;
+    double ticksToInches;
+
+    public void setTicksToInches (ChassisName chassis) {
+        if (chassis == ChassisName.TANK) {
+            ticksToInches = 288 / (Math.PI * 6.125);
+        }
+    }
+
+    public Encoders (double startX, double startY, ChassisName chassisName) {
+        x = startX;
+        y = startY;
+        chassis = chassisName;
+        setTicksToInches(chassis);
+    }
+
+
+    private MecanumWheels wheels = new MecanumWheels(chassis);
+
+    DcMotor xEncoder = wheels.frontLeft;
+    DcMotor yEncoder = wheels.frontRight;
+
+    //TODO set up ticks to inches for get x and get y.
+    double x;
+    double y;
 
     double xTarget;
     double yTarget;
@@ -18,20 +42,6 @@ public class Encoders {
     double xCorrection;
     double yCorrection;
 
-    public Encoders (double startX, double startY, ChassisName chassisName) {
-        x = startX;
-        y = startY;
-        chassis = chassisName;
-    }
-
-    private MecanumWheels wheels = new MecanumWheels(chassis);
-
-    DcMotor xEncoder = wheels.frontLeft;
-    DcMotor yEncoder = wheels.frontRight;
-
-
-    double x;
-    double y;
 
 
     public void initializeEncoders () {
@@ -51,7 +61,7 @@ public class Encoders {
 
     public void setyTarget (double target) { yTarget = target; }
 
-    public double correctX (double xError) {
+    public double correctX () {
         if (getX() > xError) {
             xCorrection = -1;
         } else if (getX() < -xError) {
@@ -60,7 +70,7 @@ public class Encoders {
         return xCorrection;
     }
 
-    public double corrextY() {
+    public double correctY() {
         if (getY() > yError) {
             yCorrection = -1;
         } else if (getX() < -xError) {
@@ -70,31 +80,36 @@ public class Encoders {
     }
 
     public boolean testPosition (double xTarget, double yTarget) {
-        if ((getX() == xTarget || getX() == 0) && (getY() == yTarget || getY() == 0)) {
+        if (getX() == xTarget && getY() == yTarget) {
             return true;
         } else {
             return false;
         }
     }
 
-    protected void MoveInchesEncoders(Telemetry telemetry,double MotorPower, double MinMotorPower,double Inches,double ticksToInches) {
+    protected void moveInchesEncoders(Telemetry telemetry,double MotorPower, double MinMotorPower,double Inches,double ticksToInches) {
 
         wheels.ResetEncoders();
 
-        setxTarget(ticksToInches*Inches);
-        setyTarget(0);
+        setyTarget(ticksToInches*Inches);
+        setxTarget(0);
 
         while (testPosition(xTarget, yTarget)){
             wheels.checkIsActive();
 
             double distance=Math.abs(x-xTarget);
 
+            //min motor power should be set to zero
             double power=wheels.calculateProportionalMotorPower(0.0015,distance,MotorPower,MinMotorPower);
 
+            wheels.setPowerFromGamepad(false, 1, 0, correctX(), power);
+
+            /*
             wheels.backRight.setPower(power);
             wheels.frontLeft.setPower(power);
             wheels.backLeft.setPower(power);
             wheels.frontRight.setPower(power);
+             */
 
             telemetry.addData("Moving Forward","Moving Forward "+power);
             // telemetry.addData("avg encoder value:", averagePos);
@@ -111,5 +126,94 @@ public class Encoders {
         wheels.StopMotors();
 
     }
+
+    protected void crabInchesEncoder(Telemetry telemetry,double MotorPower, double MinMotorPower,double Inches,double ticksToInches) {
+
+        wheels.ResetEncoders();
+
+        setxTarget(ticksToInches*Inches);
+        setyTarget(0);
+
+        while (testPosition(xTarget, yTarget)){
+            wheels.checkIsActive();
+
+            double distance=Math.abs(x-xTarget) * ticksToInches;
+
+            //min motor power should be set to zero
+            double power=wheels.calculateProportionalMotorPower(0.0015,distance,MotorPower,MinMotorPower);
+
+            wheels.setPowerFromGamepad(false, 1, 0, power, correctY());
+
+            /*
+            wheels.backRight.setPower(power);
+            wheels.frontLeft.setPower(power);
+            wheels.backLeft.setPower(power);
+            wheels.frontRight.setPower(power);
+             */
+
+            telemetry.addData("Moving Forward","Moving Forward "+power);
+            // telemetry.addData("avg encoder value:", averagePos);
+            telemetry.addData("distance:", distance);
+           /* telemetry.addData("F/L encoder value:", frontLeft.getCurrentPosition()*ticksToInches);
+            telemetry.addData("F/R encoder value:", frontRight.getCurrentPosition()*ticksToInches);
+            telemetry.addData("B/L encoder value:", backLeft.getCurrentPosition()*ticksToInches);
+            telemetry.addData("B/R encoder value:", backRight.getCurrentPosition()*ticksToInches);*/
+            telemetry.addData("encoder target:", Inches);
+            telemetry.update();
+
+            x = getX();
+            y = getY();
+
+        }
+
+        wheels.StopMotors();
+
+    }
+
+
+    //TODO this won't work yet
+    public void turnInchesEncoder(Telemetry telemetry,double MotorPower, double MinMotorPower,double Inches,double ticksToInches) {
+
+        wheels.ResetEncoders();
+
+        setxTarget(ticksToInches*Inches);
+        setyTarget(0);
+
+        while (testPosition(xTarget, 0)){
+            wheels.checkIsActive();
+
+            double distance=Math.abs(x-xTarget);
+
+            double power=wheels.calculateProportionalMotorPower(0.0015,distance,MotorPower,MinMotorPower);
+
+            wheels.setPowerFromGamepad(false, 1, 1, 0, 0);
+
+            /*
+            wheels.backRight.setPower(power);
+            wheels.frontLeft.setPower(power);
+            wheels.backLeft.setPower(power);
+            wheels.frontRight.setPower(power);
+             */
+
+            telemetry.addData("Moving Forward","Moving Forward "+power);
+            // telemetry.addData("avg encoder value:", averagePos);
+            telemetry.addData("distance:", distance);
+           /* telemetry.addData("F/L encoder value:", frontLeft.getCurrentPosition()*ticksToInches);
+            telemetry.addData("F/R encoder value:", frontRight.getCurrentPosition()*ticksToInches);
+            telemetry.addData("B/L encoder value:", backLeft.getCurrentPosition()*ticksToInches);
+            telemetry.addData("B/R encoder value:", backRight.getCurrentPosition()*ticksToInches);*/
+            telemetry.addData("encoder target:", Inches);
+            telemetry.update();
+
+            x = getX();
+            y = getY();
+
+        }
+
+        wheels.StopMotors();
+
+
+    }
+
 
 }
