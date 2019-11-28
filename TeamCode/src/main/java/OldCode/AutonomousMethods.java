@@ -256,7 +256,7 @@ public abstract class AutonomousMethods extends LinearOpMode {
 
 
         return imu.getPosition();
-            }
+    }
 
     String formatAngle(AngleUnit angleUnit, double angle) {
         return formatDegrees(AngleUnit.DEGREES.fromUnit(angleUnit, angle));
