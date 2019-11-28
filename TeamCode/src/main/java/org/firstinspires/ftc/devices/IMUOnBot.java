@@ -12,11 +12,12 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
-public class IMU {
+public class IMUOnBot {
     //Reference Cite: https://stemrobotics.cs.pdx.edu/node/7265
-    
+
     ChassisName chassis;
-    public void IMU (ChassisName name) {
+
+    public IMUOnBot (ChassisName name) {
         chassis = name;
     }
 
@@ -48,7 +49,7 @@ public class IMU {
         while (!isStopRequested() && !imu.isGyroCalibrated())
         {
             wheels.sleep(50);
-            IMU.idle();
+            IMUOnBot.idle();
         }
         */
 
@@ -64,7 +65,7 @@ public class IMU {
         globalAngle = 0;
     }
 
-    private double getAngle()
+    public double getAngle()
     {
         // We experimentally determined the Z axis is the axis we want to use for heading angle.
         // We have to process the angle because the imu works in euler angles so the Z axis is
@@ -87,7 +88,7 @@ public class IMU {
         return globalAngle;
     }
 
-    private double checkDirection()
+    public double checkDirection()
     {
         // The gain value determines how sensitive the correction is to direction changes.
         // You will have to experiment with your robot to get small smooth direction changes
@@ -106,7 +107,7 @@ public class IMU {
         return correction;
     }
 
-    private void rotate(int degrees, double power)
+    public void rotate(int degrees, double power)
     {
         double  leftPower, rightPower;
 

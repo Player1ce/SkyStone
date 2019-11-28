@@ -95,7 +95,7 @@ public abstract class BasicRobotMethods implements RobotMethods{
         bottomLimitSwitch = hardwareMap.digitalChannel.get("bottomLimitSwitch");
         topLimitSwitch = hardwareMap.digitalChannel.get("topLimitSwitch");
 
-        //initialize IMU in the REV module
+        //initialize IMUOnBot in the REV module
         imu = hardwareMap.get(BNO055IMU.class, "imu");
     }
 
@@ -107,7 +107,7 @@ public abstract class BasicRobotMethods implements RobotMethods{
         parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
         parameters.calibrationDataFile = "AdafruitIMUCalibration.json"; // see the calibration sample opmode
         parameters.loggingEnabled      = true;
-        parameters.loggingTag          = "IMU";
+        parameters.loggingTag          = "IMUOnBot";
         parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
 
         imu.initialize(parameters);

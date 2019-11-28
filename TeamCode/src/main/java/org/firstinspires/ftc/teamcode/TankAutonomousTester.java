@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.devices.Encoders;
+import org.firstinspires.ftc.devices.IMUOnBot;
 import org.firstinspires.ftc.logic.ChassisName;
 import org.firstinspires.ftc.devices.FoundationHook;
 import org.firstinspires.ftc.devices.MecanumWheels;
@@ -15,6 +17,8 @@ public class TankAutonomousTester extends LinearOpMode {
     private final MecanumWheels mecanumWheels = new MecanumWheels(ChassisName.TANK);
     private final FoundationHook hookServo = new FoundationHook(ChassisName.TANK);
     private final SkystoneIntake intake = new SkystoneIntake(ChassisName.TANK);
+    private final IMUOnBot imu = new IMUOnBot(ChassisName.TANK);
+    private final Encoders encoders = new Encoders(0, 0, ChassisName.TANK);
     final double HIGH_POWER = 1.0;
     final double NORMAL_POWER = 0.5;
 
@@ -24,19 +28,23 @@ public class TankAutonomousTester extends LinearOpMode {
         mecanumWheels.initializeWheels(this);
         intake.initializeIntake(this);
         hookServo.initializeHook(this);
+        imu.initializeIMU(this);
 
         mecanumWheels.setZeroPowerBrakeBehavior();
         waitForStart();
+
         robot.startTime();
-
-        hookServo.moveHookEnum(ServoPosition.UP);
-
         executeAutonomousLogic();
 
     }
 
     protected void executeAutonomousLogic() {
         double ticksToInches=288/(Math.PI*6.125);
+
+        encoders.moveInchesEncoders(telemetry, .4, 0, 2, ticksToInches );
+
+        imu.rotate(90, 1);
+
 
     }
 

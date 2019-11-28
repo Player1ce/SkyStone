@@ -51,11 +51,11 @@ public class Encoders {
         return yEncoder.getCurrentPosition();
     }
 
-    public void setxTarget (double target) { xTarget = target; }
+    private void setxTarget (double target) { xTarget = target; }
 
-    public void setyTarget (double target) { yTarget = target; }
+    private void setyTarget (double target) { yTarget = target; }
 
-    public double correctX () {
+    private double correctX () {
         double xCorrection = 0;
         if ((xTarget-getX()) > xError) {
             xCorrection = -1;
@@ -65,7 +65,7 @@ public class Encoders {
         return xCorrection;
     }
 
-    public double correctY() {
+    private double correctY() {
         double yCorrection = 0;
         if ((yTarget - getY()) > yError) {
             yCorrection = -1;
@@ -75,7 +75,7 @@ public class Encoders {
         return yCorrection;
     }
 
-    public boolean testPosition (double xTarget, double yTarget) {
+    private boolean testPosition (double xTarget, double yTarget) {
         if ((getX() == xTarget + xError || getX() == xTarget - xError) && (getY() == yTarget + yError || getY() == yTarget - yError)) {
             return false;
         } else {
@@ -97,7 +97,7 @@ public class Encoders {
         wheels.backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    protected void moveInchesEncoders(Telemetry telemetry,double MotorPower, double MinMotorPower,double Inches,double ticksToInches) {
+    public void moveInchesEncoders(Telemetry telemetry,double MotorPower, double MinMotorPower,double Inches,double ticksToInches) {
 
         wheels.ResetEncoders();
 
