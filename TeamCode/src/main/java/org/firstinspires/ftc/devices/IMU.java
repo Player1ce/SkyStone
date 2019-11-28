@@ -13,6 +13,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 public class IMU {
+    //Reference Cite: https://stemrobotics.cs.pdx.edu/node/7265
+    
     ChassisName chassis;
     public void IMU (ChassisName name) {
         chassis = name;
