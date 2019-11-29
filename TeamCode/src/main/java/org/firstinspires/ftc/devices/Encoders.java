@@ -112,7 +112,7 @@ public class Encoders {
             //min motor power should be set to zero
             double power=wheels.calculateProportionalMotorPower(0.0015,distance,MotorPower,MinMotorPower);
 
-            wheels.setPowerFromGamepad(false, power, 0, correctX(), correctY());
+            wheels.setPowerFromGamepad(false, 1 , 0, correctX() , correctY() * power);
 
             /*
             wheels.backRight.setPower(power);
@@ -152,7 +152,7 @@ public class Encoders {
             //min motor power should be set to zero
             double power=wheels.calculateProportionalMotorPower(0.0015,distance,MotorPower,MinMotorPower);
 
-            wheels.setPowerFromGamepad(false, power, 0, correctX(), correctY());
+            wheels.setPowerFromGamepad(false, 1, 0, correctX() * power, correctY());
 
             /*
             wheels.backRight.setPower(power);
@@ -173,51 +173,6 @@ public class Encoders {
 
             x = getX();
             y = getY();
-
-        }
-
-        wheels.StopMotors();
-
-    }
-
-
-    //TODO this won't work yet
-    public void turnInchesEncoder(Telemetry telemetry,double MotorPower, double MinMotorPower,double Inches,double ticksToInches) {
-
-        wheels.ResetEncoders();
-
-        setxTarget(ticksToInches*Inches);
-        setyTarget(getY());
-
-        while (testPosition(xTarget, getY())){
-            wheels.checkIsActive();
-
-            double distance=Math.abs(x-xTarget);
-
-            double power=wheels.calculateProportionalMotorPower(0.0015,distance,MotorPower,MinMotorPower);
-
-            wheels.setPowerFromGamepad(false, 1, 1, 0, 0);
-
-            /*
-            wheels.backRight.setPower(power);
-            wheels.frontLeft.setPower(power);
-            wheels.backLeft.setPower(power);
-            wheels.frontRight.setPower(power);
-             */
-
-            telemetry.addData("Moving Forward","Moving Forward "+power);
-            // telemetry.addData("avg encoder value:", averagePos);
-            telemetry.addData("distance:", distance);
-           /* telemetry.addData("F/L encoder value:", frontLeft.getCurrentPosition()*ticksToInches);
-            telemetry.addData("F/R encoder value:", frontRight.getCurrentPosition()*ticksToInches);
-            telemetry.addData("B/L encoder value:", backLeft.getCurrentPosition()*ticksToInches);
-            telemetry.addData("B/R encoder value:", backRight.getCurrentPosition()*ticksToInches);*/
-            telemetry.addData("encoder target:", Inches);
-            telemetry.update();
-
-            x = getX();
-            y = getY();
-            setyTarget(getY());
 
         }
 

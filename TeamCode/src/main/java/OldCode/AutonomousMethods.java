@@ -158,7 +158,7 @@ public abstract class AutonomousMethods extends LinearOpMode {
         bottomLimitSwitch = hardwareMap.digitalChannel.get("bottomLimitSwitch");
         topLimitSwitch = hardwareMap.digitalChannel.get("topLimitSwitch");
 
-        //initialize IMUOnBot in the REV module
+        //initialize IMURevHub in the REV module
         imu = hardwareMap.get(BNO055IMU.class, "imu");
 
         pivot = hardwareMap.servo.get("pivot");
@@ -214,7 +214,7 @@ public abstract class AutonomousMethods extends LinearOpMode {
         parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
         parameters.calibrationDataFile = "AdafruitIMUCalibration.json"; // see the calibration sample opmode
         parameters.loggingEnabled      = true;
-        parameters.loggingTag          = "IMUOnBot";
+        parameters.loggingTag          = "IMURevHub";
         parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
 
         imu.initialize(parameters);
@@ -253,8 +253,6 @@ public abstract class AutonomousMethods extends LinearOpMode {
 
 
     public Position GetIMUPosition(){
-
-
         return imu.getPosition();
     }
 

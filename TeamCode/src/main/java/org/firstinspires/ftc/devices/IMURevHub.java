@@ -12,12 +12,12 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
-public class IMUOnBot {
+public class IMURevHub {
     //Reference Cite: https://stemrobotics.cs.pdx.edu/node/7265
 
     ChassisName chassis;
 
-    public IMUOnBot (ChassisName name) {
+    public IMURevHub(ChassisName name) {
         chassis = name;
     }
 
@@ -49,7 +49,7 @@ public class IMUOnBot {
         while (!isStopRequested() && !imu.isGyroCalibrated())
         {
             wheels.sleep(50);
-            IMUOnBot.idle();
+            IMURevHub.idle();
         }
         */
 
@@ -107,8 +107,10 @@ public class IMUOnBot {
         return correction;
     }
 
-    public void rotate(int degrees, double power)
+    public void rotate(int degrees, double motorPower, double minMotorPower, LinearOpMode linearOpMode)
     {
+        double distance = Math.abs(degrees - getAngle());
+        double calcedPower=wheels.calculateProportionalMotorPower(0.0015,distance, motorPower, minMotorPower);
         double  leftPower, rightPower;
 
         // restart imu movement tracking.
@@ -119,37 +121,51 @@ public class IMUOnBot {
 
         if (degrees < 0)
         {   // turn right.
-            leftPower = power;
-            rightPower = -power;
+            leftPower = calcedPower;
+            rightPower = -calcedPower;
         }
         else if (degrees > 0)
         {   // turn left.
-            leftPower = -power;
-            rightPower = power;
+            leftPower = -calcedPower;
+            rightPower = calcedPower;
         }
         else return;
 
+        /*
         // set power to rotate.
+        wheels.setPower(rightPower, leftPower, rightPower, leftPower);
         leftMotor.setPower(leftPower);
         rightMotor.setPower(rightPower);
+         */
 
-        // TODO fix this turn method
         // rotate until turn is completed.
-        /*
         if (degrees < 0)
         {
             // On right turn we have to get off zero first.
-            while (opModeIsActive() && getAngle() == 0) {}
+            while (linearOpMode.opModeIsActive() && getAngle() == 0) {
+                distance = Math.abs(degrees - getAngle());
+                calcedPower=wheels.calculateProportionalMotorPower(0.0015,distance, motorPower, minMotorPower);
+                wheels.setPowerFromGamepad(false, calcedPower, 1, 0, 0);
+            }
 
-            while (opModeIsActive() && getAngle() > degrees) {}
+            while (linearOpMode.opModeIsActive() && getAngle() > degrees) {
+                distance = Math.abs(degrees - getAngle());
+                calcedPower=wheels.calculateProportionalMotorPower(0.0015,distance, motorPower, minMotorPower);
+                wheels.setPowerFromGamepad(false, calcedPower, 1, 0, 0);
+            }
         }
         else    // left turn.
-            while (opModeIsActive() && getAngle() < degrees) {}
-         */
+            while (linearOpMode.opModeIsActive() && getAngle() < degrees) {
+                distance = Math.abs(degrees - getAngle());
+                calcedPower=wheels.calculateProportionalMotorPower(0.0015,distance, motorPower, minMotorPower);
+                wheels.setPowerFromGamepad(false, calcedPower, -1, 0, 0);
+                leftMotor.setPower(calcedPower);
+                rightMotor.setPower(-calcedPower);
+            }
+
 
         // turn the motors off.
-        rightMotor.setPower(0);
-        leftMotor.setPower(0);
+        wheels.StopMotors();
 
         // wait for rotation to stop.
         wheels.sleepAndCheckActive(1000);
