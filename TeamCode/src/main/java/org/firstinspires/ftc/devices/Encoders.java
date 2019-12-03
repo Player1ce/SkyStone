@@ -11,13 +11,10 @@ public class Encoders {
     //TODO we need to move the encoders to separate ports on the rev hub so the wheels cna run with encoders.
 
 
-    ChassisName chassis = ChassisName.TANK;
+    ChassisName chassis;
 
-    public Encoders (double startX, double startY, ChassisName chassisName) {
-        x = startX;
-        y = startY;
+    public Encoders (ChassisName chassisName) {
         chassis = chassisName;
-
     }
 
     private MecanumWheels wheels;
@@ -25,24 +22,19 @@ public class Encoders {
     DcMotor xEncoder;
     DcMotor yEncoder;
 
-    //TODO set up ticks to inches for get x and get y.
-    double x;
-    double y;
-
     double xTarget;
     double yTarget;
 
-    double xError;
-    double yError;
 
+    //actual diameter: 2.7812 in.
     final double encoderWheelsInchesToTicks = 125/(Math.PI*2.7812);
-
     final double inchesToTicks = (1/.0699);
 
-    /*
-    double xCorrection;
-    double yCorrection;
-     */
+    public void initialize(MecanumWheels wheels) {
+        this.wheels=wheels;
+        xEncoder = wheels.frontLeft;
+        yEncoder = wheels.frontRight;
+    }
 
     public double getX () { return xEncoder.getCurrentPosition();}
 
@@ -52,36 +44,50 @@ public class Encoders {
 
     private void setyTarget (double target) { yTarget = target; }
 
+    public double getxError () {
+        double xError = (xTarget-getX());
+        return xError;
+    }
+
+    public double getyError () {
+        double yError = (yTarget - getY());
+        return yError;
+    }
     private double correctX () {
-        double xCorrection = 0;
-        if ((xTarget-getX()) > xError) {
-            xCorrection = -1;
-        } else if ((xTarget - getX()) < -xError) {
-            xCorrection = 1;
+        if (getxError() > 0) {
+            return -1;
+        } else if (getxError() < 0) {
+            return  1;
+        } else {
+            return 0;
         }
-        return xCorrection;
     }
 
     private double correctY() {
-        double yCorrection = 0;
-        if ((yTarget - getY()) > yError) {
-            yCorrection = -1;
-        } else if ((yTarget - getY()) < -xError) {
-            yCorrection = 1;
-        }
-        return yCorrection;
-    }
-
-    private boolean testPosition (double xTarget, double yTarget) {
-        if ((getX() == xTarget + xError || getX() == xTarget - xError) && (getY() == yTarget + yError || getY() == yTarget - yError)) {
-            return false;
+        if (getyError() > 0) {
+            return  -1;
+        } else if (getyError() < 0) {
+            return  1;
         } else {
-            return true;
+            return 0;
         }
-
-        wheels.StopMotors();
-
     }
+
+    public double getPowerX (double MotorPower, double MinMotorPower) {
+        double distanceX = Math.abs(getX() - xTarget);
+
+        double powerX = wheels.calculateProportionalMotorPower(0.0015, distanceX, MotorPower, MinMotorPower);
+        return powerX;
+    }
+
+    public double getPowerY (double MotorPower, double MinMotorPower) {
+        double distanceY = Math.abs(getY() - yTarget);
+
+        double powerY = wheels.calculateProportionalMotorPower(0.0015, distanceY, MotorPower, MinMotorPower);
+        return powerY;
+    }
+
+
 
     public void resetPosition() {
         wheels.frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -146,6 +152,9 @@ public class Encoders {
 
     }
 
+
+
+
     protected void crabInchesEncoder(Telemetry telemetry,double MotorPower, double MinMotorPower,double ticks) {
 
         resetPosition();
@@ -154,15 +163,14 @@ public class Encoders {
         setyTarget(ticks);
         setyTarget(0);
 
-        while (testPosition(xTarget, yTarget)){
+        while (getX() < xTarget){
             wheels.checkIsActive();
 
             double distance=Math.abs(getX()-xTarget);
 
-            //min motor power should be set to zero
             double power=wheels.calculateProportionalMotorPower(0.0015,distance,MotorPower,MinMotorPower);
 
-            wheels.setPowerFromGamepad(false, 1, 0, correctX() * power, correctY());
+            wheels.setPowerFromGamepad(false, power, 0, 1, 0);
 
             /*
             wheels.backRight.setPower(power);
@@ -181,8 +189,6 @@ public class Encoders {
             telemetry.addData("encoder target:", ticks);
             telemetry.update();
 
-            x = getX();
-            y = getY();
 
         }
 
@@ -190,11 +196,35 @@ public class Encoders {
 
     }
 
+    public void moveInchesEncodersEdited (Telemetry telemetry,double MotorPower, double MinMotorPower,double Inches) {
+        resetPosition();
 
-    public void initialize(MecanumWheels wheels) {
-        this.wheels=wheels;
-        xEncoder = wheels.frontLeft;
-        yEncoder = wheels.frontRight;
+        setyTarget(Inches/.0699);
+        setxTarget(0);
+
+        while (getY() < yTarget && correctX() != 0 ){
+            wheels.checkIsActive();
+
+            wheels.setPowerFromGamepad(false, 1 , 0, correctX() *getPowerX(MotorPower,MinMotorPower) , correctY() *getPowerY(MotorPower, MinMotorPower) );
+
+        }
+        wheels.StopMotors();
+    }
+
+    protected void crabInchesEncoderEdited(Telemetry telemetry,double MotorPower, double MinMotorPower,double Inches) {
+
+        resetPosition();
+
+        setyTarget(0);
+        setxTarget(Inches/.0699);
+
+        while (getX() < xTarget && correctY() != 0){
+            wheels.checkIsActive();
+
+            wheels.setPowerFromGamepad(false, 1, 0, correctX() * getPowerX(MotorPower, MinMotorPower) , correctY() * getPowerY(MotorPower, MinMotorPower));
+
+        }
+        wheels.StopMotors();
     }
 
 
