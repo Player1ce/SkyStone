@@ -182,6 +182,39 @@ public class MecanumWheels {
 
     }
 
+    protected void MoveInchesChanged(Telemetry telemetry,double MotorPower, double MinMotorPower,double Inches) {
+
+        ResetEncoders();
+
+        double position = frontRight.getCurrentPosition();
+
+        double dest = Inches/.0699;
+
+        while (position < dest){
+            checkIsActive();
+
+            double distance=Math.abs(position-dest);
+
+            double power=calculateProportionalMotorPower(0.0015,distance,MotorPower,MinMotorPower);
+
+            setPowerFromGamepad(false, power, 0, 0, -1);
+
+            telemetry.addData("Moving Forward","Moving Forward "+power);
+            // telemetry.addData("avg encoder value:", averagePos);
+            telemetry.addData("distance:", distance);
+           /* telemetry.addData("F/L encoder value:", frontLeft.getCurrentPosition()*ticksToInches);
+            telemetry.addData("F/R encoder value:", frontRight.getCurrentPosition()*ticksToInches);
+            telemetry.addData("B/L encoder value:", backLeft.getCurrentPosition()*ticksToInches);
+            telemetry.addData("B/R encoder value:", backRight.getCurrentPosition()*ticksToInches);*/
+            telemetry.addData("encoder target:", Inches);
+            telemetry.update();
+
+            position= frontRight.getCurrentPosition();
+        }
+
+        StopMotors();
+
+    }
     public void sleepAndCheckActive(long ms) {
         final long targetTime=System.currentTimeMillis()+ms;
         while (System.currentTimeMillis()<targetTime) {
