@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.logic.ButtonOneShot;
-import org.firstinspires.ftc.devices.ChassisName;
+import org.firstinspires.ftc.logic.ChassisName;
 import org.firstinspires.ftc.devices.FoundationHook;
 import org.firstinspires.ftc.devices.MecanumWheels;
 import org.firstinspires.ftc.devices.SkystoneIntake;
@@ -127,6 +127,9 @@ public class TankTeleOp extends OpMode {
 
         //telemetry ------------------------------
         //telemetry is used to show on the driver controller phone what the code sees
+        telemetry.addData("encoder x vlaue:", mecanumWheels.frontLeft.getCurrentPosition());
+        telemetry.addData("encoder y vlaue:", mecanumWheels.frontRight.getCurrentPosition());
+
         telemetry.addData("Power:", power);
         telemetry.addData("F/R:", robot.reverseSense(reverse));
         telemetry.addData("rampServoPosition:", rampPosition);
