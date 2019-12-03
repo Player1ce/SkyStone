@@ -28,7 +28,7 @@ public class Encoders {
 
     //actual diameter: 2.7812 in.
     final double encoderWheelsInchesToTicks = 125/(Math.PI*2.7812);
-    final double inchesToTicks = (1/.0699);
+    final double inchesToTicks = (1/.0681);
 
     public void initialize(MecanumWheels wheels) {
         this.wheels=wheels;
@@ -64,7 +64,7 @@ public class Encoders {
         resetPosition();
 
         //setyTarget(encoderWheelsInchesToTicks*Inches);
-        setyTarget(Inches/.0699);
+        setyTarget((Inches+.133)/.0713);
         //setyTarget(ticks);
 
         setxTarget(0);
@@ -150,14 +150,13 @@ public class Encoders {
     }
 
     public double getxError () {
-        double xError = (xTarget-getX());
-        return xError;
+        return (xTarget-getX());
     }
 
     public double getyError () {
-        double yError = (yTarget - getY());
-        return yError;
+        return (yTarget - getY());
     }
+
     private double correctX () {
         if (getxError() > 0) {
             return -1;
@@ -209,7 +208,7 @@ public class Encoders {
         while (getY() < yTarget && correctX() != 0 ){
             wheels.checkIsActive();
 
-            wheels.setPowerFromGamepad(false, 1 , 0, correctX() *getPowerX(MotorPower,MinMotorPower) , correctY() *getPowerY(MotorPower, MinMotorPower) );
+            wheels.setPowerFromGamepad(false, 1 , 0, 0 , correctY() * getPowerY(MotorPower, MinMotorPower) );
 
         }
         wheels.StopMotors();
