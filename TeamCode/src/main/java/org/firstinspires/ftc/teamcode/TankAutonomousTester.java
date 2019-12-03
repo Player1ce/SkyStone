@@ -18,7 +18,7 @@ public class TankAutonomousTester extends LinearOpMode {
     private final FoundationHook hookServo = new FoundationHook(ChassisName.TANK);
     private final SkystoneIntake intake = new SkystoneIntake(ChassisName.TANK);
     private final IMURevHub imu = new IMURevHub(ChassisName.TANK);
-    private final Encoders encoders = new Encoders(0, 0, ChassisName.TANK);
+    private final Encoders encoders = new Encoders(ChassisName.TANK);
     final double HIGH_POWER = 1.0;
     final double NORMAL_POWER = 0.5;
 
@@ -73,34 +73,6 @@ public class TankAutonomousTester extends LinearOpMode {
         wheels.sleepAndCheckActive(7000);
 
          */
-
-        encoders.moveInchesEncoders(telemetry, .6, 0, 2, ticksToInches );
-
-        wheels.sleepAndCheckActive(1500);
-
-        encoders.moveInchesEncoders(telemetry, -.6, 0, 2, ticksToInches);
-        wheels.sleepAndCheckActive(1000);
-
-        encoders.moveInchesEncoders(telemetry, .6, 0, 2, ticksToInches );
-        wheels.sleepAndCheckActive(500);
-
-        imu.rotate(90, 1, 0, linearOpMode );
-
-        wheels.sleepAndCheckActive(5000);
-
-        imu.rotate(90, 1, 0, linearOpMode);
-
-        encoders.moveInchesEncoders(telemetry, .6, 0, 1, ticksToInches);
-
-        imu.rotate(180, 1, 0, linearOpMode);
-
-        encoders.moveInchesEncoders(telemetry, -.6, 0, 1, ticksToInches);
-
-        telemetry.addData("end time:",  time);
-        telemetry.update();
-
-        wheels.sleepAndCheckActive(7000);
-
     }
 
     }
