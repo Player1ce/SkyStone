@@ -3,7 +3,7 @@ package org.firstinspires.ftc.useless;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.devices.ChassisName;
+import org.firstinspires.ftc.logic.ChassisName;
 import org.firstinspires.ftc.devices.FoundationHook;
 import org.firstinspires.ftc.devices.MecanumWheels;
 import org.firstinspires.ftc.devices.SkystoneIntake;

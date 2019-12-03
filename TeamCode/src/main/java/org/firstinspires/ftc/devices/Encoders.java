@@ -46,7 +46,7 @@ public class Encoders {
 
     public double getX () { return xEncoder.getCurrentPosition();}
 
-    public double getY () { return (yEncoder.getCurrentPosition()); }
+    public double getY () { return yEncoder.getCurrentPosition(); }
 
     private void setxTarget (double target) { xTarget = target; }
 
@@ -78,6 +78,9 @@ public class Encoders {
         } else {
             return true;
         }
+
+        wheels.StopMotors();
+
     }
 
     public void resetPosition() {
@@ -177,6 +180,9 @@ public class Encoders {
             telemetry.addData("B/R encoder value:", backRight.getCurrentPosition()*ticksToInches);*/
             telemetry.addData("encoder target:", ticks);
             telemetry.update();
+
+            x = getX();
+            y = getY();
 
         }
 

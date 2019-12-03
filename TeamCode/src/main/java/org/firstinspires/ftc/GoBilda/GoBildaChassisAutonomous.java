@@ -2,11 +2,9 @@ package org.firstinspires.ftc.GoBilda;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.vuforia.Vuforia;
 
 import org.firstinspires.ftc.devices.Camera;
-import org.firstinspires.ftc.devices.ChassisName;
+import org.firstinspires.ftc.logic.ChassisName;
 import org.firstinspires.ftc.devices.FoundationHook;
 import org.firstinspires.ftc.devices.MecanumWheels;
 import org.firstinspires.ftc.devices.SkystoneIntake;

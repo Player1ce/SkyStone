@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.devices;
+package org.firstinspires.ftc.logic;
 
 public enum ChassisName {
     TANK,

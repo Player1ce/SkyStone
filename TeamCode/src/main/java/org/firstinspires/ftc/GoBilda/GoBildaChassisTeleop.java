@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.logic.ButtonOneShot;
-import org.firstinspires.ftc.devices.ChassisName;
+import org.firstinspires.ftc.logic.ChassisName;
 import org.firstinspires.ftc.devices.FoundationHook;
 import org.firstinspires.ftc.devices.MecanumWheels;
 import org.firstinspires.ftc.devices.SkystoneIntake;
