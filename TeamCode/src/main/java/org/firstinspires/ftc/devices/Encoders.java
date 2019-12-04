@@ -59,17 +59,16 @@ public class Encoders {
         wheels.backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    public void moveInchesEncoders(Telemetry telemetry,double MotorPower, double MinMotorPower,double Inches) {
+    public void moveInchesEncoders(Telemetry telemetry,double MotorPower, double MinMotorPower,double ticks) {
 
         resetPosition();
 
         //setyTarget(encoderWheelsInchesToTicks*Inches);
-        setyTarget((Inches+.133)/.0713);
-        //setyTarget(ticks);
-
+        //setyTarget((Inches+.133)/.0713);
+        setyTarget(ticks);
         setxTarget(0);
 
-        while (getY()<yTarget){
+        while (getY() < yTarget){
             wheels.checkIsActive();
 
             double distance=Math.abs(getY()-yTarget) ;
@@ -93,7 +92,7 @@ public class Encoders {
             telemetry.addData("F/R encoder value:", frontRight.getCurrentPosition()*ticksToInches);
             telemetry.addData("B/L encoder value:", backLeft.getCurrentPosition()*ticksToInches);
             telemetry.addData("B/R encoder value:", backRight.getCurrentPosition()*ticksToInches);*/
-            telemetry.addData("encoder target:", Inches);
+            telemetry.addData("encoder target:", ticks);
             telemetry.addData("power:", power);
             telemetry.update();
 
@@ -108,18 +107,18 @@ public class Encoders {
 
     }
 
-    protected void crabInchesEncoder(Telemetry telemetry,double MotorPower, double MinMotorPower,double ticks) {
+    public void crabInchesEncoder(Telemetry telemetry,double MotorPower, double MinMotorPower,double ticks) {
 
         resetPosition();
 
         //setxTarget(encoderWheelsInchesToTicks*Inches);
-        setyTarget(ticks);
+        setxTarget(ticks);
         setyTarget(0);
 
         while (getX() < xTarget){
             wheels.checkIsActive();
 
-            double distance=Math.abs(getX()-xTarget);
+            double distance=Math.abs(getX() - xTarget);
 
             double power=wheels.calculateProportionalMotorPower(0.0015,distance,MotorPower,MinMotorPower);
 
@@ -146,6 +145,11 @@ public class Encoders {
         }
 
         wheels.StopMotors();
+        wheels.sleepAndCheckActive(500);
+
+        telemetry.addData("final x:", getX());
+        telemetry.addData("x target", xTarget);
+        telemetry.update();
 
     }
 
@@ -158,9 +162,9 @@ public class Encoders {
     }
 
     public double correctX () {
-        if (getxError() > 0) {
+        if (getX() < xTarget) {
             return -1;
-        } else if (getxError() < 0) {
+        } else if (getX() > xTarget) {
             return  1;
         } else {
             return 0;
@@ -168,11 +172,29 @@ public class Encoders {
     }
 
     public double correctY() {
-        if (getyError() > 0) {
+        if (getY() > yTarget) {
             return  -1;
-        } else if (getyError() < 0) {
+        } else if (getY() < yTarget) {
             return  1;
         } else {
+            return 0;
+        }
+    }
+
+    public double testY() {
+        if (getY() != yTarget) {
+            return 1;
+        }
+        else {
+            return 0;
+        }
+    }
+
+    public double testX() {
+        if (getX() != xTarget) {
+            return 1;
+        }
+        else {
             return 0;
         }
     }
@@ -181,14 +203,14 @@ public class Encoders {
         double distanceX = Math.abs(getX() - xTarget);
 
         double powerX = wheels.calculateProportionalMotorPower(0.0015, distanceX, MotorPower, MinMotorPower);
-        return powerX;
+        return powerX * testX();
     }
 
     public double getPowerY (double MotorPower, double MinMotorPower) {
         double distanceY = Math.abs(getY() - yTarget);
 
         double powerY = wheels.calculateProportionalMotorPower(0.0015, distanceY, MotorPower, MinMotorPower);
-        return powerY;
+        return powerY * testY();
     }
 
     public double getPowerCorrectionX (double MotorPower, double MinMotorPower) {
@@ -208,26 +230,35 @@ public class Encoders {
         while (getY() < yTarget && correctX() != 0 ){
             wheels.checkIsActive();
 
-            wheels.setPowerFromGamepad(false, 1 , 0, 0 , getPowerCorrectionY(MotorPower, MinMotorPower) );
+            wheels.setPowerFromGamepad(false, 1 , 0, (.5 * getPowerCorrectionX(MotorPower, MinMotorPower)) , getPowerY(MotorPower, MinMotorPower) );
 
         }
         wheels.StopMotors();
     }
 
-    protected void crabInchesEncoderEdited(Telemetry telemetry,double MotorPower, double MinMotorPower,double Inches) {
+    public void crabInchesEncoderEdited(Telemetry telemetry,double MotorPower, double MinMotorPower,double Inches) {
 
         resetPosition();
 
         setyTarget(0);
-        setxTarget(Inches/.0699);
+        setxTarget((Inches *4)/.0699);
+        //setxTarget(ticks);
 
-        while (getX() < xTarget && correctY() != 0){
+        while (getX() < xTarget){
             wheels.checkIsActive();
 
-            wheels.setPowerFromGamepad(false, 1, 0, getPowerCorrectionX(MotorPower, MinMotorPower) , 0);
+            wheels.setPowerFromGamepad(false, 1, 0, getPowerX(MotorPower,MinMotorPower) , (0.5 * getPowerCorrectionY(MotorPower, MinMotorPower)));
 
+            telemetry.addData("correctx:", correctX());
+            telemetry.addData("powerx:", getPowerX(MotorPower, MinMotorPower));
+            telemetry.addData("y:", getY());
+            telemetry.addData("ypower:", -getPowerY(MotorPower,MinMotorPower));
+            telemetry.update();
         }
         wheels.StopMotors();
+
+
+
     }
 
 

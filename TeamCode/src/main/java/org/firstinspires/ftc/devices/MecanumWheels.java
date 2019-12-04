@@ -189,6 +189,7 @@ public class MecanumWheels {
         double position = frontRight.getCurrentPosition();
 
         double dest = Inches/.0699;
+        //double dest = ticks;
 
         while (position < dest){
             checkIsActive();
