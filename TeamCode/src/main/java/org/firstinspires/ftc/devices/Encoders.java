@@ -40,9 +40,9 @@ public class Encoders {
 
     public double getY () { return yEncoder.getCurrentPosition(); }
 
-    private void setxTarget (double target) { xTarget = target; }
+    public void setxTarget (double target) { xTarget = target; }
 
-    private void setyTarget (double target) { yTarget = target; }
+    public void setyTarget (double target) { yTarget = target; }
 
 
     public void resetPosition() {
@@ -157,7 +157,7 @@ public class Encoders {
         return (yTarget - getY());
     }
 
-    private double correctX () {
+    public double correctX () {
         if (getxError() > 0) {
             return -1;
         } else if (getxError() < 0) {
@@ -167,7 +167,7 @@ public class Encoders {
         }
     }
 
-    private double correctY() {
+    public double correctY() {
         if (getyError() > 0) {
             return  -1;
         } else if (getyError() < 0) {
@@ -195,7 +195,7 @@ public class Encoders {
         return correctX() * getPowerX(MotorPower, MinMotorPower);
     }
 
-    public double getPowerCorrectionXY (double MotorPower, double MinMotorPower) {
+    public double getPowerCorrectionY (double MotorPower, double MinMotorPower) {
         return correctY() * getPowerY(MotorPower, MinMotorPower);
     }
 
@@ -208,7 +208,7 @@ public class Encoders {
         while (getY() < yTarget && correctX() != 0 ){
             wheels.checkIsActive();
 
-            wheels.setPowerFromGamepad(false, 1 , 0, 0 , correctY() * getPowerY(MotorPower, MinMotorPower) );
+            wheels.setPowerFromGamepad(false, 1 , 0, 0 , getPowerCorrectionY(MotorPower, MinMotorPower) );
 
         }
         wheels.StopMotors();
@@ -224,7 +224,7 @@ public class Encoders {
         while (getX() < xTarget && correctY() != 0){
             wheels.checkIsActive();
 
-            wheels.setPowerFromGamepad(false, 1, 0, correctX() * getPowerX(MotorPower, MinMotorPower) , correctY() * getPowerY(MotorPower, MinMotorPower));
+            wheels.setPowerFromGamepad(false, 1, 0, getPowerCorrectionX(MotorPower, MinMotorPower) , 0);
 
         }
         wheels.StopMotors();
