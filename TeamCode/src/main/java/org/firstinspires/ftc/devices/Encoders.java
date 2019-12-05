@@ -5,8 +5,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.logic.ChassisName;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-import java.time.chrono.MinguoEra;
-
 public class Encoders {
     //TODO do we need to run using encoder. Run using encoder is a PID method so it will interfere with our power setup?
     // also, xEncoder will be sideways so it won't really relate to movement.  Finally, i think we can get position without using encoders.
@@ -16,21 +14,21 @@ public class Encoders {
     ChassisName chassis;
 
     public Encoders (ChassisName chassisName) {
-        chassis = chassisName;
+        this.chassis = chassisName;
     }
 
     private MecanumWheels wheels;
 
-    DcMotor xEncoder;
-    DcMotor yEncoder;
+    private DcMotor xEncoder;
+    private DcMotor yEncoder;
 
-    double xTarget;
-    double yTarget;
+    private double xTarget;
+    private double yTarget;
 
 
     //actual diameter: 2.7812 in.
-    final double encoderWheelsInchesToTicks = 125/(Math.PI*2.7812);
-    final double inchesToTicks = (1/.0681);
+    //final double encoderWheelsInchesToTicks = 125/(Math.PI*2.7812);
+    //final double inchesToTicks = (1/.0681);
 
     public void initialize(MecanumWheels wheels) {
         this.wheels=wheels;
@@ -42,9 +40,9 @@ public class Encoders {
 
     public double getY () { return yEncoder.getCurrentPosition(); }
 
-    public void setxTarget (double target) { xTarget = target; }
+    private void setxTarget (double target) { xTarget = target; }
 
-    public void setyTarget (double target) { yTarget = target; }
+    private void setyTarget (double target) { yTarget = target; }
 
 
     public void resetPosition() {
@@ -154,24 +152,16 @@ public class Encoders {
         telemetry.update();
 
     }
-    public double getXDirection () {
-        if (getX() > xTarget) {
-            return 1;
-        } else if (getX() < xTarget) {
-            return -1;
-        } else {
-            return 0;
-        }
+    private double getXDirection () {
+        if (getX() > xTarget) return 1;
+        else if (getX() < xTarget) return -1;
+        else return 0;
     }
 
-    public double getYDirection () {
-        if (getY() > yTarget) {
-            return 1;
-        } else if (getY() < yTarget) {
-            return -1;
-        } else {
-            return 0;
-        }
+    private double getYDirection () {
+        if (getY() > yTarget) return 1;
+        else if (getY() < yTarget) return -1;
+        else return 0;
     }
 
     public void moveInchesEncodersEdited (Telemetry telemetry,double MotorPower, double MinMotorPower,double Inches) {
