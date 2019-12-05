@@ -38,7 +38,7 @@ public class Encoders {
 
     public double getX () { return xEncoder.getCurrentPosition();}
 
-    public double getY () { return yEncoder.getCurrentPosition(); }
+    public double getY () { return -yEncoder.getCurrentPosition(); }
 
     private void setxTarget (double target) { xTarget = target; }
 
@@ -68,7 +68,7 @@ public class Encoders {
         setyTarget(ticks);
         setxTarget(0);
 
-        while (getY() < yTarget){
+        while (Math.abs(getY()) < Math.abs(yTarget)){
             wheels.checkIsActive();
 
             double distance=Math.abs(getY()-yTarget) ;
@@ -115,7 +115,7 @@ public class Encoders {
         setxTarget(ticks);
         setyTarget(0);
 
-        while (getX() < xTarget){
+        while (Math.abs(getX()) < Math.abs(xTarget)){
             wheels.checkIsActive();
 
             double distance=Math.abs(getX() - xTarget);
@@ -153,8 +153,8 @@ public class Encoders {
 
     }
     private double getXDirection () {
-        if (getX() > xTarget) return 1;
-        else if (getX() < xTarget) return -1;
+        if (getX() > xTarget) return -1;
+        else if (getX() < xTarget) return 1;
         else return 0;
     }
 
@@ -164,27 +164,36 @@ public class Encoders {
         else return 0;
     }
 
-    public void moveInchesEncodersEdited (Telemetry telemetry,double MotorPower, double MinMotorPower,double Inches) {
+    public void moveInchesEncoderEdited (Telemetry telemetry,double MotorPower, double MinMotorPower,double Inches) {
         resetPosition();
 
-        setyTarget(Inches/.0699);
+        setyTarget((Inches * 4)/.0699);
         //setyTarget(Inches);
         setxTarget(0);
 
-        while (getY() < yTarget || Math.abs(getX()) > xTarget +10) {
+        while (Math.abs(getY()) < Math.abs(yTarget) || Math.abs(getX()) > Math.abs(xTarget +10)) {
             wheels.checkIsActive();
 
             double distanceX=Math.abs(getX() - xTarget);
-            double distanceY=Math.abs(getX() - yTarget);
+            double distanceY=Math.abs(getY() - yTarget);
             double powerX = MecanumWheels.calculateProportionalMotorPower(0.0015, distanceX, MotorPower, MinMotorPower);
             double powerY = MecanumWheels.calculateProportionalMotorPower(0.0015, distanceY, MotorPower, MinMotorPower);
             double yDirection = getYDirection();
             double xDirection = getXDirection();
 
             wheels.setPowerFromGamepad(false, 1 , 0, powerX * 0.4 * xDirection, powerY * yDirection);
+            telemetry.addData("y", getY());
+            telemetry.addData("x", getX());
+            telemetry.update();
+
 
         }
         wheels.StopMotors();
+        wheels.sleepAndCheckActive(500);
+
+        telemetry.addData("final Y:", getY());
+        telemetry.addData("Y target", yTarget);
+        telemetry.update();
     }
 
 
@@ -197,14 +206,14 @@ public class Encoders {
         setxTarget((Inches *4)/.0699);
         //setxTarget(Inches);
 
-        while (getX() < xTarget || Math.abs(getY()) > yTarget +10){
+        while (Math.abs(getX()) < Math.abs(xTarget) || Math.abs(getY()) > yTarget +10){
 
             wheels.checkIsActive();
 
 
             double distanceX=Math.abs(getX() - xTarget);
-            double distanceY=Math.abs(getX() - yTarget);
-            double powerX = MecanumWheels.calculateProportionalMotorPower(0.0015, distanceX, MotorPower, MinMotorPower);
+            double distanceY=Math.abs(getY() - yTarget);
+            double powerX = MecanumWheels.calculateProportionalMotorPower(0.0015, distanceX, MotorPower, .3);
             double powerY = MecanumWheels.calculateProportionalMotorPower(0.0015, distanceY, MotorPower, MinMotorPower);
             double yDirection = getYDirection();
             double xDirection = getXDirection();
@@ -213,9 +222,14 @@ public class Encoders {
 
             telemetry.addData("powerx:", powerX);
             telemetry.addData("y:", getY());
+            telemetry.addData("x", getX());
             telemetry.addData("ypower:", powerY);
             telemetry.update();
         }
+        telemetry.addData("y:", getY());
+        telemetry.addData("x", getX());
+        telemetry.update();
+
         wheels.StopMotors();
 
     }

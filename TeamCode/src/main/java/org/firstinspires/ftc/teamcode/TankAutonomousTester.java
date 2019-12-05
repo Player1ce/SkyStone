@@ -42,7 +42,9 @@ public class TankAutonomousTester extends LinearOpMode {
     protected void executeAutonomousLogic() {
         //double ticksToInches=288/(Math.PI*6.125);
 
-        //encoders.moveInchesEncoders(telemetry, .6, 0.1,500);
+        //encoders.moveInchesEncoders(telemetry, .6, 0.1,-500);
+
+        encoders.crabInchesEncoderEdited(telemetry, .6, .1, 10);
 
         sleep(10000);
         /*
