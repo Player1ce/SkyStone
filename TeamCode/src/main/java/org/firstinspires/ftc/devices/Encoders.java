@@ -156,9 +156,9 @@ public class Encoders {
     }
     public double getXDirection () {
         if (getX() > xTarget) {
-            return -1;
-        } else if (getX() < xTarget) {
             return 1;
+        } else if (getX() < xTarget) {
+            return -1;
         } else {
             return 0;
         }
