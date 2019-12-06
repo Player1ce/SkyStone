@@ -1,29 +1,30 @@
+
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.SwitchableLight;
+
 import org.firstinspires.ftc.logic.ColorSensorLogic;
 import org.firstinspires.ftc.logic.ChassisName;
 import org.firstinspires.ftc.devices.FoundationHook;
 import org.firstinspires.ftc.devices.MecanumWheels;
-import org.firstinspires.ftc.logic.KillOpModeException;
 import org.firstinspires.ftc.logic.ServoPosition;
 import org.firstinspires.ftc.devices.SkystoneIntake;
 
-@Autonomous (name = "TankAutonomousBlue", group="Skystone")
-public class TankAutonomousBlue extends LinearOpMode {
+
+@Autonomous(name = "TankAutonomousRedWall", group="Skystone")
+public class TankAutonomousRedWall extends LinearOpMode {
     private TeleOpMethods robot = new TeleOpMethods(ChassisName.TANK);
-    private final MecanumWheels mecanumWheels=new MecanumWheels(ChassisName.TANK);
+    private final MecanumWheels mecanumWheels = new MecanumWheels(ChassisName.TANK);
     private final FoundationHook hookServo = new FoundationHook(ChassisName.TANK);
     private final SkystoneIntake intake = new SkystoneIntake(ChassisName.TANK);
 
     final double HIGH_POWER = 1.0;
     final double NORMAL_POWER = 0.5;
-    private double i;
+    double i;
     long startTime;
-
 
 
     ColorSensor colorSensor;
@@ -37,12 +38,12 @@ public class TankAutonomousBlue extends LinearOpMode {
 
         colorSensor = hardwareMap.get(ColorSensor.class, "frontColorSensor");
 
-        frontColorSensor=new ColorSensorLogic(colorSensor);
+        frontColorSensor = new ColorSensorLogic(colorSensor);
 
         // If possible, turn the light on in the beginning (it might already be on anyway,
         // we just make sure it is if we can).
         if (colorSensor instanceof SwitchableLight) {
-            ((SwitchableLight)colorSensor).enableLight(true);
+            ((SwitchableLight) colorSensor).enableLight(true);
         }
 
         mecanumWheels.setZeroPowerBrakeBehavior();
@@ -51,29 +52,24 @@ public class TankAutonomousBlue extends LinearOpMode {
 
         moveHook(ServoPosition.UP);
 
-        try {
-            executeAutonomousLogic();
-        }
-        catch (KillOpModeException e) {
-            //do nothing (the program will end gracefully)
-        }
+        executeAutonomousLogic();
 
     }
 
-    public void moveHook(ServoPosition position){
-        if (position==ServoPosition.UP)  {
+    public void moveHook(ServoPosition position) {
+        if (position == ServoPosition.UP) {
             hookServo.hookServo.setPosition(.4);
-        }
-        else  {
+        } else {
             hookServo.hookServo.setPosition(0);
         }
     }
 
     protected void executeAutonomousLogic() {
-
+        //put all code in this while loop so the bot will stop when we tell it to
+        while (opModeIsActive()) {
             double ticksToInches = 288 / (Math.PI * 6.125);
             mecanumWheels.ForwardMoveInches(telemetry, 0.5, 23, ticksToInches);
-            mecanumWheels.crabDrive("left", 0.7, 1050);
+            mecanumWheels.crabDrive("right", 0.7, 1050);
 
             //now drive until we see the red or blue plate
             int colors[] = frontColorSensor.getAverageColor(500);
@@ -104,25 +100,26 @@ public class TankAutonomousBlue extends LinearOpMode {
             moveHook(ServoPosition.DOWN);
 
             mecanumWheels.sleepAndCheckActive(1000);
-            mecanumWheels.BackwardMoveInches(telemetry, -0.5, 33, ticksToInches);
+            mecanumWheels.BackwardMoveInches(telemetry, -0.5, 32, ticksToInches);
             mecanumWheels.ForwardMoveInches(telemetry, 0.5, .5, ticksToInches);
-
 
             mecanumWheels.sleepAndCheckActive(1000);
 
             moveHook(ServoPosition.UP);
 
-            mecanumWheels.crabDrive("right", 0.7, 2500);
+            mecanumWheels.sleepAndCheckActive(500);
+
+            mecanumWheels.crabDrive("left", 0.7, 2500);
             mecanumWheels.ForwardMoveInches(telemetry, 0.5, 13, ticksToInches);
-            mecanumWheels.crabDrive("left", 0.7, 2000);
+            mecanumWheels.crabDrive("right", 0.7, 2000);
 
             mecanumWheels.sleepAndCheckActive(500);
 
-            mecanumWheels.crabDrive("right", 0.7, 1000);
+            mecanumWheels.crabDrive("left", 0.7, 1000);
 
             mecanumWheels.sleepAndCheckActive(500);
 
-            mecanumWheels.setPowerFromGamepad(false, .7, 10, 0, 0);
+            mecanumWheels.setPowerFromGamepad(false, .7, -10, 0, 0);
 
             mecanumWheels.sleepAndCheckActive(1100);
 
@@ -130,7 +127,7 @@ public class TankAutonomousBlue extends LinearOpMode {
 
             mecanumWheels.sleepAndCheckActive(500);
 
-            mecanumWheels.crabDrive("right", 0.7, 1500);
+            mecanumWheels.crabDrive("left", 0.7, 1750);
 
             mecanumWheels.sleepAndCheckActive(500);
 
@@ -139,7 +136,7 @@ public class TankAutonomousBlue extends LinearOpMode {
             mecanumWheels.setPowerFromGamepad(true, .7, 0, 0, 10);
 
             //added by Leefe for timeout
-           //startTime = System.currentTimeMillis();
+            //startTime = System.currentTimeMillis();
 
             while (colorSensor.red() < redTarget && colorSensor.blue() < blueTarget ) {//&& System.currentTimeMillis() - startTime < 1400) {
                 telemetry.addData("Colors", "-> " + colors[0] + "  " + colors[1] + "   " + colors[2]);
@@ -154,10 +151,10 @@ public class TankAutonomousBlue extends LinearOpMode {
             mecanumWheels.StopMotors();
             //rampServo.setPosition(.2);
 
+
+
+        }
     }
-
 }
-
-
 
 

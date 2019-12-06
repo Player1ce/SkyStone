@@ -16,7 +16,7 @@ import org.firstinspires.ftc.devices.SkystoneIntake;
 @Autonomous(name = "TankAutonomousRed", group="Skystone")
 public class TankAutonomousRed extends LinearOpMode {
     private TeleOpMethods robot = new TeleOpMethods(ChassisName.TANK);
-    private final MecanumWheels mecanumWheels=new MecanumWheels(ChassisName.TANK);
+    private final MecanumWheels mecanumWheels = new MecanumWheels(ChassisName.TANK);
     private final FoundationHook hookServo = new FoundationHook(ChassisName.TANK);
     private final SkystoneIntake intake = new SkystoneIntake(ChassisName.TANK);
 
@@ -37,12 +37,12 @@ public class TankAutonomousRed extends LinearOpMode {
 
         colorSensor = hardwareMap.get(ColorSensor.class, "frontColorSensor");
 
-        frontColorSensor=new ColorSensorLogic(colorSensor);
+        frontColorSensor = new ColorSensorLogic(colorSensor);
 
         // If possible, turn the light on in the beginning (it might already be on anyway,
         // we just make sure it is if we can).
         if (colorSensor instanceof SwitchableLight) {
-            ((SwitchableLight)colorSensor).enableLight(true);
+            ((SwitchableLight) colorSensor).enableLight(true);
         }
 
         mecanumWheels.setZeroPowerBrakeBehavior();
@@ -55,18 +55,17 @@ public class TankAutonomousRed extends LinearOpMode {
 
     }
 
-    public void moveHook(ServoPosition position){
-        if (position==ServoPosition.UP)  {
+    public void moveHook(ServoPosition position) {
+        if (position == ServoPosition.UP) {
             hookServo.hookServo.setPosition(.4);
-        }
-        else  {
+        } else {
             hookServo.hookServo.setPosition(0);
         }
     }
 
     protected void executeAutonomousLogic() {
         //put all code in this while loop so the bot will stop when we tell it to
-        while(opModeIsActive()) {
+        while (opModeIsActive()) {
             double ticksToInches = 288 / (Math.PI * 6.125);
             mecanumWheels.ForwardMoveInches(telemetry, 0.5, 23, ticksToInches);
             mecanumWheels.crabDrive("right", 0.7, 1050);
@@ -100,7 +99,7 @@ public class TankAutonomousRed extends LinearOpMode {
             moveHook(ServoPosition.DOWN);
 
             mecanumWheels.sleepAndCheckActive(1000);
-            mecanumWheels.BackwardMoveInches(telemetry, -0.5, 31, ticksToInches);
+            mecanumWheels.BackwardMoveInches(telemetry, -0.5, 32, ticksToInches);
             mecanumWheels.ForwardMoveInches(telemetry, 0.5, .5, ticksToInches);
 
             mecanumWheels.sleepAndCheckActive(1000);
@@ -121,33 +120,40 @@ public class TankAutonomousRed extends LinearOpMode {
 
             mecanumWheels.setPowerFromGamepad(false, .7, -10, 0, 0);
 
-            mecanumWheels.sleepAndCheckActive(1050);
+            mecanumWheels.sleepAndCheckActive(1100);
 
             mecanumWheels.StopMotors();
 
             mecanumWheels.sleepAndCheckActive(500);
 
+            mecanumWheels.crabDrive("right", 0.7, 1250);
+
+            mecanumWheels.sleepAndCheckActive(500);
+
+
+
             mecanumWheels.setPowerFromGamepad(true, .7, 0, 0, 10);
 
-            startTime = System.currentTimeMillis();
+            //added by Leefe for timeout
+            //startTime = System.currentTimeMillis();
 
-            while (colorSensor.red() < redTarget && colorSensor.blue() < blueTarget && System.currentTimeMillis() - startTime < 1400) {
+            while (colorSensor.red() < redTarget && colorSensor.blue() < blueTarget ) {//&& System.currentTimeMillis() - startTime < 1400) {
                 telemetry.addData("Colors", "-> " + colors[0] + "  " + colors[1] + "   " + colors[2]);
                 telemetry.update();
-                sleep(10);
+                mecanumWheels.sleepAndCheckActive(10);
                 i += 1;
                 if (i == 18) {
                     intake.rampServo.setPosition(.2);
                 }
-
-                if (i == 35) {
-                    return;
-                }
             }
 
             mecanumWheels.StopMotors();
+            //rampServo.setPosition(.2);
+
+
+
         }
-
     }
-
 }
+
+
