@@ -12,8 +12,8 @@ import org.firstinspires.ftc.logic.KillOpModeException;
 import org.firstinspires.ftc.logic.ServoPosition;
 import org.firstinspires.ftc.devices.SkystoneIntake;
 
-@Autonomous (name = "TankAutonomousBlue", group="Skystone")
-public class TankAutonomousBlue extends LinearOpMode {
+@Autonomous (name = "TankAutonomousBlueWall", group="Skystone")
+public class TankAutonomousBlueWall extends LinearOpMode {
     private TeleOpMethods robot = new TeleOpMethods(ChassisName.TANK);
     private final MecanumWheels mecanumWheels=new MecanumWheels(ChassisName.TANK);
     private final FoundationHook hookServo = new FoundationHook(ChassisName.TANK);
@@ -105,7 +105,7 @@ public class TankAutonomousBlue extends LinearOpMode {
 
             mecanumWheels.sleepAndCheckActive(1000);
             mecanumWheels.BackwardMoveInches(telemetry, -0.5, 33, ticksToInches);
-            mecanumWheels.ForwardMoveInches(telemetry, 0.5, .5, ticksToInches);
+
 
 
             mecanumWheels.sleepAndCheckActive(1000);

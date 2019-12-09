@@ -73,6 +73,9 @@ public class TankAutonomousBlueBridge extends LinearOpMode {
 
         double ticksToInches = 288 / (Math.PI * 6.125);
         mecanumWheels.ForwardMoveInches(telemetry, 0.5, 23, ticksToInches);
+
+        mecanumWheels.sleepAndCheckActive(500);
+
         mecanumWheels.crabDrive("left", 0.7, 1050);
 
         //now drive until we see the red or blue plate
@@ -105,12 +108,12 @@ public class TankAutonomousBlueBridge extends LinearOpMode {
 
         mecanumWheels.sleepAndCheckActive(1000);
         mecanumWheels.BackwardMoveInches(telemetry, -0.5, 33, ticksToInches);
-        mecanumWheels.ForwardMoveInches(telemetry, 0.5, .5, ticksToInches);
-
 
         mecanumWheels.sleepAndCheckActive(1000);
 
         moveHook(ServoPosition.UP);
+
+        mecanumWheels.sleepAndCheckActive(500);
 
         mecanumWheels.crabDrive("right", 0.7, 2500);
         mecanumWheels.ForwardMoveInches(telemetry, 0.5, 13, ticksToInches);
@@ -128,9 +131,7 @@ public class TankAutonomousBlueBridge extends LinearOpMode {
 
         mecanumWheels.StopMotors();
 
-        mecanumWheels.sleepAndCheckActive(500);
-
-        mecanumWheels.crabDrive("left", 0.7, 1250);
+      // mecanumWheels.crabDrive("left", 0.7, 1250);
 
         mecanumWheels.sleepAndCheckActive(500);
 
@@ -139,9 +140,9 @@ public class TankAutonomousBlueBridge extends LinearOpMode {
         mecanumWheels.setPowerFromGamepad(true, .7, 0, 0, 10);
 
         //added by Leefe for timeout
-        //startTime = System.currentTimeMillis();
+        startTime = System.currentTimeMillis();
 
-        while (colorSensor.red() < redTarget && colorSensor.blue() < blueTarget ) {//&& System.currentTimeMillis() - startTime < 1400) {
+        while (colorSensor.red() < redTarget && colorSensor.blue() < blueTarget && System.currentTimeMillis() - startTime < 2200) {
             telemetry.addData("Colors", "-> " + colors[0] + "  " + colors[1] + "   " + colors[2]);
             telemetry.update();
             mecanumWheels.sleepAndCheckActive(10);

@@ -101,7 +101,6 @@ public class TankAutonomousRedWall extends LinearOpMode {
 
             mecanumWheels.sleepAndCheckActive(1000);
             mecanumWheels.BackwardMoveInches(telemetry, -0.5, 32, ticksToInches);
-            mecanumWheels.ForwardMoveInches(telemetry, 0.5, .5, ticksToInches);
 
             mecanumWheels.sleepAndCheckActive(1000);
 

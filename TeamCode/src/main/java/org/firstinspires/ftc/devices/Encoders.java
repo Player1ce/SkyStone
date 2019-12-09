@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.devices;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.logic.ChassisName;
@@ -30,13 +32,16 @@ public class Encoders {
     //final double encoderWheelsInchesToTicks = 125/(Math.PI*2.7812);
     //final double inchesToTicks = (1/.0681);
 
-    public void initialize(MecanumWheels wheels) {
+    public void initialize(MecanumWheels wheels, OpMode opMode) {
         this.wheels=wheels;
-        xEncoder = wheels.frontLeft;
-        yEncoder = wheels.frontRight;
+        //xEncoder = wheels.frontLeft;
+        //yEncoder = wheels.frontRight;
+        //pass opmode into class
+        xEncoder = opMode.hardwareMap.dcMotor.get("port 2");
+        yEncoder = opMode.hardwareMap.dcMotor.get("port 3");
     }
 
-    public double getX () { return xEncoder.getCurrentPosition();}
+    public double getX () { return xEncoder.getCurrentPosition(); }
 
     public double getY () { return -yEncoder.getCurrentPosition(); }
 
@@ -167,13 +172,13 @@ public class Encoders {
     public void moveInchesEncoderEdited (Telemetry telemetry,double MotorPower, double MinMotorPower,double Inches) {
         resetPosition();
 
-        setyTarget((Inches * 4)/.0699);
-        //setyTarget(Inches);
+        //setyTarget((Inches * 4)/.0699);
+        setyTarget(Inches);
         setxTarget(0);
 
-        while (Math.abs(getY()) < Math.abs(yTarget) || Math.abs(getX()) > Math.abs(xTarget +10)) {
+        while (Math.abs(getY()) < Math.abs(yTarget)) {
             wheels.checkIsActive();
-
+            //|| Math.abs(getX()) > Math.abs(xTarget +10)
             double distanceX=Math.abs(getX() - xTarget);
             double distanceY=Math.abs(getY() - yTarget);
             double powerX = MecanumWheels.calculateProportionalMotorPower(0.0015, distanceX, MotorPower, MinMotorPower);
@@ -181,12 +186,21 @@ public class Encoders {
             double yDirection = getYDirection();
             double xDirection = getXDirection();
 
-            wheels.setPowerFromGamepad(false, 1 , 0, powerX * 0.4 * xDirection, powerY * yDirection);
+            if (distanceX < 5) {
+                wheels.frontLeft.setPower(powerY * yDirection);
+                wheels.backRight.setPower(powerY * yDirection);
+                wheels.frontRight.setPower(powerY * yDirection);
+                wheels.backLeft.setPower(powerY * yDirection);
+            } else if (distanceX > 5) {
+                wheels.frontLeft.setPower((powerY * yDirection * .7) + (-powerX * xDirection * .7));
+                wheels.backRight.setPower((powerY * yDirection * .7) + (-powerX * xDirection * .7));
+                wheels.frontRight.setPower((powerY * yDirection * .7) + (powerX * xDirection * 2));
+                wheels.backLeft.setPower((powerY * yDirection * .7) + (powerX * xDirection * 2));
+            }
+
             telemetry.addData("y", getY());
             telemetry.addData("x", getX());
             telemetry.update();
-
-
         }
         wheels.StopMotors();
         wheels.sleepAndCheckActive(500);
@@ -210,7 +224,6 @@ public class Encoders {
 
             wheels.checkIsActive();
 
-
             double distanceX=Math.abs(getX() - xTarget);
             double distanceY=Math.abs(getY() - yTarget);
             double powerX = MecanumWheels.calculateProportionalMotorPower(0.0015, distanceX, MotorPower, .3);
@@ -218,7 +231,17 @@ public class Encoders {
             double yDirection = getYDirection();
             double xDirection = getXDirection();
 
-            wheels.setPowerFromGamepad(false, 1, 0, powerX * xDirection , 0.4 * powerY * yDirection);
+            if (distanceY < 5) {
+                wheels.frontLeft.setPower(-powerX * xDirection);
+                wheels.backRight.setPower(-powerX * xDirection);
+                wheels.frontRight.setPower(powerX * xDirection);
+                wheels.backLeft.setPower(powerX * xDirection);
+            } else if (distanceX > 5) {
+                wheels.frontLeft.setPower((powerY * yDirection * .7) + (-powerX * xDirection * .7));
+                wheels.backRight.setPower((powerY * yDirection * .7) + (-powerX * xDirection * .7));
+                wheels.frontRight.setPower((powerY * yDirection * .7) + (powerX * xDirection * 2));
+                wheels.backLeft.setPower((powerY * yDirection * .7) + (powerX * xDirection * 2));
+            }
 
             telemetry.addData("powerx:", powerX);
             telemetry.addData("y:", getY());
@@ -233,6 +256,7 @@ public class Encoders {
         wheels.StopMotors();
 
     }
+
 
 
 }

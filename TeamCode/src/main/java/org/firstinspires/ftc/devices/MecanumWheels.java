@@ -20,6 +20,7 @@ public class MecanumWheels {
     double backRightPower; //-right
     double backLeftPower;
 
+
     public double xLeft;
     public double yLeft;
     public double xRight;
@@ -247,6 +248,26 @@ public class MecanumWheels {
 
         StopMotors();
     }
+
+    public void changedCrabDriveLeft (double motorpower, long time) {
+        frontLeft.setPower(-motorpower * .7);
+        frontRight.setPower(motorpower * 2);
+        backLeft.setPower(motorpower * .7);
+        backRight.setPower(-motorpower * 2);
+        sleepAndCheckActive(time);
+        StopMotors();
+    }
+
+    public void changedCrabDriveRight (double motorpower, long time) {
+        frontLeft.setPower(-motorpower * .7);
+        frontRight.setPower(motorpower * 2);
+        backLeft.setPower(motorpower * 2);
+        backRight.setPower(-motorpower * .7);
+        sleepAndCheckActive(time);
+        StopMotors();
+    }
+
+
 
     //Turning ----------------------
     //TODO test directions

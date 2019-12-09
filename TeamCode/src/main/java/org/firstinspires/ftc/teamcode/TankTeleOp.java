@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.devices.Encoders;
 import org.firstinspires.ftc.logic.ButtonOneShot;
 import org.firstinspires.ftc.logic.ChassisName;
 import org.firstinspires.ftc.devices.FoundationHook;
@@ -22,6 +23,7 @@ public class TankTeleOp extends OpMode {
     private ButtonOneShot hookServoButtonLogic = new ButtonOneShot();
     private ButtonOneShot rampServoButtonLogic = new ButtonOneShot();
     private ButtonOneShot rampDirectControl = new ButtonOneShot();
+    private Encoders encoders = new Encoders(ChassisName.TANK);
 
     //TODO correct starting cars for drive
     private boolean reverse = true;
@@ -42,6 +44,7 @@ public class TankTeleOp extends OpMode {
         mecanumWheels.initializeWheels(this);
         hookServo.initializeHook(this);
         intake.initializeIntake(this);
+        encoders.initialize(mecanumWheels, this);
 
         //TODO I changed servos and intake to null for a full functionality test.
         //set up variables in respective classes.
@@ -138,6 +141,7 @@ public class TankTeleOp extends OpMode {
         telemetry.addData("x_left:", mecanumWheels.xLeft);
         telemetry.addData("x_right:", mecanumWheels.xRight);
         telemetry.addData("y_left:", mecanumWheels.yLeft);
+        telemetry.addData("y:", encoders.getY());
 
         /* not important in current system
         if (rampServoUp) {

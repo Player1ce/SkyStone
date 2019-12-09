@@ -65,9 +65,11 @@ public class TankAutonomousRed extends LinearOpMode {
 
     protected void executeAutonomousLogic() {
         //put all code in this while loop so the bot will stop when we tell it to
-        while (opModeIsActive()) {
+
             double ticksToInches = 288 / (Math.PI * 6.125);
             mecanumWheels.ForwardMoveInches(telemetry, 0.5, 23, ticksToInches);
+            mecanumWheels.sleepAndCheckActive(500);
+
             mecanumWheels.crabDrive("right", 0.7, 1050);
 
             //now drive until we see the red or blue plate
@@ -100,7 +102,6 @@ public class TankAutonomousRed extends LinearOpMode {
 
             mecanumWheels.sleepAndCheckActive(1000);
             mecanumWheels.BackwardMoveInches(telemetry, -0.5, 32, ticksToInches);
-            mecanumWheels.ForwardMoveInches(telemetry, 0.5, .5, ticksToInches);
 
             mecanumWheels.sleepAndCheckActive(1000);
 
@@ -123,14 +124,9 @@ public class TankAutonomousRed extends LinearOpMode {
             mecanumWheels.sleepAndCheckActive(1100);
 
             mecanumWheels.StopMotors();
+            //mecanumWheels.crabDrive("right", 0.7, 1250);
 
             mecanumWheels.sleepAndCheckActive(500);
-
-            mecanumWheels.crabDrive("right", 0.7, 1250);
-
-            mecanumWheels.sleepAndCheckActive(500);
-
-
 
             mecanumWheels.setPowerFromGamepad(true, .7, 0, 0, 10);
 
@@ -151,8 +147,6 @@ public class TankAutonomousRed extends LinearOpMode {
             //rampServo.setPosition(.2);
 
 
-
-        }
     }
 }
 

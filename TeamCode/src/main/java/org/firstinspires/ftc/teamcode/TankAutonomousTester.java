@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.devices.Encoders;
 import org.firstinspires.ftc.devices.IMURevHub;
@@ -9,6 +11,7 @@ import org.firstinspires.ftc.logic.ChassisName;
 import org.firstinspires.ftc.devices.FoundationHook;
 import org.firstinspires.ftc.devices.MecanumWheels;
 import org.firstinspires.ftc.devices.SkystoneIntake;
+import org.firstinspires.ftc.logic.KillOpModeException;
 
 @Autonomous(name = "TankAutonomousTester", group="Skystone")
 public class TankAutonomousTester extends LinearOpMode {
@@ -29,14 +32,15 @@ public class TankAutonomousTester extends LinearOpMode {
         intake.initializeIntake(this);
         hookServo.initializeHook(this);
         imu.initializeIMU(this);
-        encoders.initialize(wheels);
+        encoders.initialize(wheels, this);
 
         wheels.setZeroPowerBrakeBehavior();
         waitForStart();
 
         robot.startTime();
-        executeAutonomousLogic();
-
+        try {
+            executeAutonomousLogic();
+        } catch (KillOpModeException e) {}
     }
 
     protected void executeAutonomousLogic() {
@@ -44,37 +48,23 @@ public class TankAutonomousTester extends LinearOpMode {
 
         //encoders.moveInchesEncoders(telemetry, .6, 0.1,-500);
 
-        encoders.crabInchesEncoderEdited(telemetry, .6, .1, 10);
 
-        sleep(10000);
         /*
-
-        wheels.sleepAndCheckActive(1500);
-
-        encoders.moveInchesEncoders(telemetry, -.6, 0, 2);
-        wheels.sleepAndCheckActive(1000);
-
-        encoders.moveInchesEncoders(telemetry, .6, 0, 2);
-        wheels.sleepAndCheckActive(500);
-
-        imu.rotate(90, 1, 0, linearOpMode );
-
-        wheels.sleepAndCheckActive(5000);
-
-        imu.rotate(90, 1, 0, linearOpMode);
-
-        encoders.moveInchesEncoders(telemetry, .6, 0, 1);
-
-        imu.rotate(180, 1, 0, linearOpMode);
-
-        encoders.moveInchesEncoders(telemetry, -.6, 0, 1);
-
-        telemetry.addData("end time:",  time);
-        telemetry.update();
-
-        wheels.sleepAndCheckActive(7000);
-
+        wheels.frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        wheels.frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        wheels.backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        wheels.backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
          */
-    }
+
+        //wheels.crabDrive("right", .6, 1000);
+
+        //wheels.changedCrabDriveRight(.6, 1000);
+
+
+        //encoders.crabInchesEncoderEdited(telemetry, 1, .3, 10);
+
+        encoders.crabInchesEncoderEdited(telemetry, .2, .1, 15);
+
 
     }
+}
