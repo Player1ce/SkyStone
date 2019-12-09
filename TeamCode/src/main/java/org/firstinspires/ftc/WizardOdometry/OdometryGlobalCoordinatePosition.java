@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.WizardOdometry;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ReadWriteFile;
 
@@ -10,6 +11,7 @@ import java.io.File;
 /**
  * Created by Sarthak on 6/1/2019.
  */
+
 public class OdometryGlobalCoordinatePosition implements Runnable{
     //Odometry wheels
     private DcMotor verticalEncoderLeft, verticalEncoderRight, horizontalEncoder;
