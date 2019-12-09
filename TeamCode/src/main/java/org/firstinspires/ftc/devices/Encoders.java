@@ -21,21 +21,21 @@ public class Encoders {
 
     private MecanumWheels wheels;
 
-    private DcMotor xEncoder;
-    private DcMotor yEncoder;
+    private DcMotor xEncoder, yEncoder;
 
-    private double xTarget;
-    private double yTarget;
+    private double xTarget, yTarget;
 
 
     //actual diameter: 2.7812 in.
     //final double encoderWheelsInchesToTicks = 125/(Math.PI*2.7812);
     //final double inchesToTicks = (1/.0681);
 
-    public void initialize(MecanumWheels wheels) {
+    public void initialize(MecanumWheels wheels, OpMode opMode) {
         this.wheels=wheels;
-        xEncoder = wheels.frontLeft;
-        yEncoder = wheels.frontRight;
+        //xEncoder = wheels.frontLeft;
+        //yEncoder = wheels.frontRight;
+        xEncoder = opMode.hardwareMap.dcMotor.get("Port 1");
+        yEncoder = opMode.hardwareMap.dcMotor.get("Port 2");
     }
 
     public double getX () { return xEncoder.getCurrentPosition();}
@@ -48,17 +48,22 @@ public class Encoders {
 
 
     public void resetPosition() {
-        wheels.frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        wheels.frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        wheels.backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        wheels.backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        xEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        yEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         wheels.sleepAndCheckActive(50);
 
-        wheels.frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        wheels.frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        wheels.backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        wheels.backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        xEncoder.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        yEncoder.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+
+    public void ForwardMoveInches(Telemetry telemetry,double motorPower, double Inches) {
+        moveInchesEncoders(telemetry,motorPower,0.1,Inches);
+    }
+
+
+    public void BackwardMoveInches(Telemetry telemetry,double motorPower, double Inches) {
+        moveInchesEncoders(telemetry,motorPower,-0.1,Inches);
     }
 
     public void moveInchesEncoders(Telemetry telemetry,double MotorPower, double MinMotorPower,double ticks) {
@@ -178,7 +183,7 @@ public class Encoders {
             //|| Math.abs(getX()) > Math.abs(xTarget +10)
             double distanceX=Math.abs(getX() - xTarget);
             double distanceY=Math.abs(getY() - yTarget);
-            double powerX = MecanumWheels.calculateProportionalMotorPower(0.0015, distanceX, MotorPower, MinMotorPower);
+            double powerX = MecanumWheels.calculateProportionalMotorPower(0.0015, distanceX, MotorPower, Math.max(MinMotorPower, .3));
             double powerY = MecanumWheels.calculateProportionalMotorPower(0.0015, distanceY, MotorPower, MinMotorPower);
             double yDirection = getYDirection();
             double xDirection = getXDirection();
@@ -213,7 +218,7 @@ public class Encoders {
 
             double distanceX=Math.abs(getX() - xTarget);
             double distanceY=Math.abs(getY() - yTarget);
-            double powerX = MecanumWheels.calculateProportionalMotorPower(0.0015, distanceX, MotorPower, .3);
+            double powerX = MecanumWheels.calculateProportionalMotorPower(0.0015, distanceX, MotorPower, Math.max(MinMotorPower, .3));
             double powerY = MecanumWheels.calculateProportionalMotorPower(0.0015, distanceY, MotorPower, MinMotorPower);
             double yDirection = getYDirection();
             double xDirection = getXDirection();
