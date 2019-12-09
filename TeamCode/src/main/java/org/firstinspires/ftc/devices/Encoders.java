@@ -32,18 +32,15 @@ public class Encoders {
     //final double encoderWheelsInchesToTicks = 125/(Math.PI*2.7812);
     //final double inchesToTicks = (1/.0681);
 
-    public void initialize(MecanumWheels wheels, OpMode opMode) {
+    public void initialize(MecanumWheels wheels) {
         this.wheels=wheels;
-        //xEncoder = wheels.frontLeft;
-        //yEncoder = wheels.frontRight;
-        //pass opmode into class
-        xEncoder = opMode.hardwareMap.dcMotor.get("port 2");
-        yEncoder = opMode.hardwareMap.dcMotor.get("port 3");
+        xEncoder = wheels.frontLeft;
+        yEncoder = wheels.frontRight;
     }
 
-    public double getX () { return xEncoder.getCurrentPosition(); }
+    public double getX () { return xEncoder.getCurrentPosition();}
 
-    public double getY () { return -yEncoder.getCurrentPosition(); }
+    public double getY () { return yEncoder.getCurrentPosition(); }
 
     private void setxTarget (double target) { xTarget = target; }
 
@@ -186,17 +183,7 @@ public class Encoders {
             double yDirection = getYDirection();
             double xDirection = getXDirection();
 
-            if (distanceX < 5) {
-                wheels.frontLeft.setPower(powerY * yDirection);
-                wheels.backRight.setPower(powerY * yDirection);
-                wheels.frontRight.setPower(powerY * yDirection);
-                wheels.backLeft.setPower(powerY * yDirection);
-            } else if (distanceX > 5) {
-                wheels.frontLeft.setPower((powerY * yDirection * .7) + (-powerX * xDirection * .7));
-                wheels.backRight.setPower((powerY * yDirection * .7) + (-powerX * xDirection * .7));
-                wheels.frontRight.setPower((powerY * yDirection * .7) + (powerX * xDirection * 2));
-                wheels.backLeft.setPower((powerY * yDirection * .7) + (powerX * xDirection * 2));
-            }
+            wheels.setPowerFromGamepad(false, 1 , 0, powerX * 0.4 * xDirection, powerY * yDirection);
 
             telemetry.addData("y", getY());
             telemetry.addData("x", getX());
@@ -231,17 +218,7 @@ public class Encoders {
             double yDirection = getYDirection();
             double xDirection = getXDirection();
 
-            if (distanceY < 5) {
-                wheels.frontLeft.setPower(-powerX * xDirection);
-                wheels.backRight.setPower(-powerX * xDirection);
-                wheels.frontRight.setPower(powerX * xDirection);
-                wheels.backLeft.setPower(powerX * xDirection);
-            } else if (distanceX > 5) {
-                wheels.frontLeft.setPower((powerY * yDirection * .7) + (-powerX * xDirection * .7));
-                wheels.backRight.setPower((powerY * yDirection * .7) + (-powerX * xDirection * .7));
-                wheels.frontRight.setPower((powerY * yDirection * .7) + (powerX * xDirection * 2));
-                wheels.backLeft.setPower((powerY * yDirection * .7) + (powerX * xDirection * 2));
-            }
+            wheels.setPowerFromGamepad(false, 1, 0, powerX * xDirection , 0.4 * powerY * yDirection);
 
             telemetry.addData("powerx:", powerX);
             telemetry.addData("y:", getY());
