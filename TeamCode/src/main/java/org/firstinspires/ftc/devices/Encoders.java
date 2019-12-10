@@ -25,6 +25,8 @@ public class Encoders {
 
     private double xTarget, yTarget;
 
+    public double finalPower = 0;
+
 
     //actual diameter: 2.7812 in.
     //final double encoderWheelsInchesToTicks = 125/(Math.PI*2.7812);
@@ -247,7 +249,7 @@ public class Encoders {
 
     }
 
-    public void FixCrabdrive(Telemetry telemetry, double startI, double xPower, double Inches) {
+    public void fixCrabdrive(Telemetry telemetry, double startI, double xPower, double Inches) {
 
         double lastY = 0;
         double i = startI;
@@ -293,6 +295,19 @@ public class Encoders {
 
         wheels.StopMotors();
 
+        finalPower = i;
+
     }
+
+    public void testFix (double finalPower, double xPower) {
+        wheels.frontLeft.setPower(Math.max(.3, xPower));
+        wheels.backRight.setPower(Math.max(.3, xPower));
+        wheels.frontRight.setPower(finalPower);
+        wheels.backLeft.setPower(finalPower);
+
+        wheels.sleepAndCheckActive(3000);
+    }
+
+
 
 }
