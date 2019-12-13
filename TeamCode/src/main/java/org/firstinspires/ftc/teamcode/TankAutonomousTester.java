@@ -46,8 +46,9 @@ public class TankAutonomousTester extends LinearOpMode {
     protected void executeAutonomousLogic() {
         //double ticksToInches=288/(Math.PI*6.125);
 
-        //encoders.moveInchesEncoders(telemetry, .6, 0.1,-500);
+        encoders.moveInchesEncoders(telemetry, .15, 0.05,-1500);
 
+        sleep(5000);
 
         /*
         wheels.frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -63,7 +64,7 @@ public class TankAutonomousTester extends LinearOpMode {
 
         //encoders.crabInchesEncoderEdited(telemetry, 1, .3, 10);
 
-        encoders.crabInchesEncoderEdited(telemetry, .2, .1, 15);
+      //  encoders.crabInchesEncoderEdited(telemetry, .2, .1, 15);
 
 
     }

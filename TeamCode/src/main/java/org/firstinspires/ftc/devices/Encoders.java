@@ -34,8 +34,8 @@ public class Encoders {
         this.wheels=wheels;
         //xEncoder = wheels.frontLeft;
         //yEncoder = wheels.frontRight;
-        xEncoder = opMode.hardwareMap.dcMotor.get("Port 1");
-        yEncoder = opMode.hardwareMap.dcMotor.get("Port 2");
+        xEncoder = opMode.hardwareMap.dcMotor.get("port 2");
+        yEncoder = opMode.hardwareMap.dcMotor.get("port 3");
     }
 
     public double getX () { return xEncoder.getCurrentPosition();}
@@ -73,17 +73,20 @@ public class Encoders {
         //setyTarget(encoderWheelsInchesToTicks*Inches);
         //setyTarget((Inches+.133)/.0713);
         setyTarget(ticks);
-        setxTarget(0);
+        double currentX=getX();
 
         while (Math.abs(getY()) < Math.abs(yTarget)){
             wheels.checkIsActive();
 
             double distance=Math.abs(getY()-yTarget) ;
 
+            double horizontalDistance=getX()-currentX;
+
             //min motor power should be set to zero
             double power=wheels.calculateProportionalMotorPower(0.0015,distance,MotorPower,MinMotorPower);
+            double xPower=wheels.calculateProportionalMotorPower(0.0015,horizontalDistance,MotorPower,MinMotorPower);
 
-            wheels.setPowerFromGamepad(false, power , 0, 0 , -1 );
+            wheels.setPowerFromGamepad(false, power , 0, horizontalDistance>0?-0.1:0.1 , -1 );
 
             /*
             wheels.backRight.setPower(power);
@@ -95,6 +98,7 @@ public class Encoders {
             telemetry.addData("Moving Forward","Moving Forward "+power);
             // telemetry.addData("avg encoder value:", averagePos);
             telemetry.addData("distance:", distance);
+            telemetry.addData("hor dist:", horizontalDistance);
            /* telemetry.addData("F/L encoder value:", frontLeft.getCurrentPosition()*ticksToInches);
             telemetry.addData("F/R encoder value:", frontRight.getCurrentPosition()*ticksToInches);
             telemetry.addData("B/L encoder value:", backLeft.getCurrentPosition()*ticksToInches);
