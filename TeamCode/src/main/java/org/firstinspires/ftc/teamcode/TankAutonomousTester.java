@@ -64,8 +64,9 @@ public class TankAutonomousTester extends LinearOpMode {
 
         //encoders.crabInchesEncoderEdited(telemetry, 1, .3, 10);
 
-      //  encoders.crabInchesEncoderEdited(telemetry, .2, .1, 15);
+        encoders.fixCrabdrive(telemetry, .1, .3, 20);
 
+        //encoders.testFix(encoders.finalPower, .3);
 
     }
 }
