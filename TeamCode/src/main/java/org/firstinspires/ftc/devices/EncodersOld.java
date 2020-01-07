@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.logic.ChassisName;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-public class Encoders {
+public class EncodersOld {
     //TODO do we need to run using encoder. Run using encoder is a PID method so it will interfere with our power setup?
     // also, xEncoder will be sideways so it won't really relate to movement.  Finally, i think we can get position without using encoders.
     //TODO we need to move the encoders to separate ports on the rev hub so the wheels cna run with encoders.
@@ -15,7 +15,7 @@ public class Encoders {
 
     ChassisName chassis;
 
-    public Encoders(ChassisName chassisName) {
+    public EncodersOld(ChassisName chassisName) {
         this.chassis = chassisName;
     }
 
@@ -273,7 +273,7 @@ public class Encoders {
                 continue;
             }
 
-            i++;
+            i += .1;
 
             double xDirection = getXDirection();
 

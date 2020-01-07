@@ -21,7 +21,7 @@ public class IMURevHub {
         chassis = name;
     }
 
-    private MecanumWheels wheels = new MecanumWheels(chassis);
+    private MecanumWheels wheels;
     Orientation lastAngles = new Orientation();
 
     BNO055IMU imu;
@@ -32,7 +32,9 @@ public class IMURevHub {
     boolean aButton, bButton, touched;
 
 
-    public void initializeIMU (OpMode opMode) {
+    public void initializeIMU (MecanumWheels wheels,OpMode opMode) {
+        this.wheels=wheels;
+
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.mode                = BNO055IMU.SensorMode.IMU;
         parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
@@ -40,18 +42,17 @@ public class IMURevHub {
         parameters.loggingEnabled      = false;
         imu = opMode.hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
-        /*?
+
         opMode.telemetry.addData("Mode", "calibrating...");
         opMode.telemetry.update();
-         */
 
-        /* make sure the imu gyro is calibrated before continuing.
-        while (!isStopRequested() && !imu.isGyroCalibrated())
+
+        /* make sure the imu gyro is calibrated before continuing.*/
+        while (!imu.isGyroCalibrated())
         {
-            wheels.sleep(50);
-            IMURevHub.idle();
+            wheels.sleepAndCheckActive(1);
         }
-        */
+
 
         opMode.telemetry.addData("Mode", "waiting for start");
         opMode.telemetry.addData("imu calib status", imu.getCalibrationStatus().toString());
@@ -86,6 +87,31 @@ public class IMURevHub {
         lastAngles = angles;
 
         return globalAngle;
+    }
+
+    public Orientation getOrientation() {
+        return imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+    }
+
+    public double getAngleWithStart(Orientation startOrientation)
+    {
+        // We experimentally determined the Z axis is the axis we want to use for heading angle.
+        // We have to process the angle because the imu works in euler angles so the Z axis is
+        // returned as 0 to +180 or 0 to -180 rolling back to -179 or +179 when rotation passes
+        // 180 degrees. We detect this transition and track the total cumulative angle of rotation.
+
+        Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+
+        double deltaAngle = angles.firstAngle - startOrientation.firstAngle;
+
+        if (deltaAngle < -180)
+            deltaAngle += 360;
+        else if (deltaAngle > 180)
+            deltaAngle -= 360;
+
+        globalAngle += deltaAngle;
+
+        return deltaAngle;
     }
 
     public double checkDirection()

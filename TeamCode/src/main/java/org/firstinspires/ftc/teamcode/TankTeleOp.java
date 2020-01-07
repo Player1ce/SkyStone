@@ -3,7 +3,8 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.devices.Encoders;
+import org.firstinspires.ftc.devices.EncodersOld;
+import org.firstinspires.ftc.devices.IMURevHub;
 import org.firstinspires.ftc.logic.ButtonOneShot;
 import org.firstinspires.ftc.logic.ChassisName;
 import org.firstinspires.ftc.devices.FoundationHook;
@@ -18,12 +19,14 @@ public class TankTeleOp extends OpMode {
     private final MecanumWheels mecanumWheels = new MecanumWheels(ChassisName.TANK);
     private final SkystoneIntake intake = new SkystoneIntake(ChassisName.TANK);
     private final FoundationHook hookServo = new FoundationHook(ChassisName.TANK);
+    private final IMURevHub imu = new IMURevHub(ChassisName.TANK);
+
     private ButtonOneShot reverseButtonLogic = new ButtonOneShot();
     private ButtonOneShot powerChangeButtonLogic = new ButtonOneShot();
     private ButtonOneShot hookServoButtonLogic = new ButtonOneShot();
     private ButtonOneShot rampServoButtonLogic = new ButtonOneShot();
     private ButtonOneShot rampDirectControl = new ButtonOneShot();
-    private Encoders encoders = new Encoders(ChassisName.TANK);
+    private EncodersOld encoders = new EncodersOld(ChassisName.TANK);
 
     //TODO correct starting cars for drive
     private boolean reverse = true;
@@ -45,7 +48,7 @@ public class TankTeleOp extends OpMode {
         hookServo.initializeHook(this);
         intake.initializeIntake(this);
         encoders.initialize(mecanumWheels, this);
-
+        imu.initializeIMU(mecanumWheels,this);
         //TODO I changed servos and intake to null for a full functionality test.
         //set up variables in respective classes.
 
