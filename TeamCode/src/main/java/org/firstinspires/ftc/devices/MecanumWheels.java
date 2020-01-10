@@ -86,7 +86,7 @@ public class MecanumWheels {
             backLeftPower = (yLeft - xRight - xLeft) * power;
 
         }
-        else if (chassis == ChassisName.TANK) {
+        else if (chassis == ChassisName.GOBILDA) {
             frontRightPower = (yLeft - xRight - xLeft) * power; //-right
             frontLeftPower = (yLeft + xRight + xLeft) * power; //-right
             backRightPower = (-yLeft - xRight + xLeft) * power; //-right
