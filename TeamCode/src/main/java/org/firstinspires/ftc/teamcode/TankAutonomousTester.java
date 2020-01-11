@@ -68,7 +68,10 @@ public class TankAutonomousTester extends LinearOpMode {
         //wheels.sleepAndCheckActive(3000);
 
         //encoders.fixCrabdrive(telemetry, .3, .5, 20);
+
+        /*
         double ratio = (.5/.4);
+
 
         wheels.frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         wheels.frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -83,6 +86,7 @@ public class TankAutonomousTester extends LinearOpMode {
         wheels.sleepAndCheckActive(10000);
 
         //encoders.testFix(encoders.finalPower, .3);
+        */
 
     }
 }

@@ -54,7 +54,7 @@ public class GoBildaIMUAuto extends LinearOpMode {
     protected void executeAutonomousLogic () {
         //put all code in this while loop so the bot will stop when we tell it to
 
-        navigation.OrientateStraight(telemetry, 10000);
+        navigation.NavigateStraightInches(telemetry, 5, 2, 20);
 
         mecanumWheels.sleepAndCheckActive(30000);
 

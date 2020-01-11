@@ -177,13 +177,13 @@ public class EncodersOld {
 
     }
 
-    private double getXDirection() {
+    public double getXDirection() {
         if (getX() > xTarget) return -1;
         else if (getX() < xTarget) return 1;
         else return 0;
     }
 
-    private double getYDirection() {
+    public double getYDirection() {
         if (getY() > yTarget) return 1;
         else if (getY() < yTarget) return -1;
         else return 0;

@@ -115,6 +115,7 @@ public class Navigation {
         double correctionPower;
         startOrientation = imu.getOrientation();
 
+        //encoders.setyTarget((Inches * 4)/.0699);
         encoders.setyTarget(Inches);
         double currentX = encoders.getX();
 
@@ -151,7 +152,7 @@ public class Navigation {
 
 
 
-            wheels.setPowerFromGamepad(false, 1, 0, powerX * 0.4 * xDirection, powerY * yDirection);
+            //wheels.setPowerFromGamepad(false, 1, 0, powerX * 0.4 * xDirection, powerY * yDirection);
 
             wheels.setPower(0.2 + rightCorrect, 0.2 + leftCorrect, -0.2, 0.2);
 

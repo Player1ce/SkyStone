@@ -19,18 +19,18 @@ import org.firstinspires.ftc.teamcode.TeleOpMethods;
 
 @TeleOp (name="TankTeleopPID", group = "Skystone")
 public class TankTeleopPID extends OpMode {
-    private TeleOpMethods robot = new TeleOpMethods(ChassisName.GOBILDA);
-    private final MecanumWheels mecanumWheels = new MecanumWheels(ChassisName.GOBILDA);
-    private final SkystoneIntake intake = new SkystoneIntake(ChassisName.GOBILDA);
-    private final FoundationHook hookServo = new FoundationHook(ChassisName.GOBILDA);
-    private final IMURevHub imu = new IMURevHub(ChassisName.GOBILDA);
+    private TeleOpMethods robot = new TeleOpMethods(ChassisName.TANK);
+    private final MecanumWheels mecanumWheels = new MecanumWheels(ChassisName.TANK);
+    private final SkystoneIntake intake = new SkystoneIntake(ChassisName.TANK);
+    private final FoundationHook hookServo = new FoundationHook(ChassisName.TANK);
+    private final IMURevHub imu = new IMURevHub(ChassisName.TANK);
 
     private ButtonOneShot reverseButtonLogic = new ButtonOneShot();
     private ButtonOneShot powerChangeButtonLogic = new ButtonOneShot();
     private ButtonOneShot hookServoButtonLogic = new ButtonOneShot();
     private ButtonOneShot rampServoButtonLogic = new ButtonOneShot();
     private ButtonOneShot rampDirectControl = new ButtonOneShot();
-    private EncodersOld encoders = new EncodersOld(ChassisName.GOBILDA);
+    private EncodersOld encoders = new EncodersOld(ChassisName.TANK);
 
     //TODO correct starting cars for drive
     private boolean reverse = true;
@@ -84,7 +84,8 @@ public class TankTeleopPID extends OpMode {
 
         //CRAB: correctionPower=Math.max(-maxCorrectionPower,Math.min(maxCorrectionPower,correctionPower));
 
-        double maxCorrectionPower = .1;
+        double motorPower = .4;
+        double maxCorrectionPower = motorPower - .1;
 
         double correctionPower=Math.abs(pidController.output());
 
@@ -113,8 +114,8 @@ public class TankTeleopPID extends OpMode {
         //CRAB :mecanumWheels.setPower(.6 + rightCorrect, -0.6 + leftCorrect,
         // -0.6 + rightCorrect, -0.6 - leftCorrect);
 
-        mecanumWheels.setPower(0.2 + rightCorrect, 0.2 + leftCorrect,
-                -0.2, 0.2);
+        mecanumWheels.setPower(motorPower + rightCorrect, motorPower + leftCorrect,
+                motorPower, motorPower);
 
 
         telemetry.addData("Correction power:", correctionPower);
