@@ -22,11 +22,11 @@ public class EncodersOld {
         this.chassis = chassisName;
     }
 
-    private MecanumWheels wheels;
+    public MecanumWheels wheels;
 
-    private DcMotor xEncoder, yEncoder;
+    public DcMotor xEncoder, yEncoder;
 
-    private double xTarget, yTarget;
+    public double xTarget, yTarget;
 
     public double finalPower = 0;
 
@@ -51,11 +51,11 @@ public class EncodersOld {
         return yEncoder.getCurrentPosition();
     }
 
-    private void setxTarget(double target) {
+    public void setxTarget(double target) {
         xTarget = target;
     }
 
-    private void setyTarget(double target) {
+    public void setyTarget(double target) {
         yTarget = target;
     }
 

@@ -160,9 +160,7 @@ public class PIDController  {
      * Gets the value of the integral part of the controller.
      * @return The output of the integral calculation
      */
-    public double getIntegral() {
-        return integral;
-    }
+    public double getIntegral() { return integral; }
 
     public void setIntegral(double integral) {
         this.integral = integral;
@@ -190,9 +188,7 @@ public class PIDController  {
         return KP;
     }
 
-    public void setKP(double KP) {
-        this.KP = KP;
-    }
+    public void setKP(double KP) { this.KP = KP; }
 
     public double getKI() {
         return KI;

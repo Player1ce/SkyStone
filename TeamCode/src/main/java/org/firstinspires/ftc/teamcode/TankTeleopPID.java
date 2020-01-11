@@ -1,4 +1,5 @@
-package org.firstinspires.ftc.GoBilda;
+package org.firstinspires.ftc.teamcode;
+
 
 import android.graphics.drawable.GradientDrawable;
 
@@ -16,10 +17,8 @@ import org.firstinspires.ftc.logic.ChassisName;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.TeleOpMethods;
 
-
-@TeleOp(name="GoBildaImuTeleop", group="Skystone")
-//@Disabled
-public class GoBildaImuTeleop extends OpMode {
+@TeleOp (name="TankTeleopPID", group = "Skystone")
+public class TankTeleopPID extends OpMode {
     private TeleOpMethods robot = new TeleOpMethods(ChassisName.GOBILDA);
     private final MecanumWheels mecanumWheels = new MecanumWheels(ChassisName.GOBILDA);
     private final SkystoneIntake intake = new SkystoneIntake(ChassisName.GOBILDA);
@@ -45,16 +44,15 @@ public class GoBildaImuTeleop extends OpMode {
 
     private double startAngle = 0;
 
-
     public void init() {
         /* attaching configuration names to each motor; each one of these names must match the name
         of the motor in the configuration profile on the phone (spaces and capitalization matter)
         or else an error will occur
         */
         mecanumWheels.initializeWheels(this);
-     //   hookServo.initializeHook(this);
-      //  intake.initializeIntake(this);
-      //  encoders.initialize(mecanumWheels, this);
+        //   hookServo.initializeHook(this);
+        //  intake.initializeIntake(this);
+        //  encoders.initialize(mecanumWheels, this);
         imu.initializeIMU(mecanumWheels,this);
 
 
@@ -126,20 +124,5 @@ public class GoBildaImuTeleop extends OpMode {
         telemetry.addData("Time(ms)", diff);
         telemetry.update();
     }
-
-    /*
-    Crab Drive setting
-    KP = 0.125 KI = 0.01 KD= 0.01
-
-    mecanumWheels.setPower(.6 + rightCorrect, -0.6 + leftCorrect,
-                -0.6 + rightCorrect, -0.6 - leftCorrect);
-
-    double maxCorrectionPower = .1;
-
-    double correctionPower=Math.abs(pidController.output());
-
-    correctionPower=Math.max(-maxCorrectionPower,Math.min(maxCorrectionPower,correctionPower));
-
-     */
 
 }
