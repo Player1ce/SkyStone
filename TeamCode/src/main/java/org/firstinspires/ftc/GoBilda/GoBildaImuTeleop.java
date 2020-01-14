@@ -1,12 +1,10 @@
 package org.firstinspires.ftc.GoBilda;
 
-import android.graphics.drawable.GradientDrawable;
-
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.Controller.PIDController;
-import org.firstinspires.ftc.devices.EncodersOld;
+import org.firstinspires.ftc.devices.Encoders;
 import org.firstinspires.ftc.devices.FoundationHook;
 import org.firstinspires.ftc.devices.IMURevHub;
 import org.firstinspires.ftc.devices.MecanumWheels;
@@ -31,7 +29,7 @@ public class GoBildaImuTeleop extends OpMode {
     private ButtonOneShot hookServoButtonLogic = new ButtonOneShot();
     private ButtonOneShot rampServoButtonLogic = new ButtonOneShot();
     private ButtonOneShot rampDirectControl = new ButtonOneShot();
-    private EncodersOld encoders = new EncodersOld(ChassisName.GOBILDA);
+    private Encoders encoders = new Encoders(ChassisName.GOBILDA);
 
     //TODO correct starting cars for drive
     private boolean reverse = true;

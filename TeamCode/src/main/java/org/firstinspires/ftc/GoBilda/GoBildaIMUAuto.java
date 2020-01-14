@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.Controller.PIDController;
 import org.firstinspires.ftc.devices.Camera;
-import org.firstinspires.ftc.devices.EncodersOld;
+import org.firstinspires.ftc.devices.Encoders;
 import org.firstinspires.ftc.devices.IMURevHub;
 import org.firstinspires.ftc.devices.Navigation;
 import org.firstinspires.ftc.logic.ChassisName;
@@ -26,7 +26,7 @@ public class GoBildaIMUAuto extends LinearOpMode {
     private final Navigation navigation = new Navigation(ChassisName.GOBILDA);
     private final IMURevHub imu = new IMURevHub(ChassisName.GOBILDA);
     private final PIDController pidController = new PIDController(.0125,0.001,0.001);
-    private final EncodersOld encoders = new EncodersOld(ChassisName.GOBILDA);
+    private final Encoders encoders = new Encoders(ChassisName.GOBILDA);
 
 
     public void runOpMode() throws InterruptedException {

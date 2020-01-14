@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.devices.EncodersOld;
+import org.firstinspires.ftc.devices.Encoders;
 import org.firstinspires.ftc.devices.IMURevHub;
 import org.firstinspires.ftc.logic.ButtonOneShot;
 import org.firstinspires.ftc.logic.ChassisName;
@@ -26,7 +26,7 @@ public class TankTeleOp extends OpMode {
     private ButtonOneShot hookServoButtonLogic = new ButtonOneShot();
     private ButtonOneShot rampServoButtonLogic = new ButtonOneShot();
     private ButtonOneShot rampDirectControl = new ButtonOneShot();
-    private EncodersOld encoders = new EncodersOld(ChassisName.TANK);
+    private Encoders encoders = new Encoders(ChassisName.TANK);
 
     //TODO correct starting cars for drive
     private boolean reverse = true;

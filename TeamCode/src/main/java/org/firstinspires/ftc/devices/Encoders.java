@@ -8,7 +8,7 @@ import org.firstinspires.ftc.logic.ChassisName;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
-public class EncodersOld {
+public class Encoders {
     //TODO do we need to run using encoder. Run using encoder is a PID method so it will interfere with our power setup?
     // also, xEncoder will be sideways so it won't really relate to movement.  Finally, i think we can get position without using encoders.
     //TODO we need to move the encoders to separate ports on the rev hub so the wheels cna run with encoders.
@@ -18,7 +18,7 @@ public class EncodersOld {
 
     Orientation startOrientation;
 
-    public EncodersOld(ChassisName chassisName) {
+    public Encoders(ChassisName chassisName) {
         this.chassis = chassisName;
     }
 
@@ -314,43 +314,6 @@ public class EncodersOld {
 
         wheels.sleepAndCheckActive(3000);
     }
-
-
-    public void crabInchesEncoderOrientation(Telemetry telemetry, double MotorPower, double MinMotorPower, double Inches) {
-
-        resetPosition();
-
-        setyTarget(0);
-        setxTarget((Inches * 4) / .0699);
-        //setxTarget(Inches);
-
-        while (Math.abs(getX()) < Math.abs(xTarget) || Math.abs(getY()) > yTarget + 10) {
-
-            wheels.checkIsActive();
-
-            double distanceX = Math.abs(getX() - xTarget);
-            double distanceY = Math.abs(getY() - yTarget);
-            double powerX = MecanumWheels.calculateProportionalMotorPower(0.0015, distanceX, MotorPower, Math.max(MinMotorPower, .3));
-            double powerY = MecanumWheels.calculateProportionalMotorPower(0.0015, distanceY, MotorPower, MinMotorPower);
-            double yDirection = getYDirection();
-            double xDirection = getXDirection();
-
-            wheels.setPowerFromGamepad(false, 1, 0, powerX * xDirection, 0.4 * powerY * yDirection);
-
-            telemetry.addData("powerx:", powerX);
-            telemetry.addData("y:", getY());
-            telemetry.addData("x", getX());
-            telemetry.addData("ypower:", powerY);
-            telemetry.update();
-        }
-        telemetry.addData("y:", getY());
-        telemetry.addData("x", getX());
-        telemetry.update();
-
-        wheels.StopMotors();
-
-    }
-
 
 
 }
