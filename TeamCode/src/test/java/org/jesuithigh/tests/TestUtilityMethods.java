@@ -1,9 +1,17 @@
 package org.jesuithigh.tests;
 
+import android.graphics.drawable.GradientDrawable;
+
+import org.firstinspires.ftc.Controller.PIDController;
+import org.firstinspires.ftc.devices.IMURevHub;
+import org.firstinspires.ftc.devices.Navigation;
 import org.firstinspires.ftc.logic.ButtonOneShot;
 import org.firstinspires.ftc.devices.MecanumWheels;
+import org.firstinspires.ftc.logic.ChassisName;
 import org.junit.Assert;
 import org.junit.Test;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+
 
 /**
  * Unit test methods for utility methods used by either teleop or autonomous.
@@ -53,6 +61,25 @@ public class TestUtilityMethods {
         }
         //release button
         Assert.assertFalse(buttonLogic.isPressed(false));
+    }
+
+
+    @Test
+    public void testGetOutput() {
+        PIDController pidController = new PIDController(0.125,0.1,0.1);
+        pidController.setMaxErrorForIntegral(0.002);
+        IMURevHub imu = new IMURevHub(ChassisName.TANK);
+        Navigation navigation = new Navigation(ChassisName.TANK);
+        Orientation startOrientation;
+
+        pidController.input(50);
+        System.out.println(navigation.getOutput());
+        System.out.println(pidController.output());
+
+
+        Assert.assertTrue(pidController.output() == navigation.getOutput());
+
+
     }
 
 

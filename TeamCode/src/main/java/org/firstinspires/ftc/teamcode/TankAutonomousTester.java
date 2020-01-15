@@ -29,15 +29,12 @@ public class TankAutonomousTester extends LinearOpMode {
     PIDController pidController;
 
     public void runOpMode() {
-        pidController =new PIDController(.0125,0.001,0.001);
-        pidController.setMaxErrorForIntegral(0.002);
-
         wheels.initializeWheels(this);
         intake.initializeIntake(this);
         hookServo.initializeHook(this);
         imu.initializeIMU(wheels,this);
         encoders.initialize(wheels, this);
-        navigation.initialize(wheels, pidController, imu, encoders, this);
+        navigation.initialize(wheels, imu, encoders, this);
 
         wheels.setZeroPowerBrakeBehavior();
         waitForStart();
@@ -49,9 +46,8 @@ public class TankAutonomousTester extends LinearOpMode {
     }
 
     protected void executeAutonomousLogic() {
-        navigation.NavigateStraightTicks(telemetry, .5, 0,500);
+        navigation.NavigateStraightTicks(telemetry, .5, 0,2000);
         wheels.sleepAndCheckActive(20000);
-        throw new KillOpModeException();
 
 
     }

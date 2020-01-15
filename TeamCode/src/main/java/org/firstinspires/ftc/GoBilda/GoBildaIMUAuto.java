@@ -32,7 +32,7 @@ public class GoBildaIMUAuto extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         mecanumWheels.initializeWheels(this);
         camera.initializeCamera(this);
-        navigation.initialize(mecanumWheels, pidController, imu, encoders, this);
+        navigation.initialize(mecanumWheels, imu, encoders, this);
         imu.initializeIMU(mecanumWheels, this);
 
         // If possible, turn the light on in the beginning (it might already be on anyway,
@@ -54,7 +54,7 @@ public class GoBildaIMUAuto extends LinearOpMode {
     protected void executeAutonomousLogic () {
         //put all code in this while loop so the bot will stop when we tell it to
 
-        navigation.NavigateStraightInches(telemetry, 5, 2, 20);
+        navigation.NavigateStraightTicks(telemetry, 5, 2, 20);
 
         mecanumWheels.sleepAndCheckActive(30000);
 

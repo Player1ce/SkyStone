@@ -107,7 +107,7 @@ public class MecanumWheels {
 
     }
 
-    private void sleep(long ms) {
+    public void sleep(long ms) {
         try {
             Thread.sleep(ms);
         }

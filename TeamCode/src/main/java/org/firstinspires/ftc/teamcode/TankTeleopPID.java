@@ -9,6 +9,7 @@ import org.firstinspires.ftc.devices.Encoders;
 import org.firstinspires.ftc.devices.FoundationHook;
 import org.firstinspires.ftc.devices.IMURevHub;
 import org.firstinspires.ftc.devices.MecanumWheels;
+import org.firstinspires.ftc.devices.Navigation;
 import org.firstinspires.ftc.devices.SkystoneIntake;
 import org.firstinspires.ftc.logic.ButtonOneShot;
 import org.firstinspires.ftc.logic.ChassisName;
@@ -21,6 +22,7 @@ public class TankTeleopPID extends OpMode {
     private final SkystoneIntake intake = new SkystoneIntake(ChassisName.TANK);
     private final FoundationHook hookServo = new FoundationHook(ChassisName.TANK);
     private final IMURevHub imu = new IMURevHub(ChassisName.TANK);
+    private final Navigation navigation = new Navigation(ChassisName.TANK);
 
     private ButtonOneShot reverseButtonLogic = new ButtonOneShot();
     private ButtonOneShot powerChangeButtonLogic = new ButtonOneShot();
@@ -51,6 +53,8 @@ public class TankTeleopPID extends OpMode {
         //  intake.initializeIntake(this);
         //  encoders.initialize(mecanumWheels, this);
         imu.initializeIMU(mecanumWheels,this);
+        navigation.initialize(mecanumWheels, imu,encoders,this);
+
 
 
         //CRAB: pidController=new PIDController(.0125,0.001,0.001);
@@ -111,10 +115,12 @@ public class TankTeleopPID extends OpMode {
         //CRAB :mecanumWheels.setPower(.6 + rightCorrect, -0.6 + leftCorrect,
         // -0.6 + rightCorrect, -0.6 - leftCorrect);
 
-        mecanumWheels.setPower(motorPower + rightCorrect, motorPower + leftCorrect,
-                motorPower, motorPower);
+        //mecanumWheels.setPower(motorPower + rightCorrect, motorPower + leftCorrect,
+        //        motorPower, motorPower);
 
 
+        telemetry.addData("My output", navigation.getOutput());
+        telemetry.addData("output:", pidController.output());
         telemetry.addData("Correction power:", correctionPower);
         telemetry.addData("Right Correct:", rightCorrect);
         telemetry.addData("Left Correct:", leftCorrect);

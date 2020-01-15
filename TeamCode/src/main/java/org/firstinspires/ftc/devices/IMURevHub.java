@@ -50,7 +50,8 @@ public class IMURevHub {
         /* make sure the imu gyro is calibrated before continuing.*/
         while (!imu.isGyroCalibrated())
         {
-            wheels.sleepAndCheckActive(50);
+            //wheels.sleepAndCheckActive(50);
+            wheels.sleep(10);
         }
 
 

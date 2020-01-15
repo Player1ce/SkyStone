@@ -7,7 +7,10 @@ import org.firstinspires.ftc.logic.ChassisName;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
+import java.nio.channels.Pipe;
+
 public class Navigation {
+    PIDController pidController = new PIDController(0.125, 0.001,0.001);
 
     ChassisName chassis;
 
@@ -24,17 +27,14 @@ public class Navigation {
     }
 
     private MecanumWheels wheels;
-    private PIDController pidController;
     private IMURevHub imu;
     private Encoders encoders;
 
-    public void initialize(MecanumWheels wheels, PIDController pidController, IMURevHub imu, Encoders encoders, OpMode opMode) {
+    public void initialize(MecanumWheels wheels, IMURevHub imu, Encoders encoders, OpMode opMode) {
         this.wheels = wheels;
         this.encoders = encoders;
         this.imu = imu;
         maxCorrectionPower = 0.1;
-        this.pidController = pidController;
-
     }
 
     public void setPIDValues(double KP, double KI, double KD) {
@@ -62,7 +62,7 @@ public class Navigation {
 
             pidController.input(angle);
 
-            correctionPower = Math.abs(getOutput());
+            correctionPower = Math.abs(pidController.output());
 
             correctionPower = Math.max(-maxCorrectionPower, Math.min(maxCorrectionPower, correctionPower));
 
@@ -102,6 +102,7 @@ public class Navigation {
     public void NavigateStraightTicks (Telemetry telemetry, double MotorPower,
                                         double MinMotorPower, double ticks) {
         //imu----------------------------------------------------------------------------------------------
+        pidController.setMaxErrorForIntegral(0.002);
         long curTime;
         long diff;
         startOrientation = imu.getOrientation();
@@ -123,7 +124,7 @@ public class Navigation {
             angle = imu.getAngleWithStart(startOrientation);
             pidController.input(angle);
 
-            correctionPower = Math.abs(getOutput());
+            correctionPower = Math.abs(pidController.output());
             correctionPower = Math.max(-maxCorrectionPower, Math.min(maxCorrectionPower, correctionPower));
 
             if (angle < 0) {
@@ -157,7 +158,6 @@ public class Navigation {
 
             telemetry.addData("x Power:", (powerX * 0.4 * xDirection));
             telemetry.addData("y power", (powerY * yDirection));
-            telemetry.addData("PID output:", getOutput());
             telemetry.addData("Correction power:", correctionPower);
             telemetry.addData("Right Correct:", rightCorrect);
             telemetry.addData("Left Correct:", leftCorrect);
@@ -196,7 +196,7 @@ public class Navigation {
             angle = imu.getAngleWithStart(startOrientation);
             pidController.input(angle);
 
-            correctionPower = Math.abs(getOutput());
+            correctionPower = Math.abs(pidController.output());
             correctionPower = Math.max(-maxCorrectionPower, Math.min(maxCorrectionPower, correctionPower));
 
             if (angle < 0) {
@@ -229,7 +229,6 @@ public class Navigation {
 
             telemetry.addData("x Power:", (powerX * 0.4 * xDirection));
             telemetry.addData("y power", (powerY * yDirection));
-            telemetry.addData("PID output:", getOutput());
             telemetry.addData("Correction power:", correctionPower);
             telemetry.addData("Right Correct:", rightCorrect);
             telemetry.addData("Left Correct:", leftCorrect);
