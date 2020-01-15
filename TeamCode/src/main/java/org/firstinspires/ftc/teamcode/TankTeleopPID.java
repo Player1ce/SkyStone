@@ -52,10 +52,8 @@ public class TankTeleopPID extends OpMode {
         //   hookServo.initializeHook(this);
         //  intake.initializeIntake(this);
         //  encoders.initialize(mecanumWheels, this);
-        imu.initializeIMU(mecanumWheels,this);
-        navigation.initialize(mecanumWheels, imu,encoders,this);
-
-
+        //imu.initializeIMU(mecanumWheels,this);
+        navigation.initialize(mecanumWheels, this);
 
         //CRAB: pidController=new PIDController(.0125,0.001,0.001);
         pidController=new PIDController(.0125,0.001,0.001);
@@ -119,7 +117,6 @@ public class TankTeleopPID extends OpMode {
         //        motorPower, motorPower);
 
 
-        telemetry.addData("My output", navigation.getOutput());
         telemetry.addData("output:", pidController.output());
         telemetry.addData("Correction power:", correctionPower);
         telemetry.addData("Right Correct:", rightCorrect);

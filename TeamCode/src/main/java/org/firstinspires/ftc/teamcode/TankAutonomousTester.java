@@ -20,21 +20,15 @@ public class TankAutonomousTester extends LinearOpMode {
     private final MecanumWheels wheels = new MecanumWheels(ChassisName.TANK);
     private final FoundationHook hookServo = new FoundationHook(ChassisName.TANK);
     private final SkystoneIntake intake = new SkystoneIntake(ChassisName.TANK);
-    private final IMURevHub imu = new IMURevHub(ChassisName.TANK);
-    private final Encoders encoders = new Encoders(ChassisName.TANK);
     private final Navigation navigation = new Navigation(ChassisName.TANK);
-
+    private final IMURevHub imu = new IMURevHub(ChassisName.TANK);
     //Use this class to test new methods and anything else for auto
-
-    PIDController pidController;
 
     public void runOpMode() {
         wheels.initializeWheels(this);
         intake.initializeIntake(this);
         hookServo.initializeHook(this);
-        imu.initializeIMU(wheels,this);
-        encoders.initialize(wheels, this);
-        navigation.initialize(wheels, imu, encoders, this);
+        navigation.initialize(wheels, this);
 
         wheels.setZeroPowerBrakeBehavior();
         waitForStart();
@@ -47,6 +41,8 @@ public class TankAutonomousTester extends LinearOpMode {
 
     protected void executeAutonomousLogic() {
         navigation.NavigateStraightTicks(telemetry, .5, 0,2000);
+        //imu.rotate(-90,.3,0.1,this);
+        //navigation.NavigateCrabTicks(telemetry, 0.6,0.3,2000);
         wheels.sleepAndCheckActive(20000);
 
 

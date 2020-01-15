@@ -17,6 +17,8 @@ public class IMURevHub {
 
     ChassisName chassis;
 
+    OpMode opMode;
+
     public IMURevHub(ChassisName name) {
         chassis = name;
     }
@@ -34,6 +36,7 @@ public class IMURevHub {
 
     public void initializeIMU (MecanumWheels wheels,OpMode opMode) {
         this.wheels=wheels;
+        this.opMode = opMode;
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.mode                = BNO055IMU.SensorMode.IMU;
@@ -134,7 +137,7 @@ public class IMURevHub {
         return correction;
     }
 
-    public void rotate(int degrees, double motorPower, double minMotorPower, LinearOpMode linearOpMode)
+    public void rotate(double degrees, double motorPower, double minMotorPower, LinearOpMode linearOpMode)
     {
         double distance = Math.abs(degrees - getAngle());
         double calcedPower=wheels.calculateProportionalMotorPower(0.0015,distance, motorPower, minMotorPower);
@@ -146,6 +149,7 @@ public class IMURevHub {
         // getAngle() returns + when rotating counter clockwise (left) and - when rotating
         // clockwise (right).
 
+        /*
         if (degrees < 0)
         {   // turn right.
             leftPower = calcedPower;
@@ -158,9 +162,7 @@ public class IMURevHub {
         }
         else return;
 
-        /*
         // set power to rotate.
-        wheels.setPower(rightPower, leftPower, rightPower, leftPower);
         leftMotor.setPower(leftPower);
         rightMotor.setPower(rightPower);
          */
@@ -186,8 +188,6 @@ public class IMURevHub {
                 distance = Math.abs(degrees - getAngle());
                 calcedPower=wheels.calculateProportionalMotorPower(0.0015,distance, motorPower, minMotorPower);
                 wheels.setPowerFromGamepad(false, calcedPower, -1, 0, 0);
-                leftMotor.setPower(calcedPower);
-                rightMotor.setPower(-calcedPower);
             }
 
 

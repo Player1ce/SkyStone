@@ -25,15 +25,11 @@ public class GoBildaIMUAuto extends LinearOpMode {
     private final Camera camera = new Camera();
     private final Navigation navigation = new Navigation(ChassisName.GOBILDA);
     private final IMURevHub imu = new IMURevHub(ChassisName.GOBILDA);
-    private final PIDController pidController = new PIDController(.0125,0.001,0.001);
-    private final Encoders encoders = new Encoders(ChassisName.GOBILDA);
-
 
     public void runOpMode() throws InterruptedException {
         mecanumWheels.initializeWheels(this);
         camera.initializeCamera(this);
-        navigation.initialize(mecanumWheels, imu, encoders, this);
-        imu.initializeIMU(mecanumWheels, this);
+        navigation.initialize(mecanumWheels, this);
 
         // If possible, turn the light on in the beginning (it might already be on anyway,
         // we just make sure it is if we can).
