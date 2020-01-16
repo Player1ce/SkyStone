@@ -14,15 +14,17 @@ public class Navigation {
     public Navigation(ChassisName chassisName) {
         this.chassis = chassisName;
     }
+    private PIDController rotationPidController = new PIDController(0.0125, 0.001,0.001);
+    private PIDController yPidController = new PIDController(0.15, 0.001,0.001);
+    private PIDController xPidController = new PIDController(0.15, 0.001,0.001);
 
-    PIDController pidController = new PIDController(0.125, 0.001,0.001);
     Encoders encoders = new Encoders(chassis);
     IMURevHub imu = new IMURevHub(chassis);
     private MecanumWheels wheels;
 
     double angle;
     long time = 0;
-    double maxCorrectionPower = 0.1;
+    double maxRotationCorrectionPower = 0.1;
 
     Orientation startOrientation;
 
@@ -35,27 +37,38 @@ public class Navigation {
     }
 
 
-    public void setPIDValues(double KP, double KI, double KD) {
-        pidController.setKP(KP);
-        pidController.setKI(KI);
-        pidController.setKD(KD);
+    public void setPIDValues( PIDController pid, double KP, double KI, double KD) {
+        pid.setKP(KP);
+        pid.setKI(KI);
+        pid.setKD(KD);
     }
 
 
-    public void setMaxCorrectionPower (double power) { maxCorrectionPower = power; }
+    public void setRotationMaxCorrectionPower (double power) { maxRotationCorrectionPower = power; }
 
+
+    public double calculateCorrectionPower (PIDController pid, double error, double maxMotorPower, double minMotorPower) {
+        double power;
+        double outputPower;
+        pid.input(error);
+        outputPower = pid.output();
+        power = Math.max(minMotorPower, outputPower);
+        outputPower = Math.min(maxMotorPower, power);
+        return outputPower;
+    }
 
     public void NavigateStraightTicks (Telemetry telemetry, double MotorPower,
                                         double MinMotorPower, double ticks) {
         //imu----------------------------------------------------------------------------------------------
-        pidController.setMaxErrorForIntegral(0.002);
+        rotationPidController.setMaxErrorForIntegral(0.002);
         long curTime;
         long diff;
         startOrientation = imu.getOrientation();
-        setMaxCorrectionPower(MotorPower - 0.1);
+        setRotationMaxCorrectionPower(MotorPower - 0.1);
         double correctionPower;
         double rightCorrect = 0;
         double leftCorrect = 0;
+
 
         //encoders---------------------------------------------------------------------------------------------
         encoders.resetPosition();
@@ -69,10 +82,10 @@ public class Navigation {
 
             //imu---------------------------------------------------------------------------------------------
             angle = imu.getAngleWithStart(startOrientation);
-            pidController.input(angle);
+            rotationPidController.input(angle);
 
-            correctionPower = Math.abs(pidController.output());
-            correctionPower = Math.max(-maxCorrectionPower, Math.min(maxCorrectionPower, correctionPower));
+            correctionPower = Math.abs(rotationPidController.output());
+            correctionPower = Math.max(-maxRotationCorrectionPower, Math.min(maxRotationCorrectionPower, correctionPower));
 
             if (angle < 0) {
                 rightCorrect = -1 * correctionPower;//-.025;
@@ -91,6 +104,10 @@ public class Navigation {
             double distanceY = Math.abs(encoders.getY() - encoders.yTarget);
             double powerX = MecanumWheels.calculateProportionalMotorPower(0.0015, distanceX, MotorPower, Math.max(MinMotorPower, .3));
             double powerY = MecanumWheels.calculateProportionalMotorPower(0.0015, distanceY, MotorPower, MinMotorPower);
+            //TODO: Check this -------------------------------------------------
+            powerX = calculateCorrectionPower(xPidController, distanceX, MotorPower, MinMotorPower);
+            powerY = calculateCorrectionPower(yPidController, distanceY, MotorPower, MinMotorPower);
+
             double yDirection = encoders.getYDirection();
             double xDirection = encoders.getXDirection();
 
@@ -128,7 +145,7 @@ public class Navigation {
         long curTime;
         long diff;
         startOrientation = imu.getOrientation();
-        setMaxCorrectionPower(MotorPower - 0.1);
+        setRotationMaxCorrectionPower(MotorPower - 0.1);
         double correctionPower;
         double rightCorrect = 0;
         double leftCorrect = 0;
@@ -145,10 +162,10 @@ public class Navigation {
 
             //imu---------------------------------------------------------------------------------------------
             angle = imu.getAngleWithStart(startOrientation);
-            pidController.input(angle);
+            rotationPidController.input(angle);
 
-            correctionPower = Math.abs(pidController.output());
-            correctionPower = Math.max(-maxCorrectionPower, Math.min(maxCorrectionPower, correctionPower));
+            correctionPower = Math.abs(rotationPidController.output());
+            correctionPower = Math.max(-maxRotationCorrectionPower, Math.min(maxRotationCorrectionPower, correctionPower));
 
             if (angle < 0) {
                 rightCorrect = -1 * correctionPower;//-.025;
@@ -207,11 +224,11 @@ public class Navigation {
 
             angle = imu.getAngleWithStart(startOrientation);
 
-            pidController.input(angle);
+            rotationPidController.input(angle);
 
-            correctionPower = Math.abs(pidController.output());
+            correctionPower = Math.abs(rotationPidController.output());
 
-            correctionPower = Math.max(-maxCorrectionPower, Math.min(maxCorrectionPower, correctionPower));
+            correctionPower = Math.max(-maxRotationCorrectionPower, Math.min(maxRotationCorrectionPower, correctionPower));
 
 
             double rightCorrect = 0;
