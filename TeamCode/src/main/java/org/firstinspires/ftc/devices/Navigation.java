@@ -102,11 +102,11 @@ public class Navigation {
             //encoders---------------------------------------------------------------------------------------------
             double distanceX = Math.abs(encoders.getX() - encoders.xTarget);
             double distanceY = Math.abs(encoders.getY() - encoders.yTarget);
-            double powerX = MecanumWheels.calculateProportionalMotorPower(0.0015, distanceX, MotorPower, Math.max(MinMotorPower, .3));
-            double powerY = MecanumWheels.calculateProportionalMotorPower(0.0015, distanceY, MotorPower, MinMotorPower);
-            //TODO: Check this -------------------------------------------------
-            powerX = calculateCorrectionPower(xPidController, distanceX, MotorPower, MinMotorPower);
-            powerY = calculateCorrectionPower(yPidController, distanceY, MotorPower, MinMotorPower);
+            //double powerX = MecanumWheels.calculateProportionalMotorPower(0.0015, distanceX, MotorPower, Math.max(MinMotorPower, .3));
+            //double powerY = MecanumWheels.calculateProportionalMotorPower(0.0015, distanceY, MotorPower, MinMotorPower);
+            //TODO: Check this ---------------------------------------------------------------------------------------------
+            double powerX = calculateCorrectionPower(xPidController, distanceX, MotorPower, MinMotorPower);
+            double powerY = calculateCorrectionPower(yPidController, distanceY, MotorPower, MinMotorPower);
 
             double yDirection = encoders.getYDirection();
             double xDirection = encoders.getXDirection();
@@ -182,17 +182,22 @@ public class Navigation {
             //encoders---------------------------------------------------------------------------------------------
             double distanceX = Math.abs(encoders.getX() - encoders.xTarget);
             double distanceY = Math.abs(encoders.getY() - encoders.yTarget);
-            double powerX = MecanumWheels.calculateProportionalMotorPower(0.0015, distanceX, MotorPower, Math.max(MinMotorPower, .3));
-            double powerY = MecanumWheels.calculateProportionalMotorPower(0.0015, distanceY, MotorPower, MinMotorPower);
+            //double powerX = MecanumWheels.calculateProportionalMotorPower(0.0015, distanceX, MotorPower, Math.max(MinMotorPower, .3));
+            //double powerY = MecanumWheels.calculateProportionalMotorPower(0.0015, distanceY, MotorPower, MinMotorPower);
+            //TODO: Check this ---------------------------------------------------------------------------------------------
+            double powerX = calculateCorrectionPower(xPidController, distanceX, MotorPower, MinMotorPower);
+            double powerY = calculateCorrectionPower(yPidController, distanceY, MotorPower, MinMotorPower);
+
+
             double yDirection = encoders.getYDirection();
             double xDirection = encoders.getXDirection();
 
             //set power---------------------------------------------------------------------------------------------
             wheels.setPower(
-                    (powerY * yDirection) -(powerX * 0.4 * xDirection) + rightCorrect,
-                    (powerY * yDirection) + (powerX * 0.4 * xDirection) + leftCorrect,
-                    (powerY * yDirection) + (powerX * 0.4 * xDirection) - rightCorrect,
-                    (powerY * yDirection) - (powerX * 0.4 * xDirection) - leftCorrect
+                    (powerY * 0.4 * yDirection) -(powerX * xDirection) + rightCorrect,
+                    (powerY * 0.4 * yDirection) + (powerX * xDirection) + leftCorrect,
+                    (powerY * 0.4* yDirection) + (powerX * xDirection) - rightCorrect,
+                    (powerY  * 0.4* yDirection) - (powerX * xDirection) - leftCorrect
             );
 
             telemetry.addData("X position:", encoders.getX());
