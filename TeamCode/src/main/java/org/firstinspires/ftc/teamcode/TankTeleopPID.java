@@ -53,7 +53,7 @@ public class TankTeleopPID extends OpMode {
         //  intake.initializeIntake(this);
         //  encoders.initialize(mecanumWheels, this);
         //imu.initializeIMU(mecanumWheels,this);
-        navigation.initialize(mecanumWheels, this);
+        navigation.initialize(mecanumWheels, imu, this);
 
         //CRAB: pidController=new PIDController(.0125,0.001,0.001);
         pidController=new PIDController(.0125,0.001,0.001);

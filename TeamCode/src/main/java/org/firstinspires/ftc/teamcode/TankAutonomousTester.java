@@ -28,7 +28,8 @@ public class TankAutonomousTester extends LinearOpMode {
         wheels.initializeWheels(this);
         intake.initializeIntake(this);
         hookServo.initializeHook(this);
-        navigation.initialize(wheels, this);
+        imu.initializeIMU(wheels, this);
+        navigation.initialize(wheels, imu, this);
 
         wheels.setZeroPowerBrakeBehavior();
         waitForStart();
@@ -40,9 +41,10 @@ public class TankAutonomousTester extends LinearOpMode {
     }
 
     protected void executeAutonomousLogic() {
-        navigation.NavigateStraightTicks(telemetry, .5, 0,2000);
-        //imu.rotate(-90,.3,0.1,this);
-        //navigation.NavigateCrabTicks(telemetry, 0.6,0.3,2000);
+        navigation.NavigateStraightTicks(telemetry, .5, 0.1,2000);
+        wheels.sleepAndCheckActive(3000);
+        imu.rotate(-90,.4,0.2,this);
+        navigation.NavigateCrabTicks(telemetry, 0.6,0.3,2000);
         wheels.sleepAndCheckActive(20000);
 
 

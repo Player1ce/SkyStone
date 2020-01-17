@@ -15,11 +15,11 @@ public class Navigation {
         this.chassis = chassisName;
     }
     private PIDController rotationPidController = new PIDController(0.0125, 0.001,0.001);
-    private PIDController yPidController = new PIDController(0.15, 0.001,0.001);
-    private PIDController xPidController = new PIDController(0.15, 0.001,0.001);
+    private PIDController yPidController = new PIDController(0.15, 10,10);
+    private PIDController xPidController = new PIDController(0.15, 0.001,0.01);
 
     Encoders encoders = new Encoders(chassis);
-    IMURevHub imu = new IMURevHub(chassis);
+    IMURevHub imu;
     private MecanumWheels wheels;
 
     double angle;
@@ -30,9 +30,9 @@ public class Navigation {
 
 
 
-    public void initialize(MecanumWheels wheels, OpMode opMode) {
+    public void initialize(MecanumWheels wheels, IMURevHub imu, OpMode opMode) {
         this.wheels = wheels;
-        imu.initializeIMU(wheels, opMode);
+        this.imu = imu;
         encoders.initialize(wheels, opMode);
     }
 
@@ -48,13 +48,63 @@ public class Navigation {
 
 
     public double calculateCorrectionPower (PIDController pid, double error, double maxMotorPower, double minMotorPower) {
-        double power;
         double outputPower;
         pid.input(error);
-        outputPower = pid.output();
-        power = Math.max(minMotorPower, outputPower);
-        outputPower = Math.min(maxMotorPower, power);
+        outputPower = Math.abs(pid.output());
+        outputPower = Math.max(minMotorPower, outputPower);
+        outputPower = Math.min(maxMotorPower, outputPower);
         return outputPower;
+    }
+
+    public void rotate (Telemetry telemetry, double degrees) {
+        long curTime;
+        long diff;
+        double correctionPower;
+        startOrientation = imu.getOrientation();
+        double startTime = System.currentTimeMillis();
+        while ( Math.abs(startOrientation.firstAngle + degrees) > Math.abs(imu.getAngle()) ) {
+            wheels.checkIsActive();
+
+            angle = imu.getAngleWithStart(startOrientation);
+
+            rotationPidController.input(angle);
+
+            correctionPower = Math.abs(rotationPidController.output());
+
+            correctionPower = Math.max(-maxRotationCorrectionPower, Math.min(maxRotationCorrectionPower, correctionPower));
+
+
+            double rightCorrect = 0;
+            double leftCorrect = 0;
+
+            curTime = System.currentTimeMillis();
+
+            diff = curTime - time;
+
+            time = curTime;
+
+            if (angle < 0) {
+                rightCorrect = -1 * correctionPower;//-.025;
+                leftCorrect = correctionPower;//.025;
+            } else if (angle > 0) {
+                rightCorrect = correctionPower;//.025;
+                leftCorrect = -1 * correctionPower;//-.025;
+            }
+
+            wheels.setPower( rightCorrect, leftCorrect, rightCorrect, leftCorrect);
+
+            telemetry.addData("Correction power:", correctionPower);
+            telemetry.addData("Right Correct:", rightCorrect);
+            telemetry.addData("Left Correct:", leftCorrect);
+            telemetry.addData("Angle", angle);
+            telemetry.addData("Time(ms)", diff);
+            telemetry.update();
+
+        }
+        wheels.StopMotors();
+        wheels.sleepAndCheckActive(500);
+
+
     }
 
     public void NavigateStraightTicks (Telemetry telemetry, double MotorPower,
@@ -77,7 +127,9 @@ public class Navigation {
         encoders.setyTarget(ticks);
         double currentX = encoders.getX();
 
-        while (Math.abs(encoders.getY()) < Math.abs(encoders.yTarget) || Math.abs(encoders.getX()) < Math.abs(encoders.xTarget + 10)) {
+        double dest=Math.abs(encoders.yTarget)-5;
+
+        while (Math.abs(encoders.getY()) < dest ) {
             wheels.checkIsActive();
 
             //imu---------------------------------------------------------------------------------------------
@@ -122,6 +174,8 @@ public class Navigation {
 
             telemetry.addData("X position:", encoders.getX());
             telemetry.addData("Y position:", encoders.getY());
+            telemetry.addData("distance y:", distanceY);
+            telemetry.addData("distance x:", distanceX);
             telemetry.addData("x Power:", (powerX * 0.4 * xDirection));
             telemetry.addData("y power", (powerY * yDirection));
             telemetry.addData("Correction power:", correctionPower);

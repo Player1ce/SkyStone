@@ -29,7 +29,7 @@ public class GoBildaIMUAuto extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         mecanumWheels.initializeWheels(this);
         camera.initializeCamera(this);
-        navigation.initialize(mecanumWheels, this);
+        navigation.initialize(mecanumWheels, imu, this);
 
         // If possible, turn the light on in the beginning (it might already be on anyway,
         // we just make sure it is if we can).
