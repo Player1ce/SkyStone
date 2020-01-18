@@ -41,11 +41,15 @@ public class TankAutonomousTester extends LinearOpMode {
     }
 
     protected void executeAutonomousLogic() {
-        navigation.NavigateStraightTicks(telemetry, .5, 0.1,2000);
-        wheels.sleepAndCheckActive(3000);
-        imu.rotate(-90,.4,0.2,this);
-        navigation.NavigateCrabTicks(telemetry, 0.6,0.3,2000);
-        wheels.sleepAndCheckActive(20000);
+        //wheels.setPowerFromGamepad(false, 0.5,0,-1,0);
+        //wheels.sleepAndCheckActive(10000);
+        //navigation.NavigateCrabTicks(telemetry,0.5,0.3,2000);
+        navigation.NavigateStraightTicks(telemetry, .5, .1, 1000);
+        //navigation.NavigateStraightTicks(telemetry, .5, 0.1,2000);
+        //wheels.sleepAndCheckActive(3000);
+        //imu.rotate(-90,.4,0.2,this);
+        //navigation.NavigateCrabTicks(telemetry, 0.6,0.3,2000);
+        //wheels.sleepAndCheckActive(20000);
 
 
     }

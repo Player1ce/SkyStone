@@ -66,8 +66,8 @@ public class Encoders {
 
         wheels.sleepAndCheckActive(50);
 
-        xEncoder.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        yEncoder.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        xEncoder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        yEncoder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public void ForwardMoveInches(Telemetry telemetry, double motorPower, double Inches) {

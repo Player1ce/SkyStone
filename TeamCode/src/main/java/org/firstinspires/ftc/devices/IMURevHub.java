@@ -63,7 +63,7 @@ public class IMURevHub {
         opMode.telemetry.update();
     }
 
-    private void resetAngle()
+    public void resetAngle()
     {
         lastAngles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 

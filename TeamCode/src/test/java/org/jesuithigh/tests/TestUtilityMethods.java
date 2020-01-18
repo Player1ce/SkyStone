@@ -63,24 +63,18 @@ public class TestUtilityMethods {
         Assert.assertFalse(buttonLogic.isPressed(false));
     }
 
-
     @Test
-    public void testGetOutput() {
-        PIDController pidController = new PIDController(0.125,0.1,0.1);
-        pidController.setMaxErrorForIntegral(0.002);
-        IMURevHub imu = new IMURevHub(ChassisName.TANK);
-        Navigation navigation = new Navigation(ChassisName.TANK);
-        Orientation startOrientation;
-
-        pidController.input(50);
-        System.out.println(navigation.getOutput());
-        System.out.println(pidController.output());
-
-
-        Assert.assertTrue(pidController.output() == navigation.getOutput());
+    public void testPIDvsProportional () {
+        MecanumWheels wheels = new MecanumWheels(ChassisName.TANK);
+        PIDController pid = new PIDController(0.0015, 0, 0);
+        pid.input(30);
+        Assert.assertTrue(wheels.calculateProportionalMotorPower(0.0015, 30, .4,.2) > Math.abs(pid.output()));
+        //pid.input(30);
+        //Assert.assertTrue();
+        //pid.input(90);
+        //Assert.assertTrue();
 
 
     }
-
 
 }
