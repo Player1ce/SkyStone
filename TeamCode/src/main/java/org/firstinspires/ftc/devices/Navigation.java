@@ -118,7 +118,6 @@ public class Navigation {
         double rightCorrect = 0;
         double leftCorrect = 0;
 
-
         //encoders---------------------------------------------------------------------------------------------
         encoders.resetPosition();
         //encoders.setyTarget((Inches * 4)/.0699);
@@ -154,6 +153,8 @@ public class Navigation {
             time = curTime;
 
             //encoders---------------------------------------------------------------------------------------------
+            //double distanceX = Math.abs(encoders.getX() - encoders.xTarget);
+            //double distanceY = Math.abs(encoders.getY() - encoders.yTarget);
             double distanceX = encoders.xTarget - encoders.getX();
             double distanceY = encoders.yTarget - encoders.getY();
             //double powerX = MecanumWheels.calculateProportionalMotorPower(0.0015, distanceX, MotorPower, Math.max(MinMotorPower, .3));
@@ -161,7 +162,6 @@ public class Navigation {
             //TODO: Check this ---------------------------------------------------------------------------------------------
             double powerX = calculateCorrectionPower(xPidController, distanceX, MotorPower, MinMotorPower);
             double powerY = calculateCorrectionPower(yPidController, distanceY, MotorPower, MinMotorPower);
-
             double yDirection = encoders.getYDirection();
             double xDirection = encoders.getXDirection();
 
@@ -266,20 +266,12 @@ public class Navigation {
             }
 */
             //set power---------------------------------------------------------------------------------------------
-            //wheels.setPower(-powerX, powerX, powerX, -powerX);
-            wheels.setPower((-powerX) + (rightCorrect),
-                    (powerX) + (leftCorrect),
-                    (powerX) + (leftCorrect),
-                    (-powerX) + (rightCorrect));
-
-            /*wheels.setPower(
-                    ((powerY * 0.4 * 0) - - + rightCorrect *0),
-                    ((powerY * 0.4 *0) + -.5 + leftCorrect *0),
-                    ((powerY * 0.4 *0) + -.5 + rightCorrect *0),
-                    ((powerY * 0.4 *0) - -.5 + leftCorrect *0)
+            wheels.setPower(
+                    (powerY * 0.4) -(powerX) + rightCorrect,
+                    (powerY * 0.4) + (powerX) + leftCorrect,
+                    (powerY * 0.4) + (powerX) - rightCorrect,
+                    (powerY  * 0.4) - (powerX) - leftCorrect
             );
-
-             */
 
             telemetry.addData("X position:", encoders.getX());
             telemetry.addData("Y position:", encoders.getY());
