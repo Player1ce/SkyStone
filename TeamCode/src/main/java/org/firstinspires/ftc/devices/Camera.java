@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.devices;
 
-import android.graphics.Path;
-
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
@@ -60,7 +58,7 @@ public class Camera {
         parameters.cameraName = webcamName;
 
         //  Instantiate the Vuforia engine
-        vuforia = ClassFactory.getInstance().createVuforia(parameters);
+        vuforia = org.firstinspires.ftc.robotcore.external.ClassFactory.getInstance().createVuforia(parameters);
     }
 
     private void initTfod(OpMode opMode) {
@@ -69,7 +67,7 @@ public class Camera {
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
         //The minimum accuracy rate to detect a block
         tfodParameters.minimumConfidence = 0.8;
-        tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
+        tfod = org.firstinspires.ftc.robotcore.external.ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
     }
 
