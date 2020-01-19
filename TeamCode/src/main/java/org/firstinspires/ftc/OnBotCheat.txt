@@ -1,0 +1,56 @@
+USAGE:
+    ftc_http_win.exe [FLAGS] [OPTIONS] [DIRS]...
+
+FLAGS:
+    -b, --build
+            Builds the code on the robot controller.
+
+            Initiates a build on the robot controller and reports the build status and any errors back to the user.
+    -d, --download
+            Download .java files from the robot controller.
+
+            Source files are saved to the location specified in DIRS. This defaults to the current directory.
+
+            Files on the local computer are never deleted by ftc_http, though old files with the same name are
+            overwritten. Be sure to save to a fresh location if you don't want to risk overwriting old source files.
+    -h, --help
+            Prints help information
+
+        --restore-defaults
+            Reset the host and timeout values to their defaults.
+
+            This deletes any custom values that have been automatically remembered.
+    -u, --upload
+            Uploads .java files to the robot controller.
+
+Uploads files from the location specified in DIRS. Defaults to the current directory. Source files are recursively located by their .java extension.
+
+    -V, --version
+            Prints version information
+
+    -w, --wipe
+            Wipes all files from the robot controller.
+
+            Using this option ensures that files deleted on the local machine are also deleted on the robot controller.
+            Be cautious and make a backup with the -d option before wiping anything.
+
+OPTIONS:
+        --host <ADDR>
+            Manually specify the address of the robot controller.
+
+            Addresses are given in the form: "http://<IP>:<PORT>"
+        --timeout-ms <DELAY>
+            Manually specify the connection timeout.
+
+            Wait at least this long before declaring a robot controller offline (given in milliseconds).
+
+ARGS:
+    <DIRS>...
+            A list of directories used by the download and upload options.
+
+            Between 0 and 2 directories can be specified. When -d and -u are used together, the first directory is
+            where files are downloaded and the second is where they are uploaded from.
+
+
+org dir home: ‘Program Files/SKystone_PC_2/SkyStone/TeamCode/src/main/java/org’
+must download from this dir home: ‘D:\Program Files\SKystone_PC_2\SkyStone\TeamCode\src\main\java’
