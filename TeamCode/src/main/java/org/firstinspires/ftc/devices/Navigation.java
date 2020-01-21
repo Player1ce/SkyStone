@@ -173,10 +173,10 @@ public class Navigation {
 
             //set power---------------------------------------------------------------------------------------------
             wheels.setPower(
-                    (powerY) -(powerX * .55 * xDirection) + rightCorrect,
-                    (powerY) + (powerX * .55 *xDirection) + leftCorrect,
-                    (powerY) + (powerX * .55 *  xDirection),
-                    (powerY) - (powerX  * .55 * xDirection)
+                    (powerY) -(powerX * .7 * xDirection) + rightCorrect,
+                    (powerY) + (powerX * .7 *xDirection) + leftCorrect,
+                    (powerY) + (powerX * .7 *  xDirection),
+                    (powerY) - (powerX  * .7 * xDirection)
             );
 
             telemetry.addData("X position:", encoders.getX());
