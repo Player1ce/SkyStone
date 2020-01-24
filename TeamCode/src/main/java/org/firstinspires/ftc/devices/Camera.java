@@ -6,6 +6,7 @@ import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.Parameters;
 
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
 
@@ -58,7 +59,7 @@ public class Camera {
         parameters.cameraName = webcamName;
 
         //  Instantiate the Vuforia engine
-        vuforia = org.firstinspires.ftc.robotcore.external.ClassFactory.getInstance().createVuforia(parameters);
+        vuforia = ClassFactory.getInstance().createVuforia(parameters);
     }
 
     private void initTfod(OpMode opMode) {
@@ -67,7 +68,7 @@ public class Camera {
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
         //The minimum accuracy rate to detect a block
         tfodParameters.minimumConfidence = 0.8;
-        tfod = org.firstinspires.ftc.robotcore.external.ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
+        tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
     }
 
