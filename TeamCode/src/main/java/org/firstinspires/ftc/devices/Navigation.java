@@ -219,9 +219,9 @@ public class Navigation {
         encoders.setyTarget(0);
         encoders.setxTarget(ticks);
 
-        //setPIDValues(rotationPidController, .0125, 0.001, .001);
-        //setPIDValues(yPidController, .15, 0.001, 0.001);
-        //setPIDValues(xPidController, .15, .001, .001);
+        setPIDValues(rotationPidController, .015, 0.001, .001);
+        setPIDValues(yPidController, .15, 0.001, 0.001);
+        setPIDValues(xPidController, .15, .001, .001);
 
 
         while (Math.abs(encoders.getX()) < Math.abs(encoders.xTarget)) {
@@ -232,6 +232,7 @@ public class Navigation {
             rotationPidController.input(angle);
 
             correctionPower = Math.abs(rotationPidController.output());
+            correctionPower = Math.max(correctionPower, .2);
             correctionPower = Math.max(-maxRotationCorrectionPower, Math.min(maxRotationCorrectionPower, correctionPower));
 
             if (angle < 0) {
@@ -253,7 +254,7 @@ public class Navigation {
             //double distanceY = encoders.yTarget - encoders.getY();
 
             //double powerX = MecanumWheels.calculateProportionalMotorPower(0.0015, distanceX, MotorPower, Math.max(MinMotorPower, .3));
-            double powerY = MecanumWheels.calculateProportionalMotorPower(0.0015, distanceY, MotorPower, MinMotorPower);
+            double powerY = MecanumWheels.calculateProportionalMotorPower(0.0015, distanceY, maxRotationCorrectionPower, MinMotorPower);
             //TODO: Check this ---------------------------------------------------------------------------------------------
             double powerX = calculateCorrectionPower(xPidController, distanceX, MotorPower, MinMotorPower);
             //double powerY = calculateCorrectionPower(yPidController, distanceY, MotorPower, MinMotorPower);
@@ -269,10 +270,10 @@ public class Navigation {
 */
             //set power---------------------------------------------------------------------------------------------
             wheels.setPower(
-                    (powerY * 0.4 * yDirection) -(powerX ) + rightCorrect,
-                    (powerY * 0.4 * yDirection) + (powerX ) + leftCorrect,
-                    (powerY * 0.4 * yDirection) + (powerX) - rightCorrect,
-                    (powerY  * 0.4 * yDirection) - (powerX) - leftCorrect
+                    (powerY * 0.7 * yDirection * 0) +(powerX * 0) + rightCorrect,
+                    (powerY * 0.7 * yDirection * 0) - (powerX * 0) + leftCorrect,
+                    (powerY * 0.7 * yDirection * 0) - (powerX * 0) + rightCorrect,
+                    (powerY  * 0.7 * yDirection * 0) + (powerX * 0) + leftCorrect
             );
 
             telemetry.addData("X position:", encoders.getX());
