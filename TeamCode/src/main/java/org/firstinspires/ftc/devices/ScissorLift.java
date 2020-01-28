@@ -7,7 +7,7 @@ import org.firstinspires.ftc.logic.ChassisName;
 
 public class ScissorLift {
     ChassisName chassis;
-    DcMotor liftMotor;
+    public DcMotor liftMotor;
 
     public void ScissorLift(ChassisName name) {
         chassis = name;
@@ -15,7 +15,8 @@ public class ScissorLift {
 
     public void initialize(OpMode opMode) {
         liftMotor = opMode.hardwareMap.dcMotor.get("liftMotor");
-        liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        //liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        liftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
 
