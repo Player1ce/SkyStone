@@ -9,7 +9,7 @@ import org.firstinspires.ftc.devices.Encoders;
 import org.firstinspires.ftc.devices.FoundationHook;
 import org.firstinspires.ftc.devices.IMURevHub;
 import org.firstinspires.ftc.devices.MecanumWheels;
-import org.firstinspires.ftc.devices.Navigation;
+import org.firstinspires.ftc.logic.Navigation;
 import org.firstinspires.ftc.devices.SkystoneIntake;
 import org.firstinspires.ftc.logic.ButtonOneShot;
 import org.firstinspires.ftc.logic.ChassisName;

@@ -1,10 +1,13 @@
-package org.firstinspires.ftc.devices;
+package org.firstinspires.ftc.logic;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.Controller.PIDController;
+import org.firstinspires.ftc.devices.Encoders;
+import org.firstinspires.ftc.devices.IMURevHub;
+import org.firstinspires.ftc.devices.MecanumWheels;
 import org.firstinspires.ftc.logic.ChassisName;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
@@ -222,9 +225,10 @@ public class Navigation {
         setPIDValues(rotationPidController, .015, 0.001, .001);
         setPIDValues(yPidController, .15, 0.001, 0.001);
         setPIDValues(xPidController, .15, .001, .001);
+        double distanceX = Math.abs(encoders.xTarget) - Math.abs(encoders.getX());
 
 
-        while (Math.abs(encoders.getX()) < Math.abs(encoders.xTarget)) {
+        while (distanceX > 0) {
             wheels.checkIsActive();
 
             //imu---------------------------------------------------------------------------------------------
@@ -250,7 +254,7 @@ public class Navigation {
             //encoders---------------------------------------------------------------------------------------------
             //double distanceX = Math.abs(encoders.getX() - encoders.xTarget);
             double distanceY = Math.abs(encoders.getY() - encoders.yTarget);
-            double distanceX = encoders.xTarget - encoders.getX();
+            distanceX = encoders.xTarget - encoders.getX();
             //double distanceY = encoders.yTarget - encoders.getY();
 
             //double powerX = MecanumWheels.calculateProportionalMotorPower(0.0015, distanceX, MotorPower, Math.max(MinMotorPower, .3));
@@ -270,10 +274,10 @@ public class Navigation {
 */
             //set power---------------------------------------------------------------------------------------------
             wheels.setPower(
-                    (powerY * 0.7 * yDirection * 0) +(powerX * 0) + rightCorrect,
-                    (powerY * 0.7 * yDirection * 0) - (powerX * 0) + leftCorrect,
-                    (powerY * 0.7 * yDirection * 0) - (powerX * 0) + rightCorrect,
-                    (powerY  * 0.7 * yDirection * 0) + (powerX * 0) + leftCorrect
+                    (powerY * 0.7 * yDirection * 0) +(powerX) + rightCorrect * 0,
+                    (powerY * 0.7 * yDirection * 0) - (powerX) + leftCorrect * 0,
+                    (powerY * 0.7 * yDirection * 0) - (powerX) + rightCorrect * 0,
+                    (powerY  * 0.7 * yDirection * 0) + (powerX) + leftCorrect * 0
             );
 
             telemetry.addData("X position:", encoders.getX());
