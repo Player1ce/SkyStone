@@ -16,16 +16,15 @@ import org.firstinspires.ftc.devices.MecanumWheels;
 import org.firstinspires.ftc.devices.SkystoneIntake;
 import org.firstinspires.ftc.logic.KillOpModeException;
 
-@TeleOp(name="Tank TeleOp", group="Skystone")
+@TeleOp(name="lift Test", group="Skystone")
 //@Disabled
 public class LiftTest extends OpMode {
-    OpMode opMode;
     private final ScissorLift lift = new ScissorLift();
     private final ButtonOneShot liftControl = new ButtonOneShot();
     //Use this class to test new methods and anything else for auto
 
     public void init() {
-        lift.initialize(opMode);
+        lift.initialize(this);
 
 
     }
@@ -35,7 +34,7 @@ public class LiftTest extends OpMode {
             lift.liftMotor.setPower(1);
         }
         else if (gamepad2.right_trigger > 0) {
-            lift.liftMotor.setPower(1);
+            lift.liftMotor.setPower(-1);
         }
         else {
             lift.liftMotor.setPower(0);
