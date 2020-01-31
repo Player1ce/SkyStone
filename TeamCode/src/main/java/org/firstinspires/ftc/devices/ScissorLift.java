@@ -3,6 +3,7 @@ package org.firstinspires.ftc.devices;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.logic.BasicPositions;
 import org.firstinspires.ftc.logic.ChassisName;
 
 public class ScissorLift {
@@ -32,6 +33,14 @@ public class ScissorLift {
     }
 
 
+    public void setPosition (BasicPositions position) {
+        if (position == BasicPositions.OPEN) {
+            liftMotor.setTargetPosition(0);
+        }
+        if (position == BasicPositions.CLOSED) {
+            liftMotor.setTargetPosition(0);
+        }
+    }
 
 
 }
