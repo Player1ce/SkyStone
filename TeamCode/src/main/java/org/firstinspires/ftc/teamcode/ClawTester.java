@@ -19,13 +19,13 @@ public class ClawTester extends OpMode {
     public void loop() {
         if (gamepad2.left_bumper) {
             if (rampPosition < 1) {
-                rampPosition = rampPosition + 0.003;
+                rampPosition = rampPosition + 0.001;
             }
             blockClaw.clawServo.setPosition(rampPosition);
         }
         if (gamepad2.right_bumper) {
             if (rampPosition > .0001) {
-                rampPosition = rampPosition - 0.003;
+                rampPosition = rampPosition - 0.001;
             }
             blockClaw.clawServo.setPosition(rampPosition);
         }
