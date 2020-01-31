@@ -133,7 +133,7 @@ public class Navigation {
         //setPIDValues(yPidController, 0.15, .001,.001);
         setPIDValues(xPidController, .8, .001, .001);
 
-        while (Math.abs(encoders.getY()) < dest ) {
+        while (Math.abs(encoders.getY()) < dest) {
             wheels.checkIsActive();
 
             //imu---------------------------------------------------------------------------------------------

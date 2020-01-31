@@ -14,7 +14,7 @@ public class BlockClaw {
     }
 
     public void initialize(OpMode opMode) {
-        clawServo = opMode.hardwareMap.servo.get("rampServo");
+        clawServo = opMode.hardwareMap.servo.get("blockClaw");
     }
 
 }
