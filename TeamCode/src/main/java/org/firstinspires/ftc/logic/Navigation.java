@@ -20,8 +20,8 @@ public class Navigation {
         this.chassis = chassisName;
     }
     private PIDController rotationPidController = new PIDController(0.0125, 0.001,0.001);
-    private PIDController yPidController = new PIDController(0.15, 10,10);
-    private PIDController xPidController = new PIDController(0.15, 0.001,0.01);
+    private PIDController yPidController = new PIDController(0.15, 0.001, 0.001);
+    private PIDController xPidController = new PIDController(0.15, 0.001,0.001);
 
     Encoders encoders = new Encoders(chassis);
     IMURevHub imu;
@@ -58,7 +58,11 @@ public class Navigation {
         outputPower = Math.abs(pid.output());
         outputPower = Math.max(minMotorPower, outputPower);
         outputPower = Math.min(maxMotorPower, outputPower);
-        return outputPower * (pid.output() / Math.abs(pid.output()));
+        if (error == 0) {
+            return 0;
+        } else {
+            return outputPower * (pid.output() / Math.abs(pid.output()));
+        }
     }
 
     public void rotate(double degrees, double motorPower, double minMotorPower, LinearOpMode linearOpMode)
@@ -129,9 +133,9 @@ public class Navigation {
 
         double dest=Math.abs(encoders.yTarget)-5;
 
-        //setPIDValues(rotationPidController, 0.0015, 0.001, 0.001);
-        //setPIDValues(yPidController, 0.15, .001,.001);
-        setPIDValues(xPidController, .8, .001, .001);
+        setPIDValues(rotationPidController, 0.0125, 0.001, 0.001);
+        setPIDValues(yPidController, 0.15, 0.001,0.001);
+        setPIDValues(xPidController, .00225, 0.001, 0.001);
 
         while (Math.abs(encoders.getY()) < dest) {
             wheels.checkIsActive();
@@ -156,14 +160,14 @@ public class Navigation {
             time = curTime;
 
             //encoders---------------------------------------------------------------------------------------------
-            double distanceX = Math.abs(encoders.getX() - encoders.xTarget);
+            //double distanceX = Math.abs(encoders.getX() - encoders.xTarget);
             //double distanceY = Math.abs(encoders.getY() - encoders.yTarget);
-            //double distanceX = encoders.xTarget - encoders.getX();
+            double distanceX = encoders.xTarget - encoders.getX();
             double distanceY = encoders.yTarget - encoders.getY();
-            double powerX = MecanumWheels.calculateProportionalMotorPower(0.0015, distanceX, MotorPower, Math.max(MinMotorPower, .3));
+            //double powerX = MecanumWheels.calculateProportionalMotorPower(0.0015, distanceX, MotorPower, Math.max(MinMotorPower, .3));
             //double powerY = MecanumWheels.calculateProportionalMotorPower(0.0015, distanceY, MotorPower, MinMotorPower);
             //TODO: Check this ---------------------------------------------------------------------------------------------
-            //double powerX = calculateCorrectionPower(xPidController, distanceX, MotorPower, MinMotorPower);
+            double powerX = calculateCorrectionPower(xPidController, distanceX * .03 ,   Math.max( .2, MotorPower - .4)  , 0.03);
             double powerY = calculateCorrectionPower(yPidController, distanceY, MotorPower, MinMotorPower);
             double yDirection = encoders.getYDirection();
             double xDirection = encoders.getXDirection();
@@ -175,11 +179,13 @@ public class Navigation {
  */
 
             //set power---------------------------------------------------------------------------------------------
+            xDirection = 1;
+            powerY = 0;
             wheels.setPower(
-                    (powerY) -(powerX * .7 * xDirection) + rightCorrect,
-                    (powerY) + (powerX * .7 *xDirection) + leftCorrect,
-                    (powerY) + (powerX * .7 *  xDirection),
-                    (powerY) - (powerX  * .7 * xDirection)
+                    (powerY) -(powerX * xDirection) + rightCorrect,
+                    (powerY) + (powerX *xDirection) + leftCorrect,
+                    (powerY) + (powerX * xDirection),
+                    (powerY) - (powerX * xDirection)
             );
 
             telemetry.addData("X position:", encoders.getX());
@@ -211,10 +217,11 @@ public class Navigation {
         long curTime;
         long diff;
         startOrientation = imu.getOrientation();
-        setRotationMaxCorrectionPower(MotorPower - 0.1);
+        setRotationMaxCorrectionPower(MotorPower - 0.2);
         double correctionPower;
         double rightCorrect = 0;
         double leftCorrect = 0;
+        double powerY = 0;
 
         //encoders---------------------------------------------------------------------------------------------
         encoders.resetPosition();
@@ -222,8 +229,8 @@ public class Navigation {
         encoders.setyTarget(0);
         encoders.setxTarget(ticks);
 
-        setPIDValues(rotationPidController, .015, 0.001, .001);
-        setPIDValues(yPidController, .15, 0.001, 0.001);
+        setPIDValues(rotationPidController, 0.00325, 0.001,0.001);
+        setPIDValues(yPidController, .00225, 0.001, 0.001);
         setPIDValues(xPidController, .15, .001, .001);
         double distanceX = Math.abs(encoders.xTarget) - Math.abs(encoders.getX());
 
@@ -233,11 +240,12 @@ public class Navigation {
 
             //imu---------------------------------------------------------------------------------------------
             angle = imu.getAngleWithStart(startOrientation);
+
             rotationPidController.input(angle);
 
             correctionPower = Math.abs(rotationPidController.output());
-            correctionPower = Math.max(correctionPower, .2);
-            correctionPower = Math.max(-maxRotationCorrectionPower, Math.min(maxRotationCorrectionPower, correctionPower));
+            //correctionPower = Math.max(correctionPower,  .2);
+            //correctionPower = Math.min(-maxRotationCorrectionPower, Math.min(maxRotationCorrectionPower, correctionPower));
 
             if (angle < 0) {
                 rightCorrect = -1 * correctionPower;//-.025;
@@ -252,40 +260,44 @@ public class Navigation {
             time = curTime;
 
             //encoders---------------------------------------------------------------------------------------------
-            //double distanceX = Math.abs(encoders.getX() - encoders.xTarget);
-            double distanceY = Math.abs(encoders.getY() - encoders.yTarget);
             distanceX = encoders.xTarget - encoders.getX();
-            //double distanceY = encoders.yTarget - encoders.getY();
+            double distanceY = encoders.yTarget - encoders.getY();
 
             //double powerX = MecanumWheels.calculateProportionalMotorPower(0.0015, distanceX, MotorPower, Math.max(MinMotorPower, .3));
-            double powerY = MecanumWheels.calculateProportionalMotorPower(0.0015, distanceY, maxRotationCorrectionPower, MinMotorPower);
+            //double powerY =  MecanumWheels.calculateProportionalMotorPower(0.0015, distanceY, maxRotationCorrectionPower, .2);
             //TODO: Check this ---------------------------------------------------------------------------------------------
             double powerX = calculateCorrectionPower(xPidController, distanceX, MotorPower, MinMotorPower);
-            //double powerY = calculateCorrectionPower(yPidController, distanceY, MotorPower, MinMotorPower);
+            powerY = calculateCorrectionPower(yPidController, distanceY * .02, Math.max( .2, MotorPower - .4) ,  0.03);
 
 
             double yDirection = encoders.getYDirection();
             double xDirection = encoders.getXDirection();
+
+
 
 /*
             if (encoders.getY() == 0) {
                 wheels.setPowerFromGamepad(false,1, 0,1 * xDirection ,0);
             }
 */
+yDirection=1;
+//powerY = 0;
+//powerX = 0;
             //set power---------------------------------------------------------------------------------------------
             wheels.setPower(
-                    (powerY * 0.7 * yDirection * 0) +(powerX) + rightCorrect * 0,
-                    (powerY * 0.7 * yDirection * 0) - (powerX) + leftCorrect * 0,
-                    (powerY * 0.7 * yDirection * 0) - (powerX) + rightCorrect * 0,
-                    (powerY  * 0.7 * yDirection * 0) + (powerX) + leftCorrect * 0
+                    (powerY  * yDirection) +(powerX) + rightCorrect ,
+                    (powerY * yDirection) - (powerX) + leftCorrect ,
+                    (powerY * yDirection) - (powerX) + rightCorrect ,
+                    (powerY  * yDirection) + (powerX ) + leftCorrect
             );
 
+            telemetry.addData("power:", Math.max( .2, MotorPower - .4));
             telemetry.addData("X position:", encoders.getX());
             telemetry.addData("Y position:", encoders.getY());
             telemetry.addData("distance x:", distanceX);
             telemetry.addData("distance y:", distanceY);
-            telemetry.addData("x Power:", (powerX));
-            telemetry.addData("y power", (powerY * .4));
+            telemetry.addData("x Power:", powerX);
+            telemetry.addData("y power", powerY);
             telemetry.addData("Correction power:", correctionPower);
             telemetry.addData("Right Correct:", rightCorrect);
             telemetry.addData("Left Correct:", leftCorrect);
@@ -298,7 +310,7 @@ public class Navigation {
         }
 
         wheels.StopMotors();
-        wheels.sleepAndCheckActive(500);
+        wheels.sleepAndCheckActive(10000);
         imu.resetAngle();
     }
 
