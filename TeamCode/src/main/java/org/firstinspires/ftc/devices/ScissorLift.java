@@ -5,11 +5,15 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.logic.BasicPositions;
 import org.firstinspires.ftc.logic.ChassisName;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 
 public class ScissorLift {
     ChassisName chassis;
     public DcMotor liftMotor;
     public MecanumWheels wheels;
+    public DistanceSensor distanceSensor;
 
     public ScissorLift (ChassisName name, MecanumWheels Wheels) {
         this.wheels = Wheels;
@@ -20,6 +24,7 @@ public class ScissorLift {
         liftMotor = opMode.hardwareMap.dcMotor.get("liftMotor");
         liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         liftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        this.distanceSensor = opMode.hardwareMap.get(DistanceSensor.class, "liftDistanceSensor");
     }
 
     public double getPosition () {
@@ -41,6 +46,12 @@ public class ScissorLift {
             liftMotor.setTargetPosition(0);
         }
     }
+
+    public void getDistance () {
+        double distance = distanceSensor.getDistance(DistanceUnit.INCH);
+    }
+
+
 
 
 }
