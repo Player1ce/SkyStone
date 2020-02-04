@@ -180,7 +180,7 @@ public class Navigation {
 
             //set power---------------------------------------------------------------------------------------------
             xDirection = 1;
-            powerY = 0;
+            //powerY = 0;
             wheels.setPower(
                     (powerY) -(powerX * xDirection) + rightCorrect,
                     (powerY) + (powerX *xDirection) + leftCorrect,
