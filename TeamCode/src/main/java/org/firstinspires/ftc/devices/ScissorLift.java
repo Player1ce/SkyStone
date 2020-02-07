@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.devices;
 
+import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
@@ -13,7 +14,7 @@ public class ScissorLift {
     ChassisName chassis;
     public DcMotor liftMotor;
     public MecanumWheels wheels;
-    public DistanceSensor distanceSensor;
+    DistanceSensor distanceSensor;
 
     public ScissorLift (ChassisName name, MecanumWheels Wheels) {
         this.wheels = Wheels;
@@ -24,7 +25,8 @@ public class ScissorLift {
         liftMotor = opMode.hardwareMap.dcMotor.get("liftMotor");
         liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         liftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        this.distanceSensor = opMode.hardwareMap.get(DistanceSensor.class, "liftDistanceSensor");
+        DistanceSensor distanceSensor = opMode.hardwareMap.get(DistanceSensor.class, "liftDistanceSensor");
+        //this.distanceSensor = (Rev2mDistanceSensor)distanceSensor;
     }
 
     public double getPosition () {

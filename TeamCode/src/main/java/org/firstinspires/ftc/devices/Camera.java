@@ -5,8 +5,12 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.Parameters;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
 
@@ -37,6 +41,13 @@ public class Camera {
         initTfod(opMode);
 
         tfod.activate();
+    }
+
+    public List<Recognition> getUpdatedRecognitions() {
+        if (tfod != null) {
+            return tfod.getUpdatedRecognitions();
+        }
+        return new ArrayList<Recognition>(0);
     }
 
 
