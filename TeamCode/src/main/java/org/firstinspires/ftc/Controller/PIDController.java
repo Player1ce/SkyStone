@@ -2,6 +2,8 @@ package org.firstinspires.ftc.Controller;
 
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.utils.LogUtils;
+
 /**
  * Created by Gabriel on 2/25/2017; edited substantially on 2017-12-28.
  * A PID controller, which allows the robot to move to a specific position and correct itself so that it lands right on (or very close).
@@ -59,6 +61,11 @@ public class PIDController  {
     private double maxIntegral = Double.POSITIVE_INFINITY;
     private double maxDerivative = Double.POSITIVE_INFINITY;
 
+    //name for log file
+    public final String name;
+    public final boolean enableLogging;
+    public boolean firstLog;
+
     /**
      * The constructor for the PID Controller.
      * @param KP The gain for the derivative part of the controller
@@ -66,15 +73,29 @@ public class PIDController  {
      * @param KD The gain for the derivative part of the controller
      */
     public PIDController(final double KP, final double KI, final double KD) {
+        this(null,false,KP,KI,KD);
+    }
+        /**
+         * The constructor for the PID Controller.
+         * @param name The name for the log file if logging enabled
+         * @param logEnable Enable logging of the pid
+         * @param KP The gain for the derivative part of the controller
+         * @param KI The gain for the integral part of the controller
+         * @param KD The gain for the derivative part of the controller
+         */
+    public PIDController(final String name,final boolean logEnable,final double KP, final double KI, final double KD) {
         this.KP = KP;
         this.KI = KI;
         this.KD = KD;
+        firstLog=true;
+        this.enableLogging=logEnable;
+        this.name=name;
         timeAtUpdate = System.nanoTime();
         integral = 0;
     }
 
     public PIDController(PIDController original, boolean copyState) {
-        this(original.getKP(), original.getKI(), original.getKD());
+        this(original.name, original.enableLogging,original.getKP(), original.getKI(), original.getKD());
         setDerivativeAveraging(original.getDerivativeAveraging());
         setMaxDerivative(original.getMaxDerivative());
         setMaxErrorForIntegral(original.getMaxErrorForIntegral());
@@ -154,6 +175,16 @@ public class PIDController  {
         timeAtUpdate = newTime;
         integralSet = false;
         derivativeSet = false;
+
+        if (enableLogging) {
+            if (firstLog) {
+                LogUtils.log(newTime + ",input,error,\"proportional_power (KP:"+KP+")\",\"integral_power (KI:"+KI+")\",\"derivative_power (KD:"+KD+")\",output", name);
+
+                firstLog=false;
+            }
+            double output=output();
+            LogUtils.log(newTime + "," + input + "," + error + "," + (KP * error) + "," + (KI * integral) + "," + (KD * derivative)+","+output, name);
+        }
     }
 
     /**

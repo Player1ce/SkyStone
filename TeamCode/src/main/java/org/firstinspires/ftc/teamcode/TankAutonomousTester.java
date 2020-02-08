@@ -10,6 +10,7 @@ import org.firstinspires.ftc.devices.FoundationHook;
 import org.firstinspires.ftc.devices.MecanumWheels;
 import org.firstinspires.ftc.devices.SkystoneIntake;
 import org.firstinspires.ftc.logic.KillOpModeException;
+import org.firstinspires.ftc.utils.LogUtils;
 
 @Autonomous(name = "TankAutonomousTester", group="Skystone")
 public class TankAutonomousTester extends LinearOpMode {
@@ -40,6 +41,7 @@ public class TankAutonomousTester extends LinearOpMode {
 
     protected void executeAutonomousLogic() {
         navigation.NavigateCrabTicks(telemetry,.7,0.3,2000);
+        LogUtils.closeLoggers();
         //navigation.NavigateStraightTicks(telemetry, .5, .3, 2000);
         wheels.sleepAndCheckActive(10000);
 

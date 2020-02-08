@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 
-import org.firstinspires.ftc.Controller.PIDController;
 import org.firstinspires.ftc.devices.Camera;
 import org.firstinspires.ftc.devices.Encoders;
 import org.firstinspires.ftc.devices.FoundationHook;
@@ -13,10 +12,9 @@ import org.firstinspires.ftc.devices.MecanumWheels;
 import org.firstinspires.ftc.devices.SkystoneIntake;
 import org.firstinspires.ftc.logic.ButtonOneShot;
 import org.firstinspires.ftc.logic.ChassisName;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.TeleOpMethods;
+import org.firstinspires.ftc.utils.LogUtils;
 
 import java.util.List;
 
@@ -54,13 +52,14 @@ public class GoBildaTestTeleop extends OpMode {
 
     public void init() {
 
-         distanceSensor = hardwareMap.get(DistanceSensor.class, "liftDistanceSensor");
-         camera.initializeCamera(this);
+        // distanceSensor = hardwareMap.get(DistanceSensor.class, "liftDistanceSensor");
+       //  camera.initializeCamera(this);
 
     }
 
     public void loop() {
 
+        LogUtils.log(LogUtils.LogType.normal,"Test","x_pid");
 
             // getUpdatedRecognitions() will return null if no new information is available since
             // the last time that call was made.

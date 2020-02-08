@@ -19,9 +19,17 @@ public class Navigation {
     public Navigation(ChassisName chassisName) {
         this.chassis = chassisName;
     }
-    private PIDController rotationPidController = new PIDController(0.0125, 0.001,0.001);
-    private PIDController yPidController = new PIDController(0.15, 0.001, 0.001);
-    private PIDController xPidController = new PIDController(0.15, 0.001,0.001);
+
+
+        /*setPIDValues(rotationPidController, 0.00325, 0.001,0.001);
+        setPIDValues(yPidController, .00225, 0.001, 0.001);
+        setPIDValues(xPidController, .15, .001, .001);*/
+
+
+    private PIDController rotationPidController = new PIDController("rot_pid",true,0.00375, 0.001,0.001);
+
+    private PIDController yPidController = new PIDController("y_pid",true,0.00225, 0.001, 0.001);
+    private PIDController xPidController = new PIDController("x_pid",true,0.00015, .0001, .0001);
 
     Encoders encoders = new Encoders(chassis);
     IMURevHub imu;
@@ -133,9 +141,9 @@ public class Navigation {
 
         double dest=Math.abs(encoders.yTarget)-5;
 
-        setPIDValues(rotationPidController, 0.0125, 0.001, 0.001);
+        /*setPIDValues(rotationPidController, 0.0125, 0.001, 0.001);
         setPIDValues(yPidController, 0.15, 0.001,0.001);
-        setPIDValues(xPidController, .00225, 0.001, 0.001);
+        setPIDValues(xPidController, .00225, 0.001, 0.001);*/
 
         while (Math.abs(encoders.getY()) < dest) {
             wheels.checkIsActive();
@@ -203,7 +211,7 @@ public class Navigation {
 
         }
         wheels.StopMotors();
-        setPIDValues(xPidController, .15, .001, .001);
+        //setPIDValues(xPidController, .15, .001, .001);
         imu.resetAngle();
         wheels.sleepAndCheckActive(500);
 
@@ -229,9 +237,10 @@ public class Navigation {
         encoders.setyTarget(0);
         encoders.setxTarget(ticks);
 
-        setPIDValues(rotationPidController, 0.00325, 0.001,0.001);
+        /*setPIDValues(rotationPidController, 0.00325, 0.001,0.001);
         setPIDValues(yPidController, .00225, 0.001, 0.001);
-        setPIDValues(xPidController, .15, .001, .001);
+        setPIDValues(xPidController, .15, .001, .001);*/
+
         double distanceX = Math.abs(encoders.xTarget) - Math.abs(encoders.getX());
 
 
