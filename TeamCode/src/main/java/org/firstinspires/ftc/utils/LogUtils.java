@@ -2,14 +2,12 @@ package org.firstinspires.ftc.utils;
 
 import android.os.Environment;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
 
 public class LogUtils {
@@ -21,13 +19,59 @@ public class LogUtils {
         warning,
         error
     };
-    /**name of the FTC team, used in the file namesw */
-    static public String teamname = "jesuit";
-    FileOutputStream fOUT = null;
+    
+    /**name of the FTC team, used in the file names */
+    
+    private static final String teamname = "jesuit"; 
+    
     /**the list of filewriters, can be seen as the list of logging channels */
-    public static final HashMap<String, FileWriter> filewriters=new HashMap<>();
-
+    private static final HashMap<String, FileWriter> filewriters=new HashMap<>();
+    /**the list of pending records to be written to disk */
+    private static final ConcurrentLinkedDeque<LogRecord> logRecords=new ConcurrentLinkedDeque<LogRecord>();
+    
+    private static final Thread writerThread;
+    
+    static {
+    	//start the background thread that is responsible for writing to disk
+    	writerThread=new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				runThread();
+			}
+		});
+    	writerThread.setDaemon(true);
+    	writerThread.start();
+    }
+    
+    private static final void runThread() {
+    	while (true) {
+    		LogRecord record=logRecords.poll();
+    		if (record!=null) {
+    			try {
+	    			FileWriter writer=filewriters.get(record.id);
+	    	        if (writer==null) {
+	    	            writer=startLogging(record.id);
+	    	        }
+	    	        writer.write(record.message+"\n");
+	    	        writer.flush();
+    			}
+    			catch (IOException e) {
+    				e.printStackTrace();
+    			}
+    		}
+    		else {
+    			try {
+					Thread.sleep(1);
+				} catch (InterruptedException e) {
+				}
+    		}
+    		
+    	}
+    }
+    
     public static final void flushLoggers() {
+    	waitForRecords();
         //force all loggers to flush to disk
         for (FileWriter writer : filewriters.values()) {
             try {
@@ -40,7 +84,8 @@ public class LogUtils {
     }
 
     public static final void closeLoggers() {
-        //force all loggers to flush to disk
+    	waitForRecords();
+        //force all loggers to flush to disk and close
         for (FileWriter writer : filewriters.values()) {
             try {
                 writer.flush();
@@ -53,9 +98,21 @@ public class LogUtils {
         filewriters.clear();
     }
 
+	private static void waitForRecords() {
+		int count=0;
+		//waits up to 250 ms for log records to be empty
+		while (!logRecords.isEmpty()&&count<250) {
+			try {
+				Thread.sleep(1);
+			} catch (InterruptedException e) {
+			}
+    		count++;
+    	}
+	}
+
     private static final FileWriter startLogging(String id)  {
-        SimpleDateFormat format=new SimpleDateFormat("yyyy_MM_dd_hh_mm_ss_SSS");
-        String fileName = teamname + format.format(new Date()) + "_"+id+".csv";
+        SimpleDateFormat format=new SimpleDateFormat("yyyy_MM_dd__hh_mm_ss_SSS");
+        String fileName = teamname +"_"+ format.format(new Date()) + "_"+id+".csv";
         File file = new File(getPublicAlbumStorageDir(teamname),fileName );
 
         try {
@@ -71,61 +128,34 @@ public class LogUtils {
 
     /**gets the public image folder */
     public static File getPublicAlbumStorageDir(String albumName) {
-// Get the directory for the user’s public pictures directory.
+    	// Get the directory for the user’s public pictures directory.
         File file = new File(Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_DOCUMENTS), albumName);
         file.mkdirs();
         return file;
     }
 
-
-    /**closes the filewriter given by the id, do this to make sure your data gets saved */
-    public static void stopLogging(int id) {
-        try {
-            filewriters.remove(id).close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
     /** log your data to the filewriter given by the ID */
     public static void log(LogType type, String message, String id) {
-        FileWriter writer=filewriters.get(id);
-        if (writer==null) {
-            writer=startLogging(id);
-        }
-
-        try {
-            filewriters.get(id).write(type.toString() + "," + System.currentTimeMillis() + "," + message+"\n");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String messageLine=type.toString() + "," + System.currentTimeMillis() + "," + message;
+        logRecords.add(new LogRecord(id,messageLine));
     }
 
+    /** log your data to the filewriter given by the ID */
     public static void log(String message, String id) {
-        FileWriter writer=filewriters.get(id);
-        boolean first=false;
-        if (writer==null) {
-            writer=startLogging(id);
-            first=true;
-        }
-
-        try {
-            writer.write( message+"\n");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if (first) {
-            try {
-                writer.flush();
-            }
-            catch (Exception e) {
-
-            }
-        }
-
+        logRecords.add(new LogRecord(id,message));
     }
+    
+
+    private static class LogRecord {
+    	public LogRecord(String id2, String messageLine) {
+			this.id=id2;
+			this.message=messageLine;
+		}
+		public final String id;
+    	public final String message;
+    }
+    
 
 
 
