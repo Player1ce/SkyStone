@@ -26,7 +26,7 @@ public class Navigation {
         setPIDValues(xPidController, .15, .001, .001);*/
 
 
-    private PIDController rotationPidController = new PIDController("rot_pid",true,0.00375, 0.001,0.001);
+    private PIDController rotationPidController = new PIDController("rot_pid",true,0.05, 0.0015,0.0015);
 
     private PIDController yPidController = new PIDController("y_pid",true,0.00225, 0.001, 0.001);
     private PIDController xPidController = new PIDController("x_pid",true,0.00015, .0001, .0001);
@@ -231,6 +231,8 @@ public class Navigation {
         double leftCorrect = 0;
         double powerY = 0;
 
+        wheels.RunWithoutEncoders();
+
         //encoders---------------------------------------------------------------------------------------------
         encoders.resetPosition();
         //encoders.setyTarget((Inches * 4)/.0699);
@@ -319,7 +321,6 @@ yDirection=1;
         }
 
         wheels.StopMotors();
-        wheels.sleepAndCheckActive(10000);
         imu.resetAngle();
     }
 

@@ -24,6 +24,8 @@ public class TankAutonomousTester extends LinearOpMode {
     //Use this class to test new methods and anything else for auto
 
     public void runOpMode() {
+        LogUtils.reset();
+
         wheels.initializeWheels(this);
         intake.initializeIntake(this);
         hookServo.initializeHook(this);
@@ -40,7 +42,7 @@ public class TankAutonomousTester extends LinearOpMode {
     }
 
     protected void executeAutonomousLogic() {
-        navigation.NavigateCrabTicks(telemetry,.7,0.3,2000);
+        navigation.NavigateCrabTicks(telemetry,.7,0.3,2500);
         LogUtils.closeLoggers();
         //navigation.NavigateStraightTicks(telemetry, .5, .3, 2000);
         wheels.sleepAndCheckActive(10000);

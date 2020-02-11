@@ -183,7 +183,7 @@ public class PIDController  {
                 firstLog=false;
             }
             double output=output();
-            LogUtils.log(newTime + "," + input + "," + error + "," + (KP * error) + "," + (KI * integral) + "," + (KD * derivative)+","+output, name);
+            LogUtils.log((newTime/1000000L) + "," + input + "," + error + "," + (KP * error) + "," + (KI * integral) + "," + (KD * derivative)+","+output, name);
         }
     }
 

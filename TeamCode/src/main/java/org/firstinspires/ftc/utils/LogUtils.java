@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 
@@ -27,7 +28,7 @@ public class LogUtils {
     /**the list of filewriters, can be seen as the list of logging channels */
     private static final HashMap<String, FileWriter> filewriters=new HashMap<>();
     /**the list of pending records to be written to disk */
-    private static final ConcurrentLinkedDeque<LogRecord> logRecords=new ConcurrentLinkedDeque<LogRecord>();
+    private static final LinkedList<LogRecord> logRecords=new LinkedList<LogRecord>();
     
     private static final Thread writerThread;
     
@@ -46,7 +47,10 @@ public class LogUtils {
     
     private static final void runThread() {
     	while (true) {
-    		LogRecord record=logRecords.poll();
+    		LogRecord record=null;
+    		synchronized (filewriters) {
+    		    record=logRecords.poll();
+            }
     		if (record!=null) {
     			try {
 	    			FileWriter writer=filewriters.get(record.id);
@@ -54,7 +58,6 @@ public class LogUtils {
 	    	            writer=startLogging(record.id);
 	    	        }
 	    	        writer.write(record.message+"\n");
-	    	        writer.flush();
     			}
     			catch (IOException e) {
     				e.printStackTrace();
@@ -68,6 +71,13 @@ public class LogUtils {
     		}
     		
     	}
+    }
+
+    public static void reset() {
+        synchronized (filewriters) {
+            filewriters.clear();
+            logRecords.clear();
+        }
     }
     
     public static final void flushLoggers() {
@@ -85,29 +95,38 @@ public class LogUtils {
 
     public static final void closeLoggers() {
     	waitForRecords();
-        //force all loggers to flush to disk and close
-        for (FileWriter writer : filewriters.values()) {
-            try {
-                writer.flush();
-                writer.close();
-            }
-            catch (Exception e) {
+    	synchronized (filewriters) {
+            //force all loggers to flush to disk and close
+            for (FileWriter writer : filewriters.values()) {
+                try {
+                    writer.flush();
+                    writer.close();
+                } catch (Exception e) {
 
+                }
             }
+            filewriters.clear();
         }
-        filewriters.clear();
     }
 
 	private static void waitForRecords() {
-		int count=0;
-		//waits up to 250 ms for log records to be empty
-		while (!logRecords.isEmpty()&&count<250) {
-			try {
-				Thread.sleep(1);
-			} catch (InterruptedException e) {
-			}
-    		count++;
-    	}
+            int count = 0;
+            boolean empty=false;
+            synchronized (filewriters) {
+                empty= logRecords.isEmpty();
+            }
+            //waits up to 250 ms for log records to be empty
+            while (!empty && count < 250) {
+                try {
+                    Thread.sleep(1);
+                } catch (InterruptedException e) {
+                }
+                count++;
+                synchronized (filewriters) {
+                    empty= logRecords.isEmpty();
+                }
+            }
+
 	}
 
     private static final FileWriter startLogging(String id)  {
@@ -138,12 +157,16 @@ public class LogUtils {
     /** log your data to the filewriter given by the ID */
     public static void log(LogType type, String message, String id) {
         String messageLine=type.toString() + "," + System.currentTimeMillis() + "," + message;
-        logRecords.add(new LogRecord(id,messageLine));
+        synchronized (filewriters) {
+            logRecords.add(new LogRecord(id, messageLine));
+        }
     }
 
     /** log your data to the filewriter given by the ID */
     public static void log(String message, String id) {
-        logRecords.add(new LogRecord(id,message));
+        synchronized (filewriters) {
+            logRecords.add(new LogRecord(id, message));
+        }
     }
     
 
