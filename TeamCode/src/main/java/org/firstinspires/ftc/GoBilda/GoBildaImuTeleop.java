@@ -2,6 +2,7 @@ package org.firstinspires.ftc.GoBilda;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 
 import org.firstinspires.ftc.Controller.PIDController;
 import org.firstinspires.ftc.devices.Encoders;
@@ -43,22 +44,26 @@ public class GoBildaImuTeleop extends OpMode {
 
     private double startAngle = 0;
 
+    DigitalChannel limitSwitch;
 
     public void init() {
         /* attaching configuration names to each motor; each one of these names must match the name
         of the motor in the configuration profile on the phone (spaces and capitalization matter)
         or else an error will occur
         */
-        mecanumWheels.initializeWheels(this);
+      //  mecanumWheels.initializeWheels(this);
      //   hookServo.initializeHook(this);
       //  intake.initializeIntake(this);
       //  encoders.initialize(mecanumWheels, this);
-        imu.initializeIMU(mecanumWheels,this);
+        //imu.initializeIMU(mecanumWheels,this);
 
+        //blue and black on port 0
+        limitSwitch= hardwareMap.digitalChannel.get("limitSwitch");
+       // limitSwitch.setMode(DigitalChannel.Mode.INPUT);
 
         //CRAB: pidController=new PIDController(.0125,0.001,0.001);
-        pidController=new PIDController(.0125,0.001,0.001);
-        pidController.setMaxErrorForIntegral(0.002);
+        //pidController=new PIDController(.0125,0.001,0.001);
+        //pidController.setMaxErrorForIntegral(0.002);
 
     }
 
@@ -70,6 +75,8 @@ public class GoBildaImuTeleop extends OpMode {
 
     public void loop() {
 
+       boolean state= limitSwitch.getState();
+        /*
         if (startOrientation==null) {
             startOrientation=imu.getOrientation();
         }
@@ -122,7 +129,11 @@ public class GoBildaImuTeleop extends OpMode {
         telemetry.addData("Left Correct:", leftCorrect);
         telemetry.addData("Angle", angle);
         telemetry.addData("Time(ms)", diff);
+        telemetry.update();*/
+
+        telemetry.addData("State", state);
         telemetry.update();
+
     }
 
     /*

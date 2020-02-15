@@ -8,6 +8,8 @@ import org.firstinspires.ftc.logic.BasicPositions;
 import org.firstinspires.ftc.logic.ChassisName;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 
 public class ScissorLift {
@@ -15,13 +17,24 @@ public class ScissorLift {
     public DcMotor liftMotor;
     public MecanumWheels wheels;
     DistanceSensor distanceSensor;
+    public DigitalChannel limitSwitch;
+
+    /**
+     * limit switch starts
+     *
+     */
 
     public ScissorLift (ChassisName name, MecanumWheels Wheels) {
         this.wheels = Wheels;
         chassis = name;
     }
 
+    public boolean getLimitState() {
+        return limitSwitch.getState();
+    }
+
     public void initialize(OpMode opMode) {
+        limitSwitch= opMode.hardwareMap.digitalChannel.get("limitSwitch");
         liftMotor = opMode.hardwareMap.dcMotor.get("liftMotor");
         liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         liftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -40,18 +53,28 @@ public class ScissorLift {
     }
 
 
-    public void setPosition (BasicPositions position) {
-        if (position == BasicPositions.OPEN) {
-            liftMotor.setTargetPosition(0);
-        }
-        if (position == BasicPositions.CLOSED) {
-            liftMotor.setTargetPosition(0);
-        }
+    public void setPosition (int position) {
+        liftMotor.setTargetPosition(position);
+        liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        liftMotor.setPower(1);
     }
 
     public void getDistance () {
         double distance = distanceSensor.getDistance(DistanceUnit.INCH);
     }
+
+    public void zeroEncoder() {
+        liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        while (limitSwitch.getState()) {
+            liftMotor.setPower(-1);
+        }
+        liftMotor.setPower(0);
+        wheels.sleepAndCheckActive(500);
+        resetEncoder();
+
+    }
+
+
 
 
 

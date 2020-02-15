@@ -22,6 +22,13 @@ public class TankTeleOpLiftTester extends OpMode {
     private TeleOpMethods robot = new TeleOpMethods(ChassisName.TANK);
     private final IMURevHub imu = new IMURevHub(ChassisName.TANK);
 
+   int skystoneServo;
+
+
+
+
+
+
     DistanceSensor distanceSensor;
     public DcMotor liftMotor;
 
@@ -35,6 +42,12 @@ public class TankTeleOpLiftTester extends OpMode {
     }
 
     public void loop() {
+
+  
+
+
+
+
 
         if (gamepad1.right_bumper) {
             liftMotor.setPower(1);

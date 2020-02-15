@@ -30,19 +30,58 @@ public class LiftTest extends OpMode {
 
     }
 
+    int count=0;
+
     public void loop() {
-        if (gamepad1.left_trigger > 0) {
+        /*if (gamepad1.left_trigger > 0) {
             lift.liftMotor.setPower(1);
         }
-        else if (gamepad1.right_trigger > 0) {
+        else if (gamepad1.right_trigger > 0 && lift.limitSwitch.getState()) {
             lift.liftMotor.setPower(-1);
         }
         else {
             lift.liftMotor.setPower(0);
-        }
+        }*/
 
         if (xButton.isPressed(gamepad1.x)) {
-            lift.resetEncoder();
+            lift.zeroEncoder();
+
+         //   lift.setPosition(200);
+        }
+
+
+        if (buttonOneShotA.isPressed(gamepad1.a)){
+            int target=0;
+            switch (count) {
+                case 0:
+                    target=2500;
+                    break;
+                case 1:
+                    target=5000;
+                    break;
+                case 2:
+                    target=7500;
+                    break;
+                case 3:
+                    target=10000;
+                    break;
+                case 4:
+                    target=12500;
+                    break;
+                case 5:
+                    target=15000;
+                    break;
+                case 6:
+                    target=17500;
+                    break;
+                default:
+                    target=0;
+                    count=-1;
+                    break;
+            }
+            count++;
+            lift.setPosition(target);
+
         }
 
         /*
@@ -65,8 +104,10 @@ public class LiftTest extends OpMode {
 
          */
 
-        telemetry.addData("liftState:", liftState);
+        telemetry.addData("limit:", lift.getLimitState());
+      //  telemetry.addData("liftState:", liftState);
         telemetry.addData("position:", lift.getPosition());
+        telemetry.addData("Power:", lift.liftMotor.getPower());
         telemetry.update();
 
     }
