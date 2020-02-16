@@ -53,7 +53,7 @@ public class ScissorLift {
     }
 
 
-    public void setPosition (int position) {
+    public void setTargetPosition (int position) {
         liftMotor.setTargetPosition(position);
         liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         liftMotor.setPower(1);

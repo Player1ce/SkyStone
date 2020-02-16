@@ -19,7 +19,7 @@ public class SkystoneLeverTester extends OpMode {
     private double leverPosition;
     private boolean leverUp;
     private String leverState;
-    private boolean setPositions;
+    private boolean setPositions = false;
 
     public void init() {
         lever.initialize(this);
@@ -31,14 +31,14 @@ public class SkystoneLeverTester extends OpMode {
             if (leverPosition < 1) {
                 leverPosition = leverPosition + 0.001;
             }
-            lever.leverServo.setPosition(leverPosition);
         }
         if (gamepad1.right_bumper) {
             if (leverPosition > .0001) {
                 leverPosition = leverPosition - 0.001;
             }
-            lever.leverServo.setPosition(leverPosition);
         }
+
+        lever.leverServo.setPosition(leverPosition);
 
         if (buttonOneShotY.isPressed(gamepad1.y)) {
             leverUp = !leverUp;
@@ -47,11 +47,13 @@ public class SkystoneLeverTester extends OpMode {
         if (buttonOneShotX.isPressed(gamepad1.x)) {
             setPositions = !setPositions;
         }
+
         if (setPositions) {
             if (leverUp) {
                 lever.setPosition(OPEN);
                 leverState = "open";
-            } else if (!leverUp) {
+            }
+            else if (!leverUp) {
                 lever.setPosition(CLOSED);
                 leverState = "closed";
             }

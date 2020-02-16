@@ -2,13 +2,14 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.devices.MecanumWheels;
 import org.firstinspires.ftc.devices.ScissorLift;
 import org.firstinspires.ftc.logic.BasicPositions;
 import org.firstinspires.ftc.logic.ButtonOneShot;
 import org.firstinspires.ftc.logic.ChassisName;
+
 
 @TeleOp(name="lift Test", group="Skystone")
 //@Disabled
@@ -18,7 +19,7 @@ public class LiftTest extends OpMode {
     private final ButtonOneShot xButton = new ButtonOneShot();
     private final ButtonOneShot buttonOneShotY = new ButtonOneShot();
     private final ButtonOneShot buttonOneShotA = new ButtonOneShot();
-    private boolean liftOpen = true;
+    private boolean liftUp = true;
     private boolean setPositions = true;
     String liftState;
 
@@ -33,20 +34,20 @@ public class LiftTest extends OpMode {
     int count=0;
 
     public void loop() {
-        /*if (gamepad1.left_trigger > 0) {
-            lift.liftMotor.setPower(1);
-        }
-        else if (gamepad1.right_trigger > 0 && lift.limitSwitch.getState()) {
-            lift.liftMotor.setPower(-1);
-        }
-        else {
-            lift.liftMotor.setPower(0);
-        }*/
 
-        if (xButton.isPressed(gamepad1.x)) {
-            lift.zeroEncoder();
+        if (lift.liftMotor.getMode() == DcMotor.RunMode.RUN_TO_POSITION && lift.liftMotor.getCurrentPosition() == lift.liftMotor.getTargetPosition()) {
+            lift.liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            if (gamepad1.left_trigger > 0) {
+                lift.liftMotor.setPower(1);
+            } else if (gamepad1.right_trigger > 0 && lift.limitSwitch.getState()) {
+                lift.liftMotor.setPower(-1);
+            } else {
+                lift.liftMotor.setPower(0);
+            }
 
-         //   lift.setPosition(200);
+            if (xButton.isPressed(gamepad1.x)) {
+                lift.zeroEncoder();
+            }
         }
 
 
@@ -80,32 +81,33 @@ public class LiftTest extends OpMode {
                     break;
             }
             count++;
-            lift.setPosition(target);
+            lift.setTargetPosition(target);
 
         }
 
         /*
         if (buttonOneShotY.isPressed(gamepad1.y)) {
-            liftOpen = !liftOpen;
+            liftUp = !liftUp;
         }
 
         if (buttonOneShotA.isPressed(gamepad1.a)) {
             setPositions = !setPositions;
         }
         if (setPositions) {
-            if (liftOpen) {
-                lift.setPosition(BasicPositions.OPEN);
-                liftState = "open";
-            } else if (!liftOpen) {
-                lift.setPosition(BasicPositions.CLOSED);
-                liftState = "closed";
+            if (liftUp) {
+                lift.setTargetPosition(BasicPositions.OPEN);
+                liftState = "up";
+            } else if (!liftUp) {
+                lift.setTargetPosition(BasicPositions.CLOSED);
+                liftState = "down";
             }
         }
 
          */
 
         telemetry.addData("limit:", lift.getLimitState());
-      //  telemetry.addData("liftState:", liftState);
+        //  telemetry.addData("liftState:", liftState);
+        //telemetry.addData("set position:", setPositions);
         telemetry.addData("position:", lift.getPosition());
         telemetry.addData("Power:", lift.liftMotor.getPower());
         telemetry.update();
