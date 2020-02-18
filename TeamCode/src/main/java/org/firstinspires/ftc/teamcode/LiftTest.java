@@ -35,6 +35,7 @@ public class LiftTest extends OpMode {
 
     public void loop() {
 
+        /*
         if (lift.liftMotor.getMode() == DcMotor.RunMode.RUN_TO_POSITION && lift.liftMotor.getCurrentPosition() == lift.liftMotor.getTargetPosition()) {
             lift.liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             if (gamepad1.left_trigger > 0) {
@@ -44,12 +45,13 @@ public class LiftTest extends OpMode {
             } else {
                 lift.liftMotor.setPower(0);
             }
-
-            if (xButton.isPressed(gamepad1.x)) {
-                lift.zeroEncoder();
-            }
         }
 
+         */
+
+        if (xButton.isPressed(gamepad1.x)) {
+            lift.zeroEncoder();
+        }
 
         if (buttonOneShotA.isPressed(gamepad1.a)){
             int target=0;

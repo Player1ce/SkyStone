@@ -7,7 +7,6 @@ import org.firstinspires.ftc.logic.BasicPositions;
 import org.firstinspires.ftc.logic.ChassisName;
 
 public class SkystoneLever {
-    ChassisName chassis;
     public Servo leverServo;
 
     public void initialize(OpMode opMode) {
@@ -15,10 +14,10 @@ public class SkystoneLever {
     }
     public void setPosition (BasicPositions position) {
         if (position == BasicPositions.OPEN) {
-            leverServo.setPosition(0.65);
+            leverServo.setPosition(0.27);
         }
         if (position == BasicPositions.CLOSED) {
-            leverServo.setPosition(.4);
+            leverServo.setPosition(1);
         }
     }
 }
