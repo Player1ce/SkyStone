@@ -13,10 +13,10 @@ public class SkystoneLever {
         leverServo = opMode.hardwareMap.servo.get("skystoneServo");
     }
     public void setPosition (BasicPositions position) {
-        if (position == BasicPositions.OPEN) {
+        if (position == BasicPositions.UP || position == BasicPositions.OPEN) {
             leverServo.setPosition(0.27);
         }
-        if (position == BasicPositions.CLOSED) {
+        if (position == BasicPositions.DOWN || position == BasicPositions.CLOSED) {
             leverServo.setPosition(1);
         }
     }
