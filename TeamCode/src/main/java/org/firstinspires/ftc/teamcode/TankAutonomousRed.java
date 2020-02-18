@@ -139,7 +139,7 @@ public class TankAutonomousRed extends LinearOpMode {
                 mecanumWheels.sleepAndCheckActive(10);
                 i += 1;
                 if (i == 18) {
-                    intake.rampServo.setPosition(.2);
+                    //intake.rampServo.setPosition(.2);
                 }
             }
 

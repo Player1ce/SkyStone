@@ -95,7 +95,7 @@ public class TankAutonomousBlueBrick extends LinearOpMode {
                 sleep(10);
                 i += 1;
                 if (i == 18) {
-                    intake.rampServo.setPosition(.2);
+                    //intake.rampServo.setPosition(.2);
                 }
 
                 mecanumWheels.StopMotors();

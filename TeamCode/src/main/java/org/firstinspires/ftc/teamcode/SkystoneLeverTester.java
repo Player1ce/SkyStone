@@ -16,7 +16,7 @@ public class SkystoneLeverTester extends OpMode {
     private final SkystoneLever lever = new SkystoneLever();
     private final ButtonOneShot buttonOneShotY = new ButtonOneShot();
     private final ButtonOneShot buttonOneShotX = new ButtonOneShot();
-    private double leverPosition;
+    private double leverPosition = 1;
     private boolean leverUp;
     private String leverState;
     private boolean setPositions = false;
@@ -29,12 +29,12 @@ public class SkystoneLeverTester extends OpMode {
     public void loop() {
         if (gamepad1.left_bumper) {
             if (leverPosition < 1) {
-                leverPosition = leverPosition + 0.001;
+                leverPosition = leverPosition + 0.007;
             }
         }
         if (gamepad1.right_bumper) {
             if (leverPosition > .0001) {
-                leverPosition = leverPosition - 0.001;
+                leverPosition = leverPosition - 0.01;
             }
         }
 

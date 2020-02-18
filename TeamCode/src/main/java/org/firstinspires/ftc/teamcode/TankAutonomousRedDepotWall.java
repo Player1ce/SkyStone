@@ -88,7 +88,7 @@ public class TankAutonomousRedDepotWall extends LinearOpMode {
             }
              */
 
-            intake.rampServo.setPosition(.2);
+            //intake.rampServo.setPosition(.2);
 
     }
 }
