@@ -3,11 +3,8 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.devices.BlockClaw;
 import org.firstinspires.ftc.devices.SkystoneLever;
-import org.firstinspires.ftc.logic.BasicPositions;
 import org.firstinspires.ftc.logic.ButtonOneShot;
-import org.firstinspires.ftc.logic.ChassisName;
 
 import static org.firstinspires.ftc.logic.BasicPositions.*;
 

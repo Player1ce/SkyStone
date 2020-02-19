@@ -25,9 +25,6 @@ public class GoBildaChassisTeleop extends OpMode {
     private boolean reverse = false;
     private boolean highPower = true;
 
-    private double HIGH_POWER = 1.0;
-    private double NORMAL_POWER = 0.5;
-
 
     //DcMotor spool;
 
@@ -49,6 +46,8 @@ public class GoBildaChassisTeleop extends OpMode {
             highPower = !highPower;
         }
         //if high power, use the high power constant, else use the normal power constant
+        double HIGH_POWER = 1.0;
+        double NORMAL_POWER = 0.5;
         double power = highPower ? HIGH_POWER : NORMAL_POWER;
 
         mecanumWheels.setPowerFromGamepad(reverse, power, gamepad1.left_stick_x,

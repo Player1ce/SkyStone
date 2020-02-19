@@ -10,9 +10,8 @@ public class FoundationHook {
 
     public Servo hookServo;
 
-    private ChassisName chassis;
-
-    public FoundationHook(ChassisName name) { chassis = name; }
+    public FoundationHook(ChassisName name) {
+    }
 
     public void  initializeHook (OpMode opmode) {
         hookServo = opmode.hardwareMap.servo.get("hookServo");

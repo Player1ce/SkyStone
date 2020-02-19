@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.devices.Swivel;
-import org.firstinspires.ftc.logic.BasicPositions;
 import org.firstinspires.ftc.logic.ButtonOneShot;
 
 @TeleOp (name = "Swivel Test", group = "Skystone")

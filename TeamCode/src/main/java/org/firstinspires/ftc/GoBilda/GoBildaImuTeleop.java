@@ -44,7 +44,7 @@ public class GoBildaImuTeleop extends OpMode {
 
     private double startAngle = 0;
 
-    DigitalChannel limitSwitch;
+    private DigitalChannel limitSwitch;
 
     public void init() {
         /* attaching configuration names to each motor; each one of these names must match the name

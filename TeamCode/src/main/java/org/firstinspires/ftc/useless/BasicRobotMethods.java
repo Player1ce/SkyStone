@@ -21,15 +21,15 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 //TODO: make inches to pulses conversions accurate
 public abstract class BasicRobotMethods implements RobotMethods{
-    LinearOpMode linearOpMode;
-    DcMotor frontLeft;
-    DcMotor frontRight;
-    DcMotor backLeft;
-    DcMotor backRight;
-    DcMotor horizontalEncoder;
-    DcMotor forwardEncoder;
-    Servo hookServo;
-    BNO055IMU imu;
+    private LinearOpMode linearOpMode;
+    private DcMotor frontLeft;
+    private DcMotor frontRight;
+    private DcMotor backLeft;
+    private DcMotor backRight;
+    private DcMotor horizontalEncoder;
+    private DcMotor forwardEncoder;
+    private Servo hookServo;
+    private BNO055IMU imu;
     ModernRoboticsI2cGyro gyro;
     ModernRoboticsI2cRangeSensor rangeSensor;
     ColorSensor colorSensor;
@@ -40,17 +40,17 @@ public abstract class BasicRobotMethods implements RobotMethods{
     Servo rightServo;
     Servo midServo;
 
-    Orientation lastAngle;
-    double globalAngle;
+    private Orientation lastAngle;
+    private double globalAngle;
 
-    DigitalChannel bottomLimitSwitch;
-    DigitalChannel topLimitSwitch;
+    private DigitalChannel bottomLimitSwitch;
+    private DigitalChannel topLimitSwitch;
 
-    final double WHEEL_DIAMETER = 6;
-    final int NR40_PPR = 1120;
-    final double DRIVE_WHEEL_GEAR_RATIO = 1;
+    private final double WHEEL_DIAMETER = 6;
+    private final int NR40_PPR = 1120;
+    private final double DRIVE_WHEEL_GEAR_RATIO = 1;
 
-    long startTime;
+    private long startTime;
 
     @Override
     public void InitializeHardware (OpMode opMode) {

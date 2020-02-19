@@ -17,12 +17,12 @@ public class OdometryMethods extends BasicRobotMethods {
     private final FoundationHook hookServo = new FoundationHook(ChassisName.TANK);
     private final BlockIntake intake = new BlockIntake(ChassisName.TANK);
 
-    DcMotor horizontalEncoder;
-    DcMotor forwardEncoder;
-    LinearOpMode linearOpMode;
+    private DcMotor horizontalEncoder;
+    private DcMotor forwardEncoder;
+    private LinearOpMode linearOpMode;
     
-    int forwardLeeway = 15;
-    int horizonatalLeeway = 15;
+    private int forwardLeeway = 15;
+    private int horizonatalLeeway = 15;
 
     String chassis;
     

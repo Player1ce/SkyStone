@@ -7,7 +7,6 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.Parameters;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +23,7 @@ public class Camera {
     private VuforiaLocalizer vuforia;
     private TFObjectDetector tfod;
 
-    WebcamName webcamName;
+    private WebcamName webcamName;
 
     private static final String VUFORIA_KEY = "AfnD84D/////AAABmW4G5xT8p0BGsOHFi6XGdl0963rtELJowsONUJMZrPugweZ7oWIk3Z2iECWQli6QtEv2xGM27MpU4sQV5SY/Cz/ZAcBGcxG3/iojXVlZ9rG9M5gk/iGnwKNdrwL0QSUt4DQFjd4oFVSJNQIOIZo5UpRbrYsmvuW9fw8HNZvNedLupacWJ2bQ0LF18AIXeI2kWr1w36NawvITHqsqmxHwWsJOaMhfrOfS4XSyHb+aZqro8NcreKWgZdJfAuAd+/R+tSNEGNubv0yFwMXJ1sin+hMwGFfWvhr2k37InDdXafo67NyK+GjLROwTyfPYWPEzBfd2to5tiOjzu0ghhcpyd3jGvVlDgryq+6EFVYABtDik​";
 

@@ -11,13 +11,10 @@ import org.firstinspires.ftc.logic.ChassisName;
 public class BlockIntake {
     public DcMotor leftIntake;
     public DcMotor rightIntake;
-    public Servo lockServo;
+    private Servo lockServo;
     public Servo rampServo;
 
-    private ChassisName chassis;
-
     public BlockIntake(ChassisName name) {
-        chassis = name;
     }
 
     public void initializeIntake (OpMode opMode) {

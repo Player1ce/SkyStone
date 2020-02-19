@@ -8,7 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.Locale;
 
 
 public class LogUtils {
@@ -19,7 +19,7 @@ public class LogUtils {
         normal,
         warning,
         error
-    };
+    }
     
     /**name of the FTC team, used in the file names */
     
@@ -130,7 +130,7 @@ public class LogUtils {
 	}
 
     private static final FileWriter startLogging(String id)  {
-        SimpleDateFormat format=new SimpleDateFormat("yyyy_MM_dd__hh_mm_ss_SSS");
+        SimpleDateFormat format=new SimpleDateFormat("yyyy_MM_dd__hh_mm_ss_SSS", Locale.US);
         String fileName = teamname +"_"+ format.format(new Date()) + "_"+id+".csv";
         File file = new File(getPublicAlbumStorageDir(teamname),fileName );
 

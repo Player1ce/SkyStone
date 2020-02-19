@@ -62,7 +62,7 @@ public class TankAutonomousBlueDepotBridge extends LinearOpMode {
 
         double ticksToInches = 288 / (Math.PI * 6.125);
 
-        int colors[] = frontColorSensor.getAverageColor(500);
+        int[] colors = frontColorSensor.getAverageColor(500);
 
         int redBaseline = colors[0];
         int blueBaseline = colors[2];

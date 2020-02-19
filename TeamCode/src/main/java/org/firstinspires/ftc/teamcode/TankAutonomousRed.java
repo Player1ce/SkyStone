@@ -73,7 +73,7 @@ public class TankAutonomousRed extends LinearOpMode {
             mecanumWheels.crabDrive("right", 0.7, 1050);
 
             //now drive until we see the red or blue plate
-            int colors[] = frontColorSensor.getAverageColor(500);
+        int[] colors = frontColorSensor.getAverageColor(500);
 
             int redBaseline = colors[0];
             int blueBaseline = colors[2];

@@ -1,12 +1,10 @@
 package org.firstinspires.ftc.devices;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.logic.ChassisName;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 public class Encoders {
     //TODO do we need to run using encoder. Run using encoder is a PID method so it will interfere with our power setup?
@@ -14,21 +12,14 @@ public class Encoders {
     //TODO we need to move the encoders to separate ports on the rev hub so the wheels cna run with encoders.
 
 
-    ChassisName chassis;
-
-    Orientation startOrientation;
-
     public Encoders(ChassisName chassisName) {
-        this.chassis = chassisName;
     }
 
-    public MecanumWheels wheels;
+    private MecanumWheels wheels;
 
-    public DcMotor xEncoder, yEncoder;
+    private DcMotor xEncoder, yEncoder;
 
     public double xTarget, yTarget;
-
-    public double finalPower = 0;
 
 
     //actual diameter: 2.7812 in.
@@ -97,8 +88,8 @@ public class Encoders {
             double horizontalDistance=getX()-currentX;
 
             //min motor power should be set to zero
-            double power=wheels.calculateProportionalMotorPower(0.0015,distance,MotorPower,MinMotorPower);
-            double xPower=wheels.calculateProportionalMotorPower(0.0015,horizontalDistance,MotorPower,MinMotorPower);
+            double power= MecanumWheels.calculateProportionalMotorPower(0.0015,distance,MotorPower,MinMotorPower);
+            double xPower= MecanumWheels.calculateProportionalMotorPower(0.0015,horizontalDistance,MotorPower,MinMotorPower);
 
             wheels.setPowerFromGamepad(false, power , 0, horizontalDistance>0?-0.1:0.1 , -1 );
 
@@ -145,7 +136,7 @@ public class Encoders {
 
             double distance = Math.abs(getX() - xTarget);
 
-            double power = wheels.calculateProportionalMotorPower(0.0015, distance, MotorPower, MinMotorPower);
+            double power = MecanumWheels.calculateProportionalMotorPower(0.0015, distance, MotorPower, MinMotorPower);
 
             wheels.setPowerFromGamepad(false, power, 0, 1, 0);
 
@@ -303,7 +294,7 @@ public class Encoders {
 
         wheels.StopMotors();
 
-        finalPower = i;
+        double finalPower = i;
 
     }
 

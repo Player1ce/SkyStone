@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.devices.MecanumWheels;
 import org.firstinspires.ftc.devices.ScissorLift;
-import org.firstinspires.ftc.logic.BasicPositions;
 import org.firstinspires.ftc.logic.ButtonOneShot;
 import org.firstinspires.ftc.logic.ChassisName;
 
@@ -15,7 +14,7 @@ import org.firstinspires.ftc.logic.ChassisName;
 //@Disabled
 public class LiftTest extends OpMode {
     private final MecanumWheels wheels = new MecanumWheels(ChassisName.TANK);
-    private final ScissorLift lift = new ScissorLift(ChassisName.TANK, wheels);
+    private final ScissorLift lift = new ScissorLift(wheels);
     private final ButtonOneShot xButton = new ButtonOneShot();
     private final ButtonOneShot buttonOneShotY = new ButtonOneShot();
     private final ButtonOneShot buttonOneShotA = new ButtonOneShot();

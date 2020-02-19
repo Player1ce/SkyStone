@@ -27,7 +27,7 @@ public class TankTeleOp extends OpMode {
     private final FoundationHook hookServo = new FoundationHook(ChassisName.TANK);
     private final IMURevHub imu = new IMURevHub(ChassisName.TANK);
     private final SkystoneLever skystoneLever = new SkystoneLever();
-    private final ScissorLift scissorLift = new ScissorLift(ChassisName.TANK, mecanumWheels);
+    private final ScissorLift scissorLift = new ScissorLift(mecanumWheels);
     private final Swivel swivel = new Swivel();
     private final BlockClaw blockClaw = new BlockClaw();
 
@@ -122,6 +122,7 @@ public class TankTeleOp extends OpMode {
         if (skystoneLeverButtonLogic.isPressed(gamepad1.y)) {
             leverUP = !leverUP;
         }
+
         if (leverUP) {
             skystoneLever.setPosition(BasicPositions.UP);
         }

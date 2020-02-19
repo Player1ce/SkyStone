@@ -2,7 +2,6 @@ package org.firstinspires.ftc.logic;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.Controller.PIDController;
 import org.firstinspires.ftc.devices.Encoders;
@@ -11,8 +10,6 @@ import org.firstinspires.ftc.devices.MecanumWheels;
 import org.firstinspires.ftc.logic.ChassisName;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-
-import java.nio.channels.Pipe;
 
 public class Navigation {
     ChassisName chassis;
@@ -78,7 +75,7 @@ public class Navigation {
         //double motorPower = .4;
         //double minMotorPower = .3;
         double distance = Math.abs(degrees - imu.getAngle());
-        double calcedPower=wheels.calculateProportionalMotorPower(0.0015,distance, motorPower, minMotorPower);
+        double calcedPower= MecanumWheels.calculateProportionalMotorPower(0.0015,distance, motorPower, minMotorPower);
         double  leftPower, rightPower;
 
         // restart imu movement tracking.
@@ -93,20 +90,20 @@ public class Navigation {
             // On right turn we have to get off zero first.
             while (linearOpMode.opModeIsActive() && imu.getAngle() == 0) {
                 distance = Math.abs(degrees - imu.getAngle());
-                calcedPower=wheels.calculateProportionalMotorPower(0.0015,distance, motorPower, minMotorPower);
+                calcedPower= MecanumWheels.calculateProportionalMotorPower(0.0015,distance, motorPower, minMotorPower);
                 wheels.setPowerFromGamepad(false, calcedPower, 1, 0, 0);
             }
 
             while (linearOpMode.opModeIsActive() && imu.getAngle() > degrees) {
                 distance = Math.abs(degrees - imu.getAngle());
-                calcedPower=wheels.calculateProportionalMotorPower(0.0015,distance, motorPower, minMotorPower);
+                calcedPower= MecanumWheels.calculateProportionalMotorPower(0.0015,distance, motorPower, minMotorPower);
                 wheels.setPowerFromGamepad(false, calcedPower, 1, 0, 0);
             }
         }
         else    // left turn.
             while (linearOpMode.opModeIsActive() && imu.getAngle() < degrees) {
                 distance = Math.abs(degrees - imu.getAngle());
-                calcedPower=wheels.calculateProportionalMotorPower(0.0015,distance, motorPower, minMotorPower);
+                calcedPower= MecanumWheels.calculateProportionalMotorPower(0.0015,distance, motorPower, minMotorPower);
                 wheels.setPowerFromGamepad(false, calcedPower, -1, 0, 0);
             }
 

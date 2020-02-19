@@ -11,6 +11,7 @@ import org.firstinspires.ftc.logic.ChassisName;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 
 import java.util.List;
+import java.util.Locale;
 
 @Autonomous(name = "TankAutonomousCameraTester", group="Skystone")
 public class TankAutonomousCameraTester extends LinearOpMode {
@@ -48,10 +49,10 @@ public class TankAutonomousCameraTester extends LinearOpMode {
                 // step through the list of recognitions and display boundary info.
                 int i = 0;
                 for (Recognition recognition : updatedRecognitions) {
-                    telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
-                    telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
+                    telemetry.addData(String.format(Locale.US,"label (%d)", i), recognition.getLabel());
+                    telemetry.addData(String.format(Locale.US,"  left,top (%d)", i), "%.03f , %.03f",
                             recognition.getLeft(), recognition.getTop());
-                    telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
+                    telemetry.addData(String.format(Locale.US,"  right,bottom (%d)", i), "%.03f , %.03f",
                             recognition.getRight(), recognition.getBottom());
                 }
                 telemetry.update();

@@ -43,7 +43,7 @@ public class GoBildaChassisAutonomous extends LinearOpMode {
 
     }
 
-    protected void executeAutonomousLogic () {
+    private void executeAutonomousLogic() {
         //put all code in this while loop so the bot will stop when we tell it to
 
             mecanumWheels.sleepAndCheckActive(30000);

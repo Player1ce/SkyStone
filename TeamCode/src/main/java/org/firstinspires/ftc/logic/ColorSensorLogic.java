@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
  * Helper class for color sensors.
  */
 public class ColorSensorLogic {
-    final ColorSensor colorSensor;
+    private final ColorSensor colorSensor;
 
     public ColorSensorLogic(ColorSensor colorSensor) {
         this.colorSensor=colorSensor;

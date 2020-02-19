@@ -140,7 +140,7 @@ public class IMURevHub {
     public void rotate(double degrees, double motorPower, double minMotorPower, LinearOpMode linearOpMode)
     {
         double distance = Math.abs(degrees - getAngle());
-        double calcedPower=wheels.calculateProportionalMotorPower(0.0015,distance, motorPower, minMotorPower);
+        double calcedPower= MecanumWheels.calculateProportionalMotorPower(0.0015,distance, motorPower, minMotorPower);
         double  leftPower, rightPower;
 
         // restart imu movement tracking.
@@ -173,20 +173,20 @@ public class IMURevHub {
             // On right turn we have to get off zero first.
             while (linearOpMode.opModeIsActive() && getAngle() == 0) {
                 distance = Math.abs(degrees - getAngle());
-                calcedPower=wheels.calculateProportionalMotorPower(0.0015,distance, motorPower, minMotorPower);
+                calcedPower= MecanumWheels.calculateProportionalMotorPower(0.0015,distance, motorPower, minMotorPower);
                 wheels.setPowerFromGamepad(false, calcedPower, 1, 0, 0);
             }
 
             while (linearOpMode.opModeIsActive() && getAngle() > degrees) {
                 distance = Math.abs(degrees - getAngle());
-                calcedPower=wheels.calculateProportionalMotorPower(0.0015,distance, motorPower, minMotorPower);
+                calcedPower= MecanumWheels.calculateProportionalMotorPower(0.0015,distance, motorPower, minMotorPower);
                 wheels.setPowerFromGamepad(false, calcedPower, 1, 0, 0);
             }
         }
         else    // left turn.
             while (linearOpMode.opModeIsActive() && getAngle() < degrees) {
                 distance = Math.abs(degrees - getAngle());
-                calcedPower=wheels.calculateProportionalMotorPower(0.0015,distance, motorPower, minMotorPower);
+                calcedPower= MecanumWheels.calculateProportionalMotorPower(0.0015,distance, motorPower, minMotorPower);
                 wheels.setPowerFromGamepad(false, calcedPower, -1, 0, 0);
             }
 

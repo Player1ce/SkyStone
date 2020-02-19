@@ -17,6 +17,7 @@ import org.firstinspires.ftc.teamcode.TeleOpMethods;
 import org.firstinspires.ftc.utils.LogUtils;
 
 import java.util.List;
+import java.util.Locale;
 
 
 @TeleOp(name="GoBildaTestTeleop", group="Skystone")
@@ -70,10 +71,10 @@ public class GoBildaTestTeleop extends OpMode {
                 // step through the list of recognitions and display boundary info.
                 int i = 0;
                 for (Recognition recognition : updatedRecognitions) {
-                    telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
-                    telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
+                    telemetry.addData(String.format(Locale.US,"label (%d)", i), recognition.getLabel());
+                    telemetry.addData(String.format(Locale.US,"  left,top (%d)", i), "%.03f , %.03f",
                             recognition.getLeft(), recognition.getTop());
-                    telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
+                    telemetry.addData(String.format(Locale.US,"  right,bottom (%d)", i), "%.03f , %.03f",
                             recognition.getRight(), recognition.getBottom());
                 }
                 telemetry.update();

@@ -1,9 +1,7 @@
 package org.firstinspires.ftc.devices;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.logic.BasicPositions;
 import org.firstinspires.ftc.logic.ChassisName;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 

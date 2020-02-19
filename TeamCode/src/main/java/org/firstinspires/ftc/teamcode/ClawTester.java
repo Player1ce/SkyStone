@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.devices.BlockClaw;
 import org.firstinspires.ftc.logic.BasicPositions;
 import org.firstinspires.ftc.logic.ButtonOneShot;
-import org.firstinspires.ftc.logic.ChassisName;
 
 @TeleOp(name="Claw tester", group = "Skystone")
 public class ClawTester extends OpMode {
