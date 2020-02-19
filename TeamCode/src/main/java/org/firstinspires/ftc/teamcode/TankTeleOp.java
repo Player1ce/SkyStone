@@ -182,7 +182,7 @@ public class TankTeleOp extends OpMode {
                     count180 = 0;
                     break;
                 case (1):
-                    swivel.setPositionEnum(BasicPositions.OPEN);
+                    swivel.setPosition(0.6);
                     count90 = 0;
                     count180 = 0;
                     break;
