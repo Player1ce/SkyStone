@@ -50,7 +50,7 @@ public class SwivelTest extends OpMode {
                 swivel.setPosition(0.27);
                 clawState = "open";
             } else if (!clawOpen) {
-                swivel.setPosition(0.96);
+                swivel.setPosition(0.93);
                 clawState = "closed";
             }
         }
