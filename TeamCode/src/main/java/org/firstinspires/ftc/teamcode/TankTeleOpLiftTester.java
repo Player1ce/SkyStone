@@ -6,12 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 
-import org.firstinspires.ftc.devices.Encoders;
-import org.firstinspires.ftc.devices.FoundationHook;
 import org.firstinspires.ftc.devices.IMURevHub;
-import org.firstinspires.ftc.devices.MecanumWheels;
-import org.firstinspires.ftc.devices.SkystoneIntake;
-import org.firstinspires.ftc.logic.ButtonOneShot;
 import org.firstinspires.ftc.logic.ChassisName;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 

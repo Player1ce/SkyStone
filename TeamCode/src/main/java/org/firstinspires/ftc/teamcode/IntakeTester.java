@@ -3,9 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.devices.BlockClaw;
-import org.firstinspires.ftc.devices.SkystoneIntake;
-import org.firstinspires.ftc.logic.BasicPositions;
+import org.firstinspires.ftc.devices.BlockIntake;
 import org.firstinspires.ftc.logic.ButtonOneShot;
 import org.firstinspires.ftc.logic.ChassisName;
 
@@ -13,7 +11,7 @@ import org.firstinspires.ftc.logic.ChassisName;
 public class IntakeTester extends OpMode {
     private final ButtonOneShot buttonOneShotY = new ButtonOneShot();
     private final ButtonOneShot buttonOneShotX = new ButtonOneShot();
-    private final SkystoneIntake intake = new SkystoneIntake(ChassisName.TANK);
+    private final BlockIntake intake = new BlockIntake(ChassisName.TANK);
 
     public void init() {
         intake.initializeIntake(this);

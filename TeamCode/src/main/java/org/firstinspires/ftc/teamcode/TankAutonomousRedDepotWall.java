@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.SwitchableLight;
 
 import org.firstinspires.ftc.devices.FoundationHook;
 import org.firstinspires.ftc.devices.MecanumWheels;
-import org.firstinspires.ftc.devices.SkystoneIntake;
+import org.firstinspires.ftc.devices.BlockIntake;
 import org.firstinspires.ftc.logic.ChassisName;
 import org.firstinspires.ftc.logic.ColorSensorLogic;
 import org.firstinspires.ftc.logic.KillOpModeException;
@@ -18,7 +18,7 @@ public class TankAutonomousRedDepotWall extends LinearOpMode {
     private TeleOpMethods robot = new TeleOpMethods(ChassisName.TANK);
     private final MecanumWheels mecanumWheels = new MecanumWheels(ChassisName.TANK);
     private final FoundationHook hookServo = new FoundationHook( ChassisName.TANK);
-    private final SkystoneIntake intake = new SkystoneIntake(ChassisName.TANK);
+    private final BlockIntake intake = new BlockIntake(ChassisName.TANK);
 
     ColorSensor colorSensor;
 

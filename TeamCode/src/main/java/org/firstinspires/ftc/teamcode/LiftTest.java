@@ -22,6 +22,7 @@ public class LiftTest extends OpMode {
     private boolean liftUp = true;
     private boolean setPositions = true;
     String liftState;
+    boolean directControl = true;
 
     //Use this class to test new methods and anything else for auto
 
@@ -35,57 +36,55 @@ public class LiftTest extends OpMode {
 
     public void loop() {
 
-        /*
-        if (lift.liftMotor.getMode() == DcMotor.RunMode.RUN_TO_POSITION && lift.liftMotor.getCurrentPosition() == lift.liftMotor.getTargetPosition()) {
-            lift.liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            if (gamepad1.left_trigger > 0) {
-                lift.liftMotor.setPower(1);
-            } else if (gamepad1.right_trigger > 0 && lift.limitSwitch.getState()) {
-                lift.liftMotor.setPower(-1);
-            } else {
-                lift.liftMotor.setPower(0);
-            }
-        }
-
-         */
-
         if (xButton.isPressed(gamepad1.x)) {
+            if (!directControl) {
+                lift.liftMotor.setTargetPosition(lift.liftMotor.getCurrentPosition());
+                wheels.sleepAndCheckActive(500);
+                lift.liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                lift.liftMotor.setPower(0);
+                directControl = !directControl;
+            }
             lift.zeroEncoder();
         }
 
-        if (buttonOneShotA.isPressed(gamepad1.a)){
-            int target=0;
-            switch (count) {
-                case 0:
-                    target=2500;
-                    break;
-                case 1:
-                    target=5000;
-                    break;
-                case 2:
-                    target=7500;
-                    break;
-                case 3:
-                    target=10000;
-                    break;
-                case 4:
-                    target=12500;
-                    break;
-                case 5:
-                    target=15000;
-                    break;
-                case 6:
-                    target=17500;
-                    break;
-                default:
-                    target=0;
-                    count=-1;
-                    break;
+        if (gamepad1.left_trigger > 0) {
+            if (!directControl) {
+                lift.liftMotor.setTargetPosition(lift.liftMotor.getCurrentPosition());
+                wheels.sleepAndCheckActive(500);
+                lift.liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                lift.liftMotor.setPower(0);
+                directControl = !directControl;
             }
-            count++;
-            lift.setTargetPosition(target);
+            lift.liftMotor.setPower(gamepad1.left_trigger);
 
         }
+        else if (gamepad1.right_trigger > 0 && lift.limitSwitch.getState()) {
+            if (!directControl) {
+                lift.liftMotor.setTargetPosition(lift.liftMotor.getCurrentPosition());
+                wheels.sleepAndCheckActive(500);
+                lift.liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                lift.liftMotor.setPower(0);
+                directControl = !directControl;
+            }
+            lift.liftMotor.setPower(-gamepad1.right_trigger);
+        }
+
+        else if (lift.liftMotor.getMode() == DcMotor.RunMode.RUN_USING_ENCODER){
+            if (!directControl) {
+                lift.liftMotor.setTargetPosition(lift.liftMotor.getCurrentPosition());
+                wheels.sleepAndCheckActive(500);
+                lift.liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                lift.liftMotor.setPower(0);
+                directControl = !directControl;
+            }
+            lift.liftMotor.setPower(0);
+        }
+
+        if (buttonOneShotA.isPressed(gamepad1.a)) {
+            directControl = false;
+            lift.setScissorHeights();
+        }
+
 
         /*
         if (buttonOneShotY.isPressed(gamepad1.y)) {
@@ -112,6 +111,8 @@ public class LiftTest extends OpMode {
         //telemetry.addData("set position:", setPositions);
         telemetry.addData("position:", lift.getPosition());
         telemetry.addData("Power:", lift.liftMotor.getPower());
+        telemetry.addData("direct control:", directControl);
+        telemetry.addData("runmode:", lift.liftMotor.getMode());
         telemetry.update();
 
     }

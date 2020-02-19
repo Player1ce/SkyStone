@@ -8,7 +8,7 @@ import org.firstinspires.ftc.logic.Navigation;
 import org.firstinspires.ftc.logic.ChassisName;
 import org.firstinspires.ftc.devices.FoundationHook;
 import org.firstinspires.ftc.devices.MecanumWheels;
-import org.firstinspires.ftc.devices.SkystoneIntake;
+import org.firstinspires.ftc.devices.BlockIntake;
 import org.firstinspires.ftc.logic.KillOpModeException;
 import org.firstinspires.ftc.utils.LogUtils;
 
@@ -18,7 +18,7 @@ public class TankAutonomousTester extends LinearOpMode {
     private TeleOpMethods robot = new TeleOpMethods(ChassisName.TANK);
     private final MecanumWheels wheels = new MecanumWheels(ChassisName.TANK);
     private final FoundationHook hookServo = new FoundationHook(ChassisName.TANK);
-    private final SkystoneIntake intake = new SkystoneIntake(ChassisName.TANK);
+    private final BlockIntake intake = new BlockIntake(ChassisName.TANK);
     private final Navigation navigation = new Navigation(ChassisName.TANK);
     private final IMURevHub imu = new IMURevHub(ChassisName.TANK);
     //Use this class to test new methods and anything else for auto

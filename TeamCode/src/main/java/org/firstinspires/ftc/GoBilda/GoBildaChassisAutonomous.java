@@ -7,7 +7,7 @@ import org.firstinspires.ftc.devices.Camera;
 import org.firstinspires.ftc.logic.ChassisName;
 import org.firstinspires.ftc.devices.FoundationHook;
 import org.firstinspires.ftc.devices.MecanumWheels;
-import org.firstinspires.ftc.devices.SkystoneIntake;
+import org.firstinspires.ftc.devices.BlockIntake;
 import org.firstinspires.ftc.logic.KillOpModeException;
 import org.firstinspires.ftc.teamcode.TeleOpMethods;
 
@@ -20,7 +20,7 @@ public class GoBildaChassisAutonomous extends LinearOpMode {
     private TeleOpMethods robot = new TeleOpMethods(ChassisName.GOBILDA);
     private final MecanumWheels mecanumWheels=new MecanumWheels(ChassisName.GOBILDA);
     private final FoundationHook hookServo = new FoundationHook(ChassisName.GOBILDA);
-    private final SkystoneIntake intake = new SkystoneIntake(ChassisName.GOBILDA);
+    private final BlockIntake intake = new BlockIntake(ChassisName.GOBILDA);
     private final Camera camera = new Camera();
 
     public void runOpMode() throws InterruptedException {

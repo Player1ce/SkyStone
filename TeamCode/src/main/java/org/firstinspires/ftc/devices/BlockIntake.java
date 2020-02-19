@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.logic.BasicPositions;
 import org.firstinspires.ftc.logic.ChassisName;
 
-public class SkystoneIntake {
+public class BlockIntake {
     public DcMotor leftIntake;
     public DcMotor rightIntake;
     public Servo lockServo;
@@ -16,7 +16,7 @@ public class SkystoneIntake {
 
     private ChassisName chassis;
 
-    public SkystoneIntake(ChassisName name) {
+    public BlockIntake(ChassisName name) {
         chassis = name;
     }
 

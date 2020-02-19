@@ -5,13 +5,14 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.devices.Encoders;
 import org.firstinspires.ftc.devices.IMURevHub;
+import org.firstinspires.ftc.devices.ScissorLift;
 import org.firstinspires.ftc.devices.SkystoneLever;
 import org.firstinspires.ftc.logic.BasicPositions;
 import org.firstinspires.ftc.logic.ButtonOneShot;
 import org.firstinspires.ftc.logic.ChassisName;
 import org.firstinspires.ftc.devices.FoundationHook;
 import org.firstinspires.ftc.devices.MecanumWheels;
-import org.firstinspires.ftc.devices.SkystoneIntake;
+import org.firstinspires.ftc.devices.BlockIntake;
 
 
 @TeleOp(name="Tank TeleOp", group="Skystone")
@@ -19,10 +20,11 @@ import org.firstinspires.ftc.devices.SkystoneIntake;
 public class TankTeleOp extends OpMode {
     private TeleOpMethods robot = new TeleOpMethods(ChassisName.TANK);
     private final MecanumWheels mecanumWheels = new MecanumWheels(ChassisName.TANK);
-    private final SkystoneIntake intake = new SkystoneIntake(ChassisName.TANK);
+    private final BlockIntake intake = new BlockIntake(ChassisName.TANK);
     private final FoundationHook hookServo = new FoundationHook(ChassisName.TANK);
     private final IMURevHub imu = new IMURevHub(ChassisName.TANK);
     private final SkystoneLever skystoneLever = new SkystoneLever();
+    private final ScissorLift scissorLift = new ScissorLift(ChassisName.TANK, mecanumWheels);
 
     private ButtonOneShot reverseButtonLogic = new ButtonOneShot();
     private ButtonOneShot powerChangeButtonLogic = new ButtonOneShot();
@@ -50,6 +52,7 @@ public class TankTeleOp extends OpMode {
         intake.initializeIntake(this);
         encoders.initialize(mecanumWheels, this);
         imu.initializeIMU(mecanumWheels,this);
+        skystoneLever.initialize(this);
         //TODO I changed servos and intake to null for a full functionality test.
         //set up variables in respective classes.
 
@@ -109,13 +112,13 @@ public class TankTeleOp extends OpMode {
         }
 
         //intake control ----------------------------
-        if (gamepad2.left_trigger > 0) {
-            intake.leftIntake.setPower(-gamepad2.left_trigger * .7);
-            intake.rightIntake.setPower(gamepad2.left_trigger * .7);
+        if (gamepad1.left_trigger > 0) {
+            intake.leftIntake.setPower(-gamepad1.left_trigger * .7);
+            intake.rightIntake.setPower(gamepad1.left_trigger * .7);
         }
-        else if (gamepad2.right_trigger > 0) {
-            intake.leftIntake.setPower(gamepad2.right_trigger * .7);
-            intake.rightIntake.setPower(-gamepad2.right_trigger * .7);
+        else if (gamepad1.right_trigger > 0) {
+            intake.leftIntake.setPower(gamepad1.right_trigger * .7);
+            intake.rightIntake.setPower(-gamepad1.right_trigger * .7);
         }
         else {
             intake.leftIntake.setPower(0);
@@ -134,7 +137,9 @@ public class TankTeleOp extends OpMode {
          * h.	Rb: Close Claw
          */
 
-        
+
+
+
 
 
 

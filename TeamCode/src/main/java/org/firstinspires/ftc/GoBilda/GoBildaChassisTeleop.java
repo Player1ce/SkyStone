@@ -8,7 +8,7 @@ import org.firstinspires.ftc.logic.ButtonOneShot;
 import org.firstinspires.ftc.logic.ChassisName;
 import org.firstinspires.ftc.devices.FoundationHook;
 import org.firstinspires.ftc.devices.MecanumWheels;
-import org.firstinspires.ftc.devices.SkystoneIntake;
+import org.firstinspires.ftc.devices.BlockIntake;
 import org.firstinspires.ftc.teamcode.TeleOpMethods;
 
 @TeleOp(name="GoBildaChassisTeleop", group="Skystone")
@@ -18,7 +18,7 @@ public class GoBildaChassisTeleop extends OpMode {
     private TeleOpMethods robot = new TeleOpMethods(ChassisName.GOBILDA);
     private final MecanumWheels mecanumWheels = new MecanumWheels(ChassisName.GOBILDA);
     private final FoundationHook hookServo = new FoundationHook(ChassisName.GOBILDA);
-    private final SkystoneIntake intake = new SkystoneIntake(ChassisName.GOBILDA);
+    private final BlockIntake intake = new BlockIntake(ChassisName.GOBILDA);
     private ButtonOneShot reverseButtonLogic = new ButtonOneShot();
     private ButtonOneShot powerChangeButtonLogic = new ButtonOneShot();
 
