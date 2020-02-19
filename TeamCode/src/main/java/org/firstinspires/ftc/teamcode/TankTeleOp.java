@@ -2,11 +2,14 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.devices.BlockClaw;
 import org.firstinspires.ftc.devices.Encoders;
 import org.firstinspires.ftc.devices.IMURevHub;
 import org.firstinspires.ftc.devices.ScissorLift;
 import org.firstinspires.ftc.devices.SkystoneLever;
+import org.firstinspires.ftc.devices.Swivel;
 import org.firstinspires.ftc.logic.BasicPositions;
 import org.firstinspires.ftc.logic.ButtonOneShot;
 import org.firstinspires.ftc.logic.ChassisName;
@@ -25,21 +28,31 @@ public class TankTeleOp extends OpMode {
     private final IMURevHub imu = new IMURevHub(ChassisName.TANK);
     private final SkystoneLever skystoneLever = new SkystoneLever();
     private final ScissorLift scissorLift = new ScissorLift(ChassisName.TANK, mecanumWheels);
+    private final Swivel swivel = new Swivel();
+    private final BlockClaw blockClaw = new BlockClaw();
 
     private ButtonOneShot reverseButtonLogic = new ButtonOneShot();
     private ButtonOneShot powerChangeButtonLogic = new ButtonOneShot();
     private ButtonOneShot hookServoButtonLogic = new ButtonOneShot();
     private ButtonOneShot skystoneLeverButtonLogic = new ButtonOneShot();
-    private ButtonOneShot hookControlButtonLocgic = new ButtonOneShot();
+    private ButtonOneShot swivel180ButtonLogic = new ButtonOneShot();
+    private ButtonOneShot swivel90ButtonLogic = new ButtonOneShot();
+    private ButtonOneShot scissorLiftCalibrateButtonLogic = new ButtonOneShot();
+    private ButtonOneShot scissorLiftSetPositionsButtonLogic = new ButtonOneShot();
+    private ButtonOneShot clawOpenButtonLogic = new ButtonOneShot();
+    private ButtonOneShot clawClosedButtonLogic = new ButtonOneShot();
     private Encoders encoders = new Encoders(ChassisName.TANK);
 
     //TODO correct starting cars for drive
     private boolean reverse = true;
     private boolean highPower = true;
     private boolean hookServoEnable = false;
-    private final double HIGH_POWER = 1.0;
-    private final double NORMAL_POWER = 0.5;
     private boolean leverUP = true;
+    private boolean scissorLiftDirectControl;
+    private boolean clawOpen;
+    private String clawState;
+    private int count180 =0;
+    private int count90 = 0;
 
 
     public void init() {
@@ -53,6 +66,9 @@ public class TankTeleOp extends OpMode {
         encoders.initialize(mecanumWheels, this);
         imu.initializeIMU(mecanumWheels,this);
         skystoneLever.initialize(this);
+        swivel.initialize(this);
+        scissorLift.initialize(this);
+        blockClaw.initialize(this);
         //TODO I changed servos and intake to null for a full functionality test.
         //set up variables in respective classes.
 
@@ -80,6 +96,8 @@ public class TankTeleOp extends OpMode {
             reverse = !reverse;
         }
         //if high power, use the high power constant, else use the normal power constant
+        double HIGH_POWER = 1.0;
+        double NORMAL_POWER = 0.5;
         double power = highPower ? HIGH_POWER : NORMAL_POWER;
 
 
@@ -137,25 +155,105 @@ public class TankTeleOp extends OpMode {
          * h.	Rb: Close Claw
          */
 
+        if (swivel180ButtonLogic.isPressed(gamepad2.a)) {
+            switch (count180) {
+                case (0):
+                    swivel.setPositionEnum(BasicPositions.CLOSED);
+                    count180 = 1;
+                    count90 = 0;
+                    break;
+                case (1):
+                    swivel.setPositionEnum(BasicPositions.OPEN);
+                    count180 = 0;
+                    count90 = 0;
+                    break;
+                default:
+                    count180 = 0;
+                    break;
+            }
+        }
 
+        if (swivel90ButtonLogic.isPressed(gamepad2.b)) {
+            switch (count90) {
+                case (0):
+                    swivel.setPositionEnum(BasicPositions.CLOSED);
+                    count90 = 1;
+                    count180 = 0;
+                    break;
+                case (1):
+                    swivel.setPositionEnum(BasicPositions.OPEN);
+                    count90 = 0;
+                    count180 = 0;
+                    break;
+                default:
+                    count90 = 0;
+                    break;
+            }
+        }
 
+        if (scissorLiftCalibrateButtonLogic.isPressed(gamepad2.y)) {
+            scissorLiftDirectControl = scissorLift.switchMode(scissorLiftDirectControl);
+            scissorLift.zeroEncoder();
+        }
 
+        if (scissorLiftSetPositionsButtonLogic.isPressed(gamepad2.x)) {
+            scissorLiftDirectControl = false;
+            scissorLift.setScissorHeights();
+        }
 
+        if (gamepad1.left_trigger > 0) {
+            scissorLiftDirectControl = scissorLift.switchMode(scissorLiftDirectControl);
+            scissorLift.liftMotor.setPower(gamepad1.left_trigger);
+
+        }
+        else if (gamepad1.right_trigger > 0 && scissorLift.limitSwitch.getState()) {
+            scissorLiftDirectControl = scissorLift.switchMode(scissorLiftDirectControl);
+            scissorLift.liftMotor.setPower(-gamepad1.right_trigger);
+        }
+
+        else if (scissorLift.liftMotor.getMode() == DcMotor.RunMode.RUN_USING_ENCODER){
+            scissorLiftDirectControl = scissorLift.switchMode(scissorLiftDirectControl);
+            scissorLift.liftMotor.setPower(0);
+        }
+
+        if (clawOpenButtonLogic.isPressed(gamepad2.left_bumper)) {
+            clawOpen = true;
+        }
+        else if (clawClosedButtonLogic.isPressed(gamepad2.right_bumper)) {
+            clawOpen = false;
+        }
+
+        if (clawOpen) {
+            blockClaw.setPosition(BasicPositions.OPEN);
+            clawState = "open";
+        }
+        else if (!clawOpen) {
+            blockClaw.setPosition(BasicPositions.CLOSED);
+            clawState = "closed";
+        }
 
 
 
         //telemetry ------------------------------
         //telemetry is used to show on the driver controller phone what the code sees
-        telemetry.addData("encoder x vlaue:", mecanumWheels.frontLeft.getCurrentPosition());
-        telemetry.addData("encoder y vlaue:", mecanumWheels.frontRight.getCurrentPosition());
-
         telemetry.addData("Power:", power);
         telemetry.addData("F/R:", robot.reverseSense(reverse));
+        telemetry.addData("claw State:", clawState);
+        telemetry.addData("scissor lift DC:", scissorLiftDirectControl);
         telemetry.addData("hookServo Position", hookServo.hookServo.getPosition());
-        telemetry.addData("x_left:", mecanumWheels.xLeft);
+        telemetry.addData("SL position:", scissorLift.getPosition());
+        telemetry.addData("count:", scissorLift.count);
+        telemetry.addData("Skystone lever up:", leverUP);
+
+        /*telemetry.addData("x_left:", mecanumWheels.xLeft);
         telemetry.addData("x_right:", mecanumWheels.xRight);
         telemetry.addData("y_left:", mecanumWheels.yLeft);
         telemetry.addData("y:", encoders.getY());
+
+         */
+
+        //telemetry.addData("encoder x vlaue:", mecanumWheels.frontLeft.getCurrentPosition());
+       //telemetry.addData("encoder y vlaue:", mecanumWheels.frontRight.getCurrentPosition());
 
         //telemetry.addData("rampServo Position:", intake.rampServo.getPosition());
         //telemetry.addData("rampServoPosition:", rampPosition);

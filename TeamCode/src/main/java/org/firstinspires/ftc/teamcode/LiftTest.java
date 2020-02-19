@@ -37,6 +37,7 @@ public class LiftTest extends OpMode {
     public void loop() {
 
         if (xButton.isPressed(gamepad1.x)) {
+            /*
             if (!directControl) {
                 lift.liftMotor.setTargetPosition(lift.liftMotor.getCurrentPosition());
                 wheels.sleepAndCheckActive(500);
@@ -44,39 +45,25 @@ public class LiftTest extends OpMode {
                 lift.liftMotor.setPower(0);
                 directControl = !directControl;
             }
+
+             */
+
+            directControl = lift.switchMode(directControl);
             lift.zeroEncoder();
         }
 
         if (gamepad1.left_trigger > 0) {
-            if (!directControl) {
-                lift.liftMotor.setTargetPosition(lift.liftMotor.getCurrentPosition());
-                wheels.sleepAndCheckActive(500);
-                lift.liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                lift.liftMotor.setPower(0);
-                directControl = !directControl;
-            }
+            directControl = lift.switchMode(directControl);
             lift.liftMotor.setPower(gamepad1.left_trigger);
 
         }
         else if (gamepad1.right_trigger > 0 && lift.limitSwitch.getState()) {
-            if (!directControl) {
-                lift.liftMotor.setTargetPosition(lift.liftMotor.getCurrentPosition());
-                wheels.sleepAndCheckActive(500);
-                lift.liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                lift.liftMotor.setPower(0);
-                directControl = !directControl;
-            }
+            directControl = lift.switchMode(directControl);
             lift.liftMotor.setPower(-gamepad1.right_trigger);
         }
 
         else if (lift.liftMotor.getMode() == DcMotor.RunMode.RUN_USING_ENCODER){
-            if (!directControl) {
-                lift.liftMotor.setTargetPosition(lift.liftMotor.getCurrentPosition());
-                wheels.sleepAndCheckActive(500);
-                lift.liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                lift.liftMotor.setPower(0);
-                directControl = !directControl;
-            }
+            directControl = lift.switchMode(directControl);
             lift.liftMotor.setPower(0);
         }
 

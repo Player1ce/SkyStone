@@ -16,7 +16,7 @@ public class ClawTester extends OpMode {
     private final ButtonOneShot buttonOneShotX = new ButtonOneShot();
     private boolean clawOpen = true;
     private boolean setPositions = true;
-    String clawState;
+    private String clawState;
 
     public void init() {
         blockClaw.initialize(this);

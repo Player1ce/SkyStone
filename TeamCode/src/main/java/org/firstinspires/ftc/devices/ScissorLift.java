@@ -18,7 +18,7 @@ public class ScissorLift {
     public MecanumWheels wheels;
     DistanceSensor distanceSensor;
     public DigitalChannel limitSwitch;
-    int count;
+    public int count;
 
     /**
      * limit switch starts
@@ -109,7 +109,17 @@ public class ScissorLift {
         liftMotor.setTargetPosition(target);
         liftMotor.setPower(1);
         liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
 
+    public boolean switchMode (boolean directControl) {
+        if (!directControl) {
+            liftMotor.setTargetPosition(liftMotor.getCurrentPosition());
+            wheels.sleepAndCheckActive(500);
+            liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            liftMotor.setPower(0);
+            directControl = !directControl;
+        }
+        return directControl;
     }
 
 

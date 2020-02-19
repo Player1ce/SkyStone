@@ -16,7 +16,7 @@ public class SwivelTest extends OpMode {
     private final ButtonOneShot buttonOneShotX = new ButtonOneShot();
     private boolean clawOpen = true;
     private boolean setPositions = true;
-    String clawState;
+    private String clawState;
 
     public void init() {
         swivel.initialize(this);
@@ -47,10 +47,10 @@ public class SwivelTest extends OpMode {
         }
         if (setPositions) {
             if (clawOpen) {
-                swivel.setPosition(0.27);
+                swivel.setPosition(0.93);
                 clawState = "open";
             } else if (!clawOpen) {
-                swivel.setPosition(0.93);
+                swivel.setPosition(0.27);
                 clawState = "closed";
             }
         }
