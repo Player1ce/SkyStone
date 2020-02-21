@@ -47,10 +47,11 @@ public class TankTeleOp extends OpMode {
     private boolean reverse = true;
     private boolean highPower = true;
     private boolean hookServoEnable = false;
-    private boolean leverUP = true;
+    private boolean leverUP = false;
     private boolean scissorLiftDirectControl;
     private boolean clawOpen;
     private String clawState;
+    private double clawPosition = .8;
     private int count180 =0;
     private int count90 = 0;
 
@@ -161,12 +162,12 @@ public class TankTeleOp extends OpMode {
                 case (0):
                     swivel.setPositionEnum(BasicPositions.CLOSED);
                     count180 = 1;
-                    count90 = 0;
+                    count90 = 1;
                     break;
                 case (1):
                     swivel.setPositionEnum(BasicPositions.OPEN);
                     count180 = 0;
-                    count90 = 0;
+                    count90 = 1;
                     break;
                 default:
                     count180 = 0;
@@ -179,12 +180,12 @@ public class TankTeleOp extends OpMode {
                 case (0):
                     swivel.setPositionEnum(BasicPositions.CLOSED);
                     count90 = 1;
-                    count180 = 0;
+                    count180 = 1;
                     break;
                 case (1):
                     swivel.setPosition(0.6);
                     count90 = 0;
-                    count180 = 0;
+                    count180 = 1;
                     break;
                 default:
                     count90 = 0;
@@ -202,12 +203,12 @@ public class TankTeleOp extends OpMode {
             scissorLift.setScissorHeights();
         }
 
-        if (gamepad1.left_trigger > 0) {
+        if (gamepad2.left_trigger > 0) {
             scissorLiftDirectControl = scissorLift.switchMode(scissorLiftDirectControl);
             scissorLift.liftMotor.setPower(gamepad1.left_trigger);
 
         }
-        else if (gamepad1.right_trigger > 0 && scissorLift.limitSwitch.getState()) {
+        else if (gamepad2.right_trigger > 0 && scissorLift.limitSwitch.getState()) {
             scissorLiftDirectControl = scissorLift.switchMode(scissorLiftDirectControl);
             scissorLift.liftMotor.setPower(-gamepad1.right_trigger);
         }
@@ -217,6 +218,15 @@ public class TankTeleOp extends OpMode {
             scissorLift.liftMotor.setPower(0);
         }
 
+        if (gamepad2.left_bumper /*clawOpenButtonLogic.isPressed(gamepad2.left_bumper)*/) {
+            clawPosition += 0.01;
+        }
+        else if (gamepad2.right_bumper /*clawClosedButtonLogic.isPressed(gamepad2.right_bumper)*/) {
+            clawPosition -= 0.01;
+        }
+        blockClaw.clawServo.setPosition(clawPosition);
+
+        /*
         if (clawOpenButtonLogic.isPressed(gamepad2.left_bumper)) {
             clawOpen = true;
         }
@@ -232,6 +242,8 @@ public class TankTeleOp extends OpMode {
             blockClaw.setPosition(BasicPositions.CLOSED);
             clawState = "closed";
         }
+
+         */
 
 
 

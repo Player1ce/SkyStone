@@ -30,7 +30,7 @@ public class Encoders {
         this.wheels = wheels;
         //xEncoder = wheels.frontLeft;
         //yEncoder = wheels.frontRight;
-        xEncoder = opMode.hardwareMap.dcMotor.get("port 2");
+        xEncoder = opMode.hardwareMap.dcMotor.get("leftIntake");
         //we are stealing port 3's encoder input
         yEncoder = opMode.hardwareMap.dcMotor.get("rightIntake");
     }
