@@ -11,9 +11,14 @@ import org.firstinspires.ftc.logic.ButtonOneShot;
 @TeleOp(name="Ramp Lift Test", group = "Skystone")
 public class RampLiftTest extends OpMode {
 
+
     int position;
 
     public DcMotor spoolMotor;
+
+    public void initialize (OpMode opMode){
+        spoolMotor = opMode.hardwareMap.dcMotor.get("spoolMotor");
+    }
 
     public void init() {
         spoolMotor = hardwareMap.dcMotor.get("spoolMotor");
@@ -28,7 +33,7 @@ public class RampLiftTest extends OpMode {
             position=0;
         }
 
-       spoolMotor.setPower(0.3);
+       spoolMotor.setPower(0.4);
        spoolMotor.setTargetPosition(position);
         spoolMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 

@@ -29,23 +29,30 @@ public class ScissorLift {
         return liftMotor.getCurrentPosition();
     }
 
-    private void resetEncoder () {
+    public void resetEncoder () {
         liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         wheels.sleepAndCheckActive(10);
         liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public void zeroEncoder() {
-        liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        while (limitSwitch.getState()) {
-            liftMotor.setPower(-1);
-            wheels.sleepAndCheckActive(10);
-        }
-        liftMotor.setPower(0);
-        wheels.sleepAndCheckActive(500);
-        resetEncoder();
+        //moved to lift calibrate
 
     }
+
+    public void resetHeight () {
+        liftMotor.setTargetPosition(0);
+        liftMotor.setPower(1);
+        liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        count=-1;
+    }
+
+    public void setPosition (int pos) {
+        liftMotor.setTargetPosition(pos);
+        liftMotor.setPower(1);
+        liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
+
 
     public void setScissorHeights () {
         int target=0;

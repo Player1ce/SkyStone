@@ -11,8 +11,8 @@ import org.firstinspires.ftc.logic.ChassisName;
 public class BlockIntake {
     public DcMotor leftIntake;
     public DcMotor rightIntake;
-    private Servo lockServo;
-    public Servo rampServo;
+
+    public DcMotor spoolMotor;
 
     public BlockIntake(ChassisName name) {
     }
@@ -21,18 +21,22 @@ public class BlockIntake {
         leftIntake = opMode.hardwareMap.dcMotor.get("leftIntake");
         rightIntake = opMode.hardwareMap.dcMotor.get("rightIntake");
         rightIntake.setDirection(DcMotorSimple.Direction.REVERSE);
-        //lockServo = opMode.hardwareMap.servo.get("lockServo");
+        spoolMotor = opMode.hardwareMap.dcMotor.get("spoolMotor");
+        spoolMotor.setPower(0.4);
+        spoolMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
-    public void lockControl (BasicPositions position) {
-        if (position == BasicPositions.OPEN) {
-            lockServo.setPosition(1);
-        }
-        else if (position == BasicPositions.CLOSED) {
-            lockServo.setPosition(0);
-        }
+    public void lowerRamp() {
+        spoolMotor.setTargetPosition(0);
+        spoolMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
     }
 
+    public void raiseRamp() {
+        spoolMotor.setTargetPosition(500);
+        spoolMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+    }
 
     public void setIntakeBrakes() {
         leftIntake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

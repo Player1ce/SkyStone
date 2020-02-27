@@ -22,7 +22,7 @@ public class FoundationHook {
             hookServo.setPosition(0);
         }
         else   {
-            hookServo.setPosition(.6);
+            hookServo.setPosition(.5);
         }
 
     }

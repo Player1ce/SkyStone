@@ -19,7 +19,7 @@ public class SkystoneLever {
             leverServo.setPosition(0.27);
         }
         if (position == BasicPositions.DOWN || position == BasicPositions.CLOSED) {
-            leverServo.setPosition(1);
+            leverServo.setPosition(0.97);
         }
     }
 }

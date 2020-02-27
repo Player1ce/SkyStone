@@ -41,6 +41,8 @@ public class TankTeleOp extends OpMode {
     private ButtonOneShot scissorLiftSetPositionsButtonLogic = new ButtonOneShot();
     private ButtonOneShot clawOpenButtonLogic = new ButtonOneShot();
     private ButtonOneShot clawClosedButtonLogic = new ButtonOneShot();
+    private ButtonOneShot liftRampButtonLogic = new ButtonOneShot();
+    private ButtonOneShot lowerRampButtonLogic = new ButtonOneShot();
     private Encoders encoders = new Encoders(ChassisName.TANK);
 
     //TODO correct starting cars for drive
@@ -52,8 +54,10 @@ public class TankTeleOp extends OpMode {
     private boolean clawOpen;
     private String clawState;
     private double clawPosition = .8;
-    private int count180 =0;
+    private int count180 = 0;
     private int count90 = 0;
+    //private int setPosition = 0;
+
 
 
     public void init() {
@@ -65,16 +69,19 @@ public class TankTeleOp extends OpMode {
         hookServo.initializeHook(this);
         intake.initializeIntake(this);
         encoders.initialize(mecanumWheels, this);
-        imu.initializeIMU(mecanumWheels,this);
+        imu.initializeIMU(mecanumWheels, this);
         skystoneLever.initialize(this);
-        swivel.initialize(this);
         scissorLift.initialize(this);
+        swivel.scissorLift=scissorLift;
+        swivel.initialize(this);
         blockClaw.initialize(this);
-        //TODO I changed servos and intake to null for a full functionality test.
-        //set up variables in respective classes.
 
         intake.setIntakeBrakes();
+
     }
+
+    boolean raisingLiftForSwivel;
+    boolean aButtonPressed;
 
     public void loop() {
         /** Drive Controller (gamepad1) ---------------------------
@@ -85,8 +92,8 @@ public class TankTeleOp extends OpMode {
          * d.	X: Hook
          * e.	Lt: Intake In
          * f.	Lr: Intake Out
-         * g.	Lb:
-         * h.	Rb:
+         * g.	Lb: Ramp Up
+         * h.	Rb: Ramp Down
          */
 
         //drive train --------------------------------
@@ -102,20 +109,18 @@ public class TankTeleOp extends OpMode {
         double power = highPower ? HIGH_POWER : NORMAL_POWER;
 
 
-
-        mecanumWheels.setPowerFromGamepad(reverse, power,gamepad1.left_stick_x,
-                gamepad1.right_stick_x,gamepad1.left_stick_y);
+        mecanumWheels.setPowerFromGamepad(reverse, power, gamepad1.left_stick_x,
+                gamepad1.right_stick_x, gamepad1.left_stick_y);
 
 
         //foundation hook -------------------------------
         if (hookServoButtonLogic.isPressed(gamepad1.x)) {
             hookServoEnable = !hookServoEnable;
         }
-        if (hookServoEnable)  {
-            hookServo.hookServo.setPosition(0);
-        }
-        else   {
-            hookServo.hookServo.setPosition(.6);
+        if (hookServoEnable) {
+            hookServo.hookServo.setPosition(0.05);
+        } else {
+            hookServo.hookServo.setPosition(.3);
             //hookServo.setPosition(.47);
         }
 
@@ -126,8 +131,7 @@ public class TankTeleOp extends OpMode {
 
         if (leverUP) {
             skystoneLever.setPosition(BasicPositions.UP);
-        }
-        else if (!leverUP) {
+        } else if (!leverUP) {
             skystoneLever.setPosition(BasicPositions.DOWN);
         }
 
@@ -135,96 +139,106 @@ public class TankTeleOp extends OpMode {
         if (gamepad1.left_trigger > 0) {
             intake.leftIntake.setPower(-gamepad1.left_trigger * .7);
             intake.rightIntake.setPower(gamepad1.left_trigger * .7);
-        }
-        else if (gamepad1.right_trigger > 0) {
+        } else if (gamepad1.right_trigger > 0) {
             intake.leftIntake.setPower(gamepad1.right_trigger * .7);
             intake.rightIntake.setPower(-gamepad1.right_trigger * .7);
-        }
-        else {
+        } else {
             intake.leftIntake.setPower(0);
             intake.rightIntake.setPower(0);
         }
 
-        /** I/O Controller Controller (gmaepad2)-------------------
-         * Controller for intake and output:
-         * a.	A: Swivel 180
-         * b.	B: Swivel 90
-         * c.	Y: Recalibrate SL
-         * d.	X: Scissor Lift Set Positions
-         * e.	Lt: Down SL
-         * f.	Rt: Up SL
-         * g.	Lb: Open Claw
-         * h.	Rb: Close Claw
-         */
+        if (lowerRampButtonLogic.isPressed(gamepad1.right_bumper)) {
+            intake.lowerRamp();
+        }
+        else if (liftRampButtonLogic.isPressed(gamepad1.left_bumper)) {
+            intake.raiseRamp();
+        }
 
-        if (swivel180ButtonLogic.isPressed(gamepad2.a)) {
-            switch (count180) {
-                case (0):
-                    swivel.setPositionEnum(BasicPositions.CLOSED);
-                    count180 = 1;
-                    count90 = 1;
-                    break;
-                case (1):
-                    swivel.setPositionEnum(BasicPositions.OPEN);
-                    count180 = 0;
-                    count90 = 1;
-                    break;
-                default:
-                    count180 = 0;
-                    break;
+
+
+       /* if (gamepad1.left_bumper) {
+            position = 500;
+        } else if (gamepad1.right_bumper) {
+            position = 0;*/
+
+
+            /** I/O Controller Controller (gmaepad2)-------------------
+             * Controller for intake and output:
+             * a.	A: Swivel 180
+             * b.	B: Swivel 90
+             * c.	Y: Recalibrate SL
+             * d.	X: Scissor Lift Set Positions
+             * e.	Lt: Down SL
+             * f.	Rt: Up SL
+             * g.	Lb: Open Claw
+             * h.	Rb: Close Claw
+             */
+
+            if (swivel180ButtonLogic.isPressed(gamepad2.a)) {
+                switch (count180) {
+                    case (0):
+                        swivel.setPositionEnum(BasicPositions.CLOSED);
+                        count180 = 1;
+                        count90 = 1;
+                        break;
+                    case (1):
+                        swivel.setPositionEnum(BasicPositions.OPEN);
+                        count180 = 0;
+                        count90 = 1;
+                        break;
+                    default:
+                        count180 = 0;
+                        break;
+                }
             }
-        }
 
-        if (swivel90ButtonLogic.isPressed(gamepad2.b)) {
-            switch (count90) {
-                case (0):
-                    swivel.setPositionEnum(BasicPositions.CLOSED);
-                    count90 = 1;
-                    count180 = 1;
-                    break;
-                case (1):
-                    swivel.setPosition(0.6);
-                    count90 = 0;
-                    count180 = 1;
-                    break;
-                default:
-                    count90 = 0;
-                    break;
+            swivel.checkState();
+/*
+            if (swivel90ButtonLogic.isPressed(gamepad2.b)) {
+                switch (count90) {
+                    case (0):
+                        swivel.setPositionEnum(BasicPositions.CLOSED);
+                        count90 = 1;
+                        count180 = 1;
+                        break;
+                    case (1):
+                        swivel.setPosition(0.6);
+                        count90 = 0;
+                        count180 = 1;
+                        break;
+                    default:
+                        count90 = 0;
+                        break;
+                }
             }
-        }
+*/
+            if (scissorLiftSetPositionsButtonLogic.isPressed(gamepad2.x)) {
+                scissorLiftDirectControl = false;
+                scissorLift.setScissorHeights();
+            }
 
-        if (scissorLiftCalibrateButtonLogic.isPressed(gamepad2.y)) {
-            scissorLiftDirectControl = scissorLift.switchMode(scissorLiftDirectControl);
-            scissorLift.zeroEncoder();
-        }
+            if (scissorLiftSetPositionsButtonLogic.isPressed(gamepad2.y)) {
+                scissorLiftDirectControl = false;
+                scissorLift.resetHeight();
+            }
 
-        if (scissorLiftSetPositionsButtonLogic.isPressed(gamepad2.x)) {
-            scissorLiftDirectControl = false;
-            scissorLift.setScissorHeights();
-        }
+            if (gamepad2.left_trigger > 0) {
+                scissorLiftDirectControl = scissorLift.switchMode(scissorLiftDirectControl);
+                scissorLift.liftMotor.setPower(gamepad2.left_trigger);
+            } else if (gamepad2.right_trigger > 0 && scissorLift.limitSwitch.getState()) {
+                scissorLiftDirectControl = scissorLift.switchMode(scissorLiftDirectControl);
+                scissorLift.liftMotor.setPower(-gamepad2.right_trigger);
+            } else if (scissorLift.liftMotor.getMode() == DcMotor.RunMode.RUN_USING_ENCODER) {
+                scissorLiftDirectControl = scissorLift.switchMode(scissorLiftDirectControl);
+                scissorLift.liftMotor.setPower(0);
+            }
 
-        if (gamepad2.left_trigger > 0) {
-            scissorLiftDirectControl = scissorLift.switchMode(scissorLiftDirectControl);
-            scissorLift.liftMotor.setPower(gamepad1.left_trigger);
-
-        }
-        else if (gamepad2.right_trigger > 0 && scissorLift.limitSwitch.getState()) {
-            scissorLiftDirectControl = scissorLift.switchMode(scissorLiftDirectControl);
-            scissorLift.liftMotor.setPower(-gamepad1.right_trigger);
-        }
-
-        else if (scissorLift.liftMotor.getMode() == DcMotor.RunMode.RUN_USING_ENCODER){
-            scissorLiftDirectControl = scissorLift.switchMode(scissorLiftDirectControl);
-            scissorLift.liftMotor.setPower(0);
-        }
-
-        if (gamepad2.left_bumper /*clawOpenButtonLogic.isPressed(gamepad2.left_bumper)*/) {
-            clawPosition += 0.01;
-        }
-        else if (gamepad2.right_bumper /*clawClosedButtonLogic.isPressed(gamepad2.right_bumper)*/) {
-            clawPosition -= 0.01;
-        }
-        blockClaw.clawServo.setPosition(clawPosition);
+            if (gamepad2.left_bumper /*clawOpenButtonLogic.isPressed(gamepad2.left_bumper)*/) {
+                clawPosition += 0.01;
+            } else if (gamepad2.right_bumper /*clawClosedButtonLogic.isPressed(gamepad2.right_bumper)*/) {
+                clawPosition -= 0.01;
+            }
+            blockClaw.clawServo.setPosition(clawPosition);
 
         /*
         if (clawOpenButtonLogic.isPressed(gamepad2.left_bumper)) {
@@ -246,17 +260,17 @@ public class TankTeleOp extends OpMode {
          */
 
 
-
-        //telemetry ------------------------------
-        //telemetry is used to show on the driver controller phone what the code sees
-        telemetry.addData("Power:", power);
-        telemetry.addData("F/R:", robot.reverseSense(reverse));
-        telemetry.addData("claw State:", clawState);
-        telemetry.addData("scissor lift DC:", scissorLiftDirectControl);
-        telemetry.addData("hookServo Position", hookServo.hookServo.getPosition());
-        telemetry.addData("SL position:", scissorLift.getPosition());
-        telemetry.addData("count:", scissorLift.count);
-        telemetry.addData("Skystone lever up:", leverUP);
+            //telemetry ------------------------------
+            //telemetry is used to show on the driver controller phone what the code sees
+            telemetry.addData("Power:", power);
+            telemetry.addData("F/R:", robot.reverseSense(reverse));
+            telemetry.addData("claw State:", clawState);
+            telemetry.addData("swivel state:", swivel.targetMode+" "+swivel.targetState);
+            telemetry.addData("scissor lift DC:", scissorLiftDirectControl);
+            telemetry.addData("hookServo Position", hookServo.hookServo.getPosition());
+            telemetry.addData("SL position:", scissorLift.getPosition());
+            telemetry.addData("count:", scissorLift.count);
+            telemetry.addData("Skystone lever up:", leverUP);
 
         /*telemetry.addData("x_left:", mecanumWheels.xLeft);
         telemetry.addData("x_right:", mecanumWheels.xRight);
@@ -265,11 +279,11 @@ public class TankTeleOp extends OpMode {
 
          */
 
-        //telemetry.addData("encoder x vlaue:", mecanumWheels.frontLeft.getCurrentPosition());
-       //telemetry.addData("encoder y vlaue:", mecanumWheels.frontRight.getCurrentPosition());
+            //telemetry.addData("encoder x vlaue:", mecanumWheels.frontLeft.getCurrentPosition());
+            //telemetry.addData("encoder y vlaue:", mecanumWheels.frontRight.getCurrentPosition());
 
-        //telemetry.addData("rampServo Position:", intake.rampServo.getPosition());
-        //telemetry.addData("rampServoPosition:", rampPosition);
+            //telemetry.addData("rampServo Position:", intake.rampServo.getPosition());
+            //telemetry.addData("rampServoPosition:", rampPosition);
 
         /* not important in current system
         if (rampServoUp) {
@@ -290,7 +304,8 @@ public class TankTeleOp extends OpMode {
                 .addData("b",  colorSensor.blue());
         */
 
-        telemetry.update();
+            telemetry.update();
+        }
+
     }
 
-}

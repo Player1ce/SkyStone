@@ -4,7 +4,8 @@ public enum BasicPositions {
     OPEN,
     CLOSED,
     UP,
-    DOWN
+    DOWN,
+    MIDWAY
 
 
 }
