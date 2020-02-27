@@ -10,8 +10,32 @@ public class ScissorLift {
     public DigitalChannel limitSwitch;
     public int count;
 
+    public int[] presetHeights=new int[]{800,2960,5930,11708};
+
+    int presetHeight=0;
+
     public ScissorLift (MecanumWheels Wheels) {
         this.wheels = Wheels;
+    }
+
+    public void increasePresetHeight() {
+        presetHeight++;
+        if (presetHeight>=presetHeights.length) {
+            presetHeight=presetHeights.length-1;
+        }
+        liftMotor.setTargetPosition(presetHeights[presetHeight]);
+        liftMotor.setPower(1);
+        liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
+
+    public void decreasePresetHeight() {
+        presetHeight--;
+        if (presetHeight<0) {
+            presetHeight=0;
+        }
+        liftMotor.setTargetPosition(presetHeights[presetHeight]);
+        liftMotor.setPower(1);
+        liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
     public boolean getLimitState() {

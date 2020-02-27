@@ -62,7 +62,7 @@ public class Swivel {
             case 2:
                 if (System.currentTimeMillis() >= targetSleepTime) {
                     if (targetMode == BasicPositions.CLOSED) {
-                        scissorLift.setPosition(2550);
+                        scissorLift.setPosition(2500);
                     } else if (targetMode == BasicPositions.OPEN) {
                         scissorLift.setPosition(800);
                     }
@@ -72,7 +72,7 @@ public class Swivel {
         }
     }
 
-    public static final double CLOSED_POSITION=.27;
+    public static final double CLOSED_POSITION=.26;
     public static final double OPEN_POSITION=.93;
     public static final double MID_POSITION=0.6;
 

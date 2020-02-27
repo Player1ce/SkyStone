@@ -305,9 +305,8 @@ public class Navigation {
 
         }
         wheels.StopMotors();
-        //setPIDValues(xPidController, .15, .001, .001);
-        imu.resetAngle();
-        wheels.sleepAndCheckActive(500);
+
+        correctRotation(telemetry, rightCorrect, leftCorrect);
 
 
     }
@@ -380,28 +379,14 @@ public class Navigation {
             powerY = calculateCorrectionPower(yPidController, distanceY * .02, Math.max(.2, MotorPower - .4), 0.03);
 
 
-            double yDirection = encoders.getYDirection();
-            double xDirection = encoders.getXDirection();
-
-
-
-/*
-            if (encoders.getY() == 0) {
-                wheels.setPowerFromGamepad(false,1, 0,1 * xDirection ,0);
-            }
-*/
-            yDirection = 1;
-//powerY = 0;
-//powerX = 0;
             //set power---------------------------------------------------------------------------------------------
             wheels.setPower(
-                    (powerY * yDirection) + (powerX) + rightCorrect,
-                    (powerY * yDirection) - (powerX) + leftCorrect,
-                    (powerY * yDirection) - (powerX) + rightCorrect,
-                    (powerY * yDirection) + (powerX) + leftCorrect
+                    (powerY ) + (powerX) + rightCorrect,
+                    (powerY ) - (powerX) + leftCorrect,
+                    (powerY ) - (powerX) + rightCorrect,
+                    (powerY ) + (powerX) + leftCorrect
             );
 
-            telemetry.addData("power:", Math.max(.2, MotorPower - .4));
             telemetry.addData("X position:", encoders.getX());
             telemetry.addData("Y position:", encoders.getY());
             telemetry.addData("distance x:", distanceX);
@@ -421,44 +406,7 @@ public class Navigation {
 
         wheels.StopMotors();
 
-        angle = imu.getAngleWithStart(startOrientation);
-        while (Math.abs(angle) > 0.5) {
-            rotationPidController.input(angle);
-
-            correctionPower = Math.abs(rotationPidController.output());
-            //correctionPower = Math.max(correctionPower,  .2);
-            //correctionPower = Math.min(-maxRotationCorrectionPower, Math.min(maxRotationCorrectionPower, correctionPower));
-
-            if (angle < 0) {
-                rightCorrect = -1 * correctionPower;//-.025;
-                leftCorrect = correctionPower;//.025;
-            } else if (angle > 0) {
-                rightCorrect = correctionPower;//.025;
-                leftCorrect = -1 * correctionPower;//-.025;
-            }
-
-            wheels.setPower(
-                    rightCorrect,
-                    leftCorrect,
-                    rightCorrect,
-                    leftCorrect
-            );
-            angle = imu.getAngleWithStart(startOrientation);
-
-            telemetry.addData("power:", Math.max(.2, MotorPower - .4));
-            telemetry.addData("X position:", encoders.getX());
-            telemetry.addData("Y position:", encoders.getY());
-            telemetry.addData("distance x:", distanceX);
-            telemetry.addData("Right Correct:", rightCorrect);
-            telemetry.addData("Left Correct:", leftCorrect);
-            telemetry.addData("Angle", angle);
-            telemetry.update();
-        }
-        wheels.StopMotors();
-        imu.resetAngle();
-
-        telemetry.addData("Angle", angle);
-        telemetry.update();
+        correctRotation(telemetry, rightCorrect, leftCorrect);
     }
 
     public void NavigateCrabTicksRight (Telemetry telemetry, double MotorPower,
@@ -522,29 +470,14 @@ public class Navigation {
             double powerX = calculateCorrectionPower(xPidController, distanceX, MotorPower, MinMotorPower);
             powerY = calculateCorrectionPower(yPidController, distanceY * .02, Math.max(.2, MotorPower - .4), 0.03);
 
-
-            double yDirection = encoders.getYDirection();
-            double xDirection = encoders.getXDirection();
-
-
-
-/*
-            if (encoders.getY() == 0) {
-                wheels.setPowerFromGamepad(false,1, 0,1 * xDirection ,0);
-            }
-*/
-            yDirection = 1;
-//powerY = 0;
-//powerX = 0;
             //set power---------------------------------------------------------------------------------------------
             wheels.setPower(
-                    (powerY * yDirection) + (powerX * -1) + rightCorrect,
-                    (powerY * yDirection) - (powerX * -1) + leftCorrect,
-                    (powerY * yDirection) - (powerX * -1) + rightCorrect,
-                    (powerY * yDirection) + (powerX * -1) + leftCorrect
+                    (powerY ) + (powerX * -1) + rightCorrect,
+                    (powerY ) - (powerX * -1) + leftCorrect,
+                    (powerY ) - (powerX * -1) + rightCorrect,
+                    (powerY ) + (powerX * -1) + leftCorrect
             );
 
-            telemetry.addData("power:", Math.max(.2, MotorPower - .4));
             telemetry.addData("X position:", encoders.getX());
             telemetry.addData("Y position:", encoders.getY());
             telemetry.addData("distance x:", distanceX);
@@ -564,7 +497,21 @@ public class Navigation {
 
         wheels.StopMotors();
 
+        correctRotation(telemetry, rightCorrect, leftCorrect);
+    }
+
+    private void correctRotation(Telemetry telemetry, double rightCorrect, double leftCorrect) {
+        double correctionPower;
         angle = imu.getAngleWithStart(startOrientation);
+
+        double kp=rotationPidController.getKP();
+        double ki=rotationPidController.getKI();
+        double kd=rotationPidController.getKD();
+
+        rotationPidController.setKD(kd*2);
+        rotationPidController.setKI(ki*2);
+        rotationPidController.setKP(kp*2);
+
         while (Math.abs(angle) > 0.5) {
             rotationPidController.input(angle);
 
@@ -588,10 +535,8 @@ public class Navigation {
             );
             angle = imu.getAngleWithStart(startOrientation);
 
-            telemetry.addData("power:", Math.max(.2, MotorPower - .4));
             telemetry.addData("X position:", encoders.getX());
             telemetry.addData("Y position:", encoders.getY());
-            telemetry.addData("distance x:", distanceX);
             telemetry.addData("Right Correct:", rightCorrect);
             telemetry.addData("Left Correct:", leftCorrect);
             telemetry.addData("Angle", angle);
@@ -602,5 +547,10 @@ public class Navigation {
 
         telemetry.addData("Angle", angle);
         telemetry.update();
+
+
+        rotationPidController.setKD(kd);
+        rotationPidController.setKI(ki);
+        rotationPidController.setKP(kp);
     }
 }

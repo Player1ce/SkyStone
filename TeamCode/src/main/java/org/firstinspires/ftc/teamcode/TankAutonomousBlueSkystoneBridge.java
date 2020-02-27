@@ -91,28 +91,51 @@ public class TankAutonomousBlueSkystoneBridge extends LinearOpMode {
     }
 
     protected void executeAutonomousLogic() {
-        camera.deactivate();
 
         skystoneLever.setPosition(BasicPositions.UP);
         navigation.NavigateCrabTicksRight(telemetry,.6,0.35,1020);
 
+        camera.activate();
+        mecanumWheels.sleepAndCheckActive(2000);
+
         int blockIndex=0;
+        outerLoop:
         while(opModeIsActive()) {
-            Recognition stone=detectSkystone();
+            Recognition stone=detectSkystone(3);
             if (stone!=null) {
                 //we have a skystone
+
+                telemetry.addData("Block Index", blockIndex);
+
+                telemetry.update();
+                break outerLoop;
             }
             else {
                 blockIndex++;
-                navigation.NavigateStraightTicks(telemetry,0.6,0.2,-100);
+                camera.deactivate();
+
+                navigation.NavigateStraightTicks(telemetry,0.3,0.15,-360);
+
+                camera.activate();
+                mecanumWheels.sleepAndCheckActive(2000);
             }
         }
+
+
+        navigation.NavigateStraightTicks(telemetry,0.3,0.15,-50);
+
+        navigation.NavigateCrabTicksRight(telemetry,.4,0.35,100);
+        skystoneLever.setPosition(BasicPositions.DOWN);
+
+        mecanumWheels.sleepAndCheckActive(1000);
+        navigation.NavigateCrabTicksLeft(telemetry,.4,0.35,100);
+
+        int ticksFromFirst=1000;
 
         mecanumWheels.sleepAndCheckActive(2000);
 
      //   navigation.NavigateCrabTicksRight(telemetry,.6,0.35,100);
 
-        skystoneLever.setPosition(BasicPositions.DOWN);
 
         LogUtils.closeLoggers();
 
@@ -121,31 +144,37 @@ public class TankAutonomousBlueSkystoneBridge extends LinearOpMode {
 
     }
 
-    protected Recognition detectSkystone() {
-        camera.activate();
+    protected Recognition detectSkystone(int maxAttempts) {
 
+        int attempt=0;
         while (opModeIsActive()) {
+            attempt++;
+            if (attempt>maxAttempts) {
+                return null;
+            }
             //put all code in this while loop so the bot will stop when we tell it to
             List<Recognition> updatedRecognitions = camera.getUpdatedRecognitions();
             if (updatedRecognitions != null) {
                 telemetry.addData("# Object Detected", updatedRecognitions.size());
 
-                // step through the list of recognitions and display boundary info.
-                int i = 0;
-                for (Recognition recognition : updatedRecognitions) {
-                    telemetry.addData(String.format(Locale.US,"label (%d)", i), recognition.getLabel());
-                    telemetry.addData(String.format(Locale.US,"  left,top (%d)", i), "%.03f , %.03f",
-                            recognition.getLeft(), recognition.getTop());
-                    telemetry.addData(String.format(Locale.US,"  right,bottom (%d)", i), "%.03f , %.03f",
-                            recognition.getRight(), recognition.getBottom());
-                    telemetry.addData(String.format(Locale.US,"  w,h (%d)", i), "%d , %d",
-                            recognition.getImageWidth(),recognition.getImageHeight());
-                    if ("Skystone".equals(recognition.getLabel())) {
-                       return recognition;
+                if (updatedRecognitions.size()>0) {
+                    // step through the list of recognitions and display boundary info.
+                    int i = 0;
+                    for (Recognition recognition : updatedRecognitions) {
+                        telemetry.addData(String.format(Locale.US, "label (%d)", i), recognition.getLabel());
+                        telemetry.addData(String.format(Locale.US, "  left,top (%d)", i), "%.03f , %.03f",
+                                recognition.getLeft(), recognition.getTop());
+                        telemetry.addData(String.format(Locale.US, "  right,bottom (%d)", i), "%.03f , %.03f",
+                                recognition.getRight(), recognition.getBottom());
+                        telemetry.addData(String.format(Locale.US, "  w,h (%d)", i), "%d , %d",
+                                recognition.getImageWidth(), recognition.getImageHeight());
+                        if ("Skystone".equals(recognition.getLabel())) {
+                            return recognition;
+                        }
                     }
+                    telemetry.update();
+                    return null;
                 }
-                telemetry.update();
-                return null;
             }
         }
         return null;

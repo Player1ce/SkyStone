@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.devices.BlockClaw;
 import org.firstinspires.ftc.devices.Encoders;
-import org.firstinspires.ftc.devices.IMURevHub;
 import org.firstinspires.ftc.devices.ScissorLift;
 import org.firstinspires.ftc.devices.SkystoneLever;
 import org.firstinspires.ftc.devices.Swivel;
@@ -25,7 +24,6 @@ public class TankTeleOp extends OpMode {
     private final MecanumWheels mecanumWheels = new MecanumWheels(ChassisName.TANK);
     private final BlockIntake intake = new BlockIntake(ChassisName.TANK);
     private final FoundationHook hookServo = new FoundationHook(ChassisName.TANK);
-    private final IMURevHub imu = new IMURevHub(ChassisName.TANK);
     private final SkystoneLever skystoneLever = new SkystoneLever();
     private final ScissorLift scissorLift = new ScissorLift(mecanumWheels);
     private final Swivel swivel = new Swivel();
@@ -44,6 +42,8 @@ public class TankTeleOp extends OpMode {
     private ButtonOneShot liftRampButtonLogic = new ButtonOneShot();
     private ButtonOneShot lowerRampButtonLogic = new ButtonOneShot();
     private Encoders encoders = new Encoders(ChassisName.TANK);
+    private ButtonOneShot heightUpButtonLogic = new ButtonOneShot();
+    private ButtonOneShot heightDownButtonLogic = new ButtonOneShot();
 
     //TODO correct starting cars for drive
     private boolean reverse = true;
@@ -69,7 +69,6 @@ public class TankTeleOp extends OpMode {
         hookServo.initializeHook(this);
         intake.initializeIntake(this);
         encoders.initialize(mecanumWheels, this);
-        imu.initializeIMU(mecanumWheels, this);
         skystoneLever.initialize(this);
         scissorLift.initialize(this);
         swivel.scissorLift=scissorLift;
@@ -177,11 +176,13 @@ public class TankTeleOp extends OpMode {
             if (swivel180ButtonLogic.isPressed(gamepad2.a)) {
                 switch (count180) {
                     case (0):
+                        scissorLiftDirectControl = false;
                         swivel.setPositionEnum(BasicPositions.CLOSED);
                         count180 = 1;
                         count90 = 1;
                         break;
                     case (1):
+                        scissorLiftDirectControl = false;
                         swivel.setPositionEnum(BasicPositions.OPEN);
                         count180 = 0;
                         count90 = 1;
@@ -212,9 +213,15 @@ public class TankTeleOp extends OpMode {
                 }
             }
 */
+            if (heightUpButtonLogic.isPressed(gamepad2.dpad_up)) {
+                scissorLift.increasePresetHeight();
+            }
+            else if (heightDownButtonLogic.isPressed(gamepad2.dpad_down)) {
+                scissorLift.decreasePresetHeight();
+            }
+
             if (scissorLiftSetPositionsButtonLogic.isPressed(gamepad2.x)) {
                 scissorLiftDirectControl = false;
-                scissorLift.setScissorHeights();
             }
 
             if (scissorLiftSetPositionsButtonLogic.isPressed(gamepad2.y)) {
@@ -222,12 +229,12 @@ public class TankTeleOp extends OpMode {
                 scissorLift.resetHeight();
             }
 
-            if (gamepad2.left_trigger > 0) {
+            if (gamepad2.left_trigger > 0 && scissorLift.limitSwitch.getState()) {
                 scissorLiftDirectControl = scissorLift.switchMode(scissorLiftDirectControl);
-                scissorLift.liftMotor.setPower(gamepad2.left_trigger);
-            } else if (gamepad2.right_trigger > 0 && scissorLift.limitSwitch.getState()) {
+                scissorLift.liftMotor.setPower(-gamepad2.left_trigger);
+            } else if (gamepad2.right_trigger > 0 ) {
                 scissorLiftDirectControl = scissorLift.switchMode(scissorLiftDirectControl);
-                scissorLift.liftMotor.setPower(-gamepad2.right_trigger);
+                scissorLift.liftMotor.setPower(gamepad2.right_trigger);
             } else if (scissorLift.liftMotor.getMode() == DcMotor.RunMode.RUN_USING_ENCODER) {
                 scissorLiftDirectControl = scissorLift.switchMode(scissorLiftDirectControl);
                 scissorLift.liftMotor.setPower(0);
@@ -238,33 +245,14 @@ public class TankTeleOp extends OpMode {
             } else if (gamepad2.right_bumper /*clawClosedButtonLogic.isPressed(gamepad2.right_bumper)*/) {
                 clawPosition -= 0.01;
             }
+            clawPosition=Math.max(0.55,Math.min(0.8,clawPosition));
             blockClaw.clawServo.setPosition(clawPosition);
-
-        /*
-        if (clawOpenButtonLogic.isPressed(gamepad2.left_bumper)) {
-            clawOpen = true;
-        }
-        else if (clawClosedButtonLogic.isPressed(gamepad2.right_bumper)) {
-            clawOpen = false;
-        }
-
-        if (clawOpen) {
-            blockClaw.setPosition(BasicPositions.OPEN);
-            clawState = "open";
-        }
-        else if (!clawOpen) {
-            blockClaw.setPosition(BasicPositions.CLOSED);
-            clawState = "closed";
-        }
-
-         */
-
 
             //telemetry ------------------------------
             //telemetry is used to show on the driver controller phone what the code sees
             telemetry.addData("Power:", power);
             telemetry.addData("F/R:", robot.reverseSense(reverse));
-            telemetry.addData("claw State:", clawState);
+            telemetry.addData("claw State:", clawPosition);
             telemetry.addData("swivel state:", swivel.targetMode+" "+swivel.targetState);
             telemetry.addData("scissor lift DC:", scissorLiftDirectControl);
             telemetry.addData("hookServo Position", hookServo.hookServo.getPosition());
