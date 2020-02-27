@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.SwitchableLight;
@@ -12,7 +13,8 @@ import org.firstinspires.ftc.logic.KillOpModeException;
 import org.firstinspires.ftc.logic.ServoPosition;
 import org.firstinspires.ftc.devices.BlockIntake;
 
-@Autonomous (name = "TankAutonomousBlueBridge", group="Skystone")
+@Disabled
+@Autonomous (name = "TankAutonomousBlueBridge", group="Skystone OLD")
 public class TankAutonomousBlueBridge extends LinearOpMode {
     private TeleOpMethods robot = new TeleOpMethods(ChassisName.TANK);
     private final MecanumWheels mecanumWheels=new MecanumWheels(ChassisName.TANK);

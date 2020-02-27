@@ -42,6 +42,18 @@ public class Camera {
         tfod.activate();
     }
 
+    public void setClipping(int left,int right,int top,int bottom) {
+        tfod.setClippingMargins(left,top,right,bottom);
+    }
+
+    public void deactivate() {
+        tfod.deactivate();
+    }
+
+    public void activate() {
+        tfod.activate();
+    }
+
     public List<Recognition> getUpdatedRecognitions() {
         if (tfod != null) {
             return tfod.getUpdatedRecognitions();
@@ -58,8 +70,8 @@ public class Camera {
          */
         int cameraMonitorViewId = opMode.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", opMode.hardwareMap.appContext.getPackageName());
         //switch the comment to disable the previewer
-        //VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
+       // VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
 
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
 
