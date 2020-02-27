@@ -64,12 +64,23 @@ public class Swivel {
                     if (targetMode == BasicPositions.CLOSED) {
                         scissorLift.setPosition(2500);
                     } else if (targetMode == BasicPositions.OPEN) {
-                        scissorLift.setPosition(800);
+                        scissorLift.setPosition(ScissorLift.presetHeights[0]);
                     }
                     targetMode = null;
                 }
                 break;
         }
+    }
+
+    public void rotate(double increment) {
+        double newTarget=swivelServo.getPosition()+increment;
+        if (newTarget<.2) {
+            newTarget=.2;
+        }
+        else if (newTarget>.96) {
+            newTarget=0.96;
+        }
+        swivelServo.setPosition(newTarget);
     }
 
     public static final double CLOSED_POSITION=.26;

@@ -26,14 +26,37 @@ public class BlockIntake {
         spoolMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
+    boolean needsTension;
+
+    long tensionTargetTime;
+
     public void lowerRamp() {
         spoolMotor.setTargetPosition(0);
         spoolMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+        needsTension=true;
+        tensionTargetTime=System.currentTimeMillis()+1000;
+    }
+
+
+
+    public void checkState() {
+        if (needsTension&&System.currentTimeMillis()>=tensionTargetTime) {
+            spoolMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            spoolMotor.setPower(0.1);
+            try {
+                Thread.sleep(100);
+            }
+            catch (Exception e){}
+
+            spoolMotor.setPower(0.4);
+            spoolMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            needsTension=false;
+        }
     }
 
     public void raiseRamp() {
-        spoolMotor.setTargetPosition(500);
+        spoolMotor.setTargetPosition(400);
         spoolMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
     }

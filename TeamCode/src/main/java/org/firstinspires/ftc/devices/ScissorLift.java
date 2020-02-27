@@ -10,9 +10,9 @@ public class ScissorLift {
     public DigitalChannel limitSwitch;
     public int count;
 
-    public int[] presetHeights=new int[]{800,2960,5930,11708};
+    public static final int[] presetHeights=new int[]{970,3100,6100,12000};
 
-    int presetHeight=0;
+    public int presetHeight=0;
 
     public ScissorLift (MecanumWheels Wheels) {
         this.wheels = Wheels;

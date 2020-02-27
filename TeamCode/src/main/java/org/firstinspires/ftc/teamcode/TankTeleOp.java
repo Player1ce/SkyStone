@@ -44,6 +44,8 @@ public class TankTeleOp extends OpMode {
     private Encoders encoders = new Encoders(ChassisName.TANK);
     private ButtonOneShot heightUpButtonLogic = new ButtonOneShot();
     private ButtonOneShot heightDownButtonLogic = new ButtonOneShot();
+    private ButtonOneShot swivelRotateLeftButtonLogic = new ButtonOneShot();
+    private ButtonOneShot swivelRotateRightButtonLogic = new ButtonOneShot();
 
     //TODO correct starting cars for drive
     private boolean reverse = true;
@@ -153,6 +155,7 @@ public class TankTeleOp extends OpMode {
             intake.raiseRamp();
         }
 
+        intake.checkState();
 
 
        /* if (gamepad1.left_bumper) {
@@ -215,10 +218,20 @@ public class TankTeleOp extends OpMode {
 */
             if (heightUpButtonLogic.isPressed(gamepad2.dpad_up)) {
                 scissorLift.increasePresetHeight();
+                scissorLiftDirectControl = false;
             }
             else if (heightDownButtonLogic.isPressed(gamepad2.dpad_down)) {
                 scissorLift.decreasePresetHeight();
+                scissorLiftDirectControl = false;
             }
+
+            if (swivelRotateLeftButtonLogic.isPressed(gamepad2.dpad_left)) {
+                swivel.rotate(-0.01);
+            }
+            else if (swivelRotateRightButtonLogic.isPressed(gamepad2.dpad_right)) {
+                swivel.rotate(0.01);
+            }
+
 
             if (scissorLiftSetPositionsButtonLogic.isPressed(gamepad2.x)) {
                 scissorLiftDirectControl = false;
@@ -250,6 +263,7 @@ public class TankTeleOp extends OpMode {
 
             //telemetry ------------------------------
             //telemetry is used to show on the driver controller phone what the code sees
+            telemetry.addData("SL height:", scissorLift.presetHeight);
             telemetry.addData("Power:", power);
             telemetry.addData("F/R:", robot.reverseSense(reverse));
             telemetry.addData("claw State:", clawPosition);
