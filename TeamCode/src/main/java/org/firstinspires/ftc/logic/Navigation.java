@@ -369,7 +369,7 @@ public class Navigation {
             time = curTime;
 
             //encoders---------------------------------------------------------------------------------------------
-            distanceX = encoders.xTarget - encoders.getX();
+            distanceX = encoders.xTarget - Math.abs(encoders.getX());
             double distanceY = encoders.yTarget - encoders.getY();
 
             //double powerX = MecanumWheels.calculateProportionalMotorPower(0.0015, distanceX, MotorPower, Math.max(MinMotorPower, .3));

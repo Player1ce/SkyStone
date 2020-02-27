@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.SwitchableLight;
 
 import org.firstinspires.ftc.devices.BlockClaw;
@@ -52,6 +53,7 @@ public class TankAutonomousBlueSkystoneBridge extends LinearOpMode {
         camera.initializeCamera(this);
         skystoneLever.initialize(this);
 
+        scissorLift.initialize(this);
         camera.setClipping(100,100,0,0);
 
         imu.initializeIMU(mecanumWheels, this);
@@ -71,10 +73,31 @@ public class TankAutonomousBlueSkystoneBridge extends LinearOpMode {
         waitForStart();
         robot.startTime();
 
+
    //     moveHook(ServoPosition.UP);
 
         try {
-            executeAutonomousLogic();
+            scissorLift.setPosition(scissorLift.getPosition()+1100);
+            mecanumWheels.sleepAndCheckActive(1000);
+
+            intake.spoolMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            intake.spoolMotor.setPower(-0.205);
+            mecanumWheels.sleepAndCheckActive(1000);
+
+            intake.spoolMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            intake.spoolMotor.setPower(0.1);
+            mecanumWheels.sleepAndCheckActive(1000);
+
+            intake.spoolMotor.setPower(0.4);
+            intake.spoolMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+            intake.raiseRampHalfway();
+
+            scissorLift.setPosition(scissorLift.getPosition()-2000);
+
+            mecanumWheels.sleepAndCheckActive(5000);
+
+           // executeAutonomousLogic();
         }
         catch (KillOpModeException e) {
             //do nothing (the program will end gracefully)

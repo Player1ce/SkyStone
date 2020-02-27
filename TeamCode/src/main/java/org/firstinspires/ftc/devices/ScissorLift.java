@@ -49,7 +49,7 @@ public class ScissorLift {
         liftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
-    public double getPosition () {
+    public int getPosition () {
         return liftMotor.getCurrentPosition();
     }
 

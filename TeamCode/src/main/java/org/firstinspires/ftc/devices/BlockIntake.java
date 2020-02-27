@@ -26,6 +26,11 @@ public class BlockIntake {
         spoolMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
+    public void resetEncoder() {
+        spoolMotor.setPower(0.4);
+        spoolMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
+
     boolean needsTension;
 
     long tensionTargetTime;
@@ -53,6 +58,11 @@ public class BlockIntake {
             spoolMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             needsTension=false;
         }
+    }
+
+    public void raiseRampHalfway() {
+        spoolMotor.setTargetPosition(200);
+        spoolMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
     public void raiseRamp() {
