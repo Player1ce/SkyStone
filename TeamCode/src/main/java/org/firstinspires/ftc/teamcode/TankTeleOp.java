@@ -119,9 +119,9 @@ public class TankTeleOp extends OpMode {
             hookServoEnable = !hookServoEnable;
         }
         if (hookServoEnable) {
-            hookServo.hookServo.setPosition(0.05);
+            hookServo.hookServo.setPosition(0.00);
         } else {
-            hookServo.hookServo.setPosition(.3);
+            hookServo.hookServo.setPosition(.2);
             //hookServo.setPosition(.47);
         }
 
