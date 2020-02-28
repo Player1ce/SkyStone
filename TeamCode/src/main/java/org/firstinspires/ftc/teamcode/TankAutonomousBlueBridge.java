@@ -106,7 +106,7 @@ public class TankAutonomousBlueBridge extends LinearOpMode {
 
         //mecanumWheels.ForwardMoveInches(telemetry, 0.5, 5, ticksToInches);
 
-        moveHook(ServoPosition.DOWN);
+
 
         mecanumWheels.sleepAndCheckActive(1000);
         mecanumWheels.BackwardMoveInches(telemetry, -0.5, 33, ticksToInches);

@@ -61,6 +61,7 @@ public class TankTeleOp extends OpMode {
     private int count180 = 0;
     private int count90 = 0;
     //private int setPosition = 0;
+    boolean calibrating = false;
 
 
 
@@ -182,12 +183,16 @@ public class TankTeleOp extends OpMode {
                 switch (count180) {
                     case (0):
                         scissorLiftDirectControl = false;
+                        //intake.lowerRamp();
+                        //skystoneLever.setPosition(BasicPositions.DOWN);
                         swivel.setPositionEnum(BasicPositions.CLOSED);
                         count180 = 1;
                         count90 = 1;
                         break;
                     case (1):
                         scissorLiftDirectControl = false;
+                        //intake.lowerRamp();
+                        //skystoneLever.setPosition(BasicPositions.DOWN);
                         swivel.setPositionEnum(BasicPositions.OPEN);
                         count180 = 0;
                         count90 = 1;
@@ -239,9 +244,22 @@ public class TankTeleOp extends OpMode {
                 scissorLiftDirectControl = false;
             }
 
-            if (scissorLiftSetPositionsButtonLogic.isPressed(gamepad2.y)) {
+            /*if (scissorLiftSetPositionsButtonLogic.isPressed(gamepad2.y)) {
                 scissorLiftDirectControl = false;
                 scissorLift.resetHeight();
+            }
+
+             */
+
+            if (scissorLiftCalibrateButtonLogic.isPressed(gamepad2.y)) {
+                calibrating = true;
+                scissorLift.liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                while (scissorLift.limitSwitch.getState()) {
+                    scissorLift.liftMotor.setPower(-0.5);
+                }
+                scissorLift.liftMotor.setPower(0);
+                scissorLift.resetEncoder();
+                calibrating = false;
             }
 
             if (gamepad2.left_trigger > 0 && scissorLift.limitSwitch.getState()) {
