@@ -102,7 +102,7 @@ public class TankAutonomousBlueSkystoneBridge extends LinearOpMode {
     private void doOpen() {
 
         scissorLift.setPosition(scissorLift.getPosition()+1100);
-        mecanumWheels.sleepAndCheckActive(500);
+        mecanumWheels.sleepAndCheckActive(1000);
 
         intake.spoolMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         intake.spoolMotor.setPower(-0.205);
