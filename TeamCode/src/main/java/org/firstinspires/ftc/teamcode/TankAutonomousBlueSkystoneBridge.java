@@ -106,7 +106,7 @@ public class TankAutonomousBlueSkystoneBridge extends LinearOpMode {
 
         intake.spoolMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         intake.spoolMotor.setPower(-0.205);
-        mecanumWheels.sleepAndCheckActive(800);
+        mecanumWheels.sleepAndCheckActive(1000);
 
         intake.spoolMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         intake.spoolMotor.setPower(0.1);

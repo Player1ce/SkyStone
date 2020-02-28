@@ -10,7 +10,7 @@ public class ScissorLift {
     public DigitalChannel limitSwitch;
     public int count;
 
-    public static final int[] presetHeights=new int[]{970,3100,6100,12000};
+    public static final int[] presetHeights=new int[]{970,3100,6100,12000,};
 
     public int presetHeight=0;
 

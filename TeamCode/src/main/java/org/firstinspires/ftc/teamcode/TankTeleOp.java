@@ -39,6 +39,8 @@ public class TankTeleOp extends OpMode {
     private ButtonOneShot scissorLiftSetPositionsButtonLogic = new ButtonOneShot();
     private ButtonOneShot clawOpenButtonLogic = new ButtonOneShot();
     private ButtonOneShot clawClosedButtonLogic = new ButtonOneShot();
+
+
     private ButtonOneShot liftRampButtonLogic = new ButtonOneShot();
     private ButtonOneShot lowerRampButtonLogic = new ButtonOneShot();
     private Encoders encoders = new Encoders(ChassisName.TANK);
