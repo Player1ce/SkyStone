@@ -50,11 +50,11 @@ public class TankAutonomousBlueSkystoneBridge extends LinearOpMode {
        // hookServo.initializeHook(this);
         intake.initializeIntake(this);
         intake.setIntakeBrakes();
-        camera.initializeCamera(this);
+      //  camera.initializeCamera(this);
+       // camera.setClipping(100,100,0,0);
         skystoneLever.initialize(this);
 
         scissorLift.initialize(this);
-        camera.setClipping(100,100,0,0);
 
         imu.initializeIMU(mecanumWheels, this);
         navigation.initialize(mecanumWheels, imu, this);
@@ -77,32 +77,48 @@ public class TankAutonomousBlueSkystoneBridge extends LinearOpMode {
    //     moveHook(ServoPosition.UP);
 
         try {
-            scissorLift.setPosition(scissorLift.getPosition()+1100);
-            mecanumWheels.sleepAndCheckActive(1000);
-
-            intake.spoolMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            intake.spoolMotor.setPower(-0.205);
-            mecanumWheels.sleepAndCheckActive(1000);
-
-            intake.spoolMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            intake.spoolMotor.setPower(0.1);
-            mecanumWheels.sleepAndCheckActive(1000);
-
-            intake.spoolMotor.setPower(0.4);
-            intake.spoolMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-            intake.raiseRampHalfway();
-
-            scissorLift.setPosition(scissorLift.getPosition()-2000);
-
-            mecanumWheels.sleepAndCheckActive(5000);
-
-           // executeAutonomousLogic();
+            executeAutonomousLogic();
+            //executeAutonomousLogicWithCamera();
         }
         catch (KillOpModeException e) {
             //do nothing (the program will end gracefully)
         }
 
+    }
+
+    //opens up the ramp and scissor lift
+    private void openUp() {
+        Thread t=new Thread(new Runnable() {
+            @Override
+            public void run() {
+                doOpen();
+            }
+        });
+        t.setDaemon(true);
+        t.start();
+
+    }
+
+    private void doOpen() {
+
+        scissorLift.setPosition(scissorLift.getPosition()+1100);
+        mecanumWheels.sleepAndCheckActive(500);
+
+        intake.spoolMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        intake.spoolMotor.setPower(-0.205);
+        mecanumWheels.sleepAndCheckActive(800);
+
+        intake.spoolMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        intake.spoolMotor.setPower(0.1);
+        mecanumWheels.sleepAndCheckActive(800);
+
+        intake.spoolMotor.setPower(0.4);
+        intake.spoolMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        intake.raiseRampHalfway();
+
+        scissorLift.setPosition(scissorLift.getPosition()-2000);
+        mecanumWheels.sleepAndCheckActive(500);
     }
 
     public void moveHook(ServoPosition position) {
@@ -114,9 +130,55 @@ public class TankAutonomousBlueSkystoneBridge extends LinearOpMode {
     }
 
     protected void executeAutonomousLogic() {
+        skystoneLever.setPosition(BasicPositions.UP);
+        navigation.NavigateCrabTicksRight(telemetry,.7,0.35,1400);
+        skystoneLever.setPosition(BasicPositions.DOWN);
+        mecanumWheels.sleepAndCheckActive(300);
+        navigation.NavigateCrabTicksLeft(telemetry,.6,0.35,400);
+        doOpen();
+        navigation.NavigateStraightTicks(telemetry,0.4,0.2,2000);
+        mecanumWheels.sleepAndCheckActive(300);
+        skystoneLever.setPosition(BasicPositions.UP);
+        mecanumWheels.sleepAndCheckActive(300);
+
+        navigation.NavigateStraightTicks(telemetry,0.4,0.2,-2360);
+
+        mecanumWheels.sleepAndCheckActive(300);
+        navigation.NavigateCrabTicksRight(telemetry,.7,0.35,400);
+        skystoneLever.setPosition(BasicPositions.DOWN);
+        mecanumWheels.sleepAndCheckActive(300);
+        navigation.NavigateCrabTicksLeft(telemetry,.6,0.35,400);
+        mecanumWheels.sleepAndCheckActive(300);
+        navigation.NavigateStraightTicks(telemetry,0.4,0.2,2360);
+        skystoneLever.setPosition(BasicPositions.UP);
+        mecanumWheels.sleepAndCheckActive(300);
+
+
+        navigation.NavigateStraightTicks(telemetry,0.4,0.2,-800);
+        mecanumWheels.sleepAndCheckActive(30000);
+
+        //we do not have eniugh time for this last block
+        /*
+        navigation.NavigateStraightTicks(telemetry,0.4,0.2,-2720);
+        mecanumWheels.sleepAndCheckActive(300);
+        navigation.NavigateCrabTicksRight(telemetry,.7,0.35,400);
+        skystoneLever.setPosition(BasicPositions.DOWN);
+        mecanumWheels.sleepAndCheckActive(300);
+        navigation.NavigateCrabTicksLeft(telemetry,.6,0.35,400);
+        mecanumWheels.sleepAndCheckActive(300);
+        navigation.NavigateStraightTicks(telemetry,0.4,0.2,2720);
+        skystoneLever.setPosition(BasicPositions.UP);
+        mecanumWheels.sleepAndCheckActive(300);
+
+        navigation.NavigateStraightTicks(telemetry,0.4,0.2,-500);
+        mecanumWheels.sleepAndCheckActive(300);
+        */
+    }
+
+    protected void executeAutonomousLogicWithCamera() {
 
         skystoneLever.setPosition(BasicPositions.UP);
-        navigation.NavigateCrabTicksRight(telemetry,.6,0.35,1020);
+        navigation.NavigateCrabTicksRight(telemetry,.7,0.35,1070);
 
         camera.activate();
         mecanumWheels.sleepAndCheckActive(2000);
@@ -125,9 +187,9 @@ public class TankAutonomousBlueSkystoneBridge extends LinearOpMode {
         outerLoop:
         while(opModeIsActive()) {
             Recognition stone=detectSkystone(3);
-            if (stone!=null) {
+            if (stone!=null || blockIndex==2) {
                 //we have a skystone
-
+                camera.deactivate();
                 telemetry.addData("Block Index", blockIndex);
 
                 telemetry.update();
@@ -145,13 +207,13 @@ public class TankAutonomousBlueSkystoneBridge extends LinearOpMode {
         }
 
 
-        navigation.NavigateStraightTicks(telemetry,0.3,0.15,-50);
+        navigation.NavigateStraightTicks(telemetry,0.3,0.15,-100);
 
-        navigation.NavigateCrabTicksRight(telemetry,.4,0.35,100);
+        navigation.NavigateCrabTicksRight(telemetry,.7,0.35,200);
         skystoneLever.setPosition(BasicPositions.DOWN);
 
         mecanumWheels.sleepAndCheckActive(1000);
-        navigation.NavigateCrabTicksLeft(telemetry,.4,0.35,100);
+        navigation.NavigateCrabTicksLeft(telemetry,.7,0.35,350);
 
         int ticksFromFirst=1000;
 

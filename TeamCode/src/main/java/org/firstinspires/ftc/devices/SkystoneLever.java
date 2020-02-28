@@ -16,7 +16,7 @@ public class SkystoneLever {
 
     public void setPosition (BasicPositions position) {
         if (position == BasicPositions.UP || position == BasicPositions.OPEN) {
-            leverServo.setPosition(0.27);
+            leverServo.setPosition(0.45);
         }
         if (position == BasicPositions.DOWN || position == BasicPositions.CLOSED) {
             leverServo.setPosition(0.97);

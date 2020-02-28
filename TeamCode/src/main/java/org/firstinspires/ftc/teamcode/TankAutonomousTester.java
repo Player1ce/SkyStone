@@ -42,10 +42,12 @@ public class TankAutonomousTester extends LinearOpMode {
     }
 
     protected void executeAutonomousLogic() {
-        navigation.NavigateCrabTicksRight(telemetry,.7,0.3,500);
-        navigation.NavigateCrabTicksLeft(telemetry,.7,0.3,500);
-        navigation.NavigateCrabTicksRight(telemetry,.7,0.3,500);
-        navigation.NavigateCrabTicksLeft(telemetry,.7,0.3,500);
+        navigation.NavigateCrabTicksRight(telemetry,.7,0.3,300);
+        navigation.NavigateCrabTicksLeft(telemetry,.7,0.3,300);
+        navigation.NavigateCrabTicksRight(telemetry,.7,0.3,300);
+        navigation.NavigateCrabTicksLeft(telemetry,.7,0.3,300);
+        navigation.NavigateCrabTicksRight(telemetry,.7,0.3,300);
+        navigation.NavigateCrabTicksLeft(telemetry,.7,0.3,300);
         LogUtils.closeLoggers();
         //navigation.NavigateStraightTicks(telemetry, .5, .3, 2000);
         wheels.sleepAndCheckActive(10000);

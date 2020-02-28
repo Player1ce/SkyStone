@@ -407,6 +407,43 @@ public class Navigation {
         wheels.StopMotors();
 
         correctRotation(telemetry, rightCorrect, leftCorrect);
+
+    }
+
+    public void correctY(Telemetry telemetry) {
+
+        double distanceY = encoders.yTarget - encoders.getY();
+        double yDirection = -1*encoders.getYDirection();
+
+        if (encoders.getY()==0) {
+            return;
+        }
+
+        while (Math.abs(encoders.getY()) > 5) {
+            wheels.checkIsActive();
+
+            distanceY =Math.abs(encoders.getY());
+
+            double powerY = calculateCorrectionPower(yPidController, distanceY, 0.4, 0.1);
+
+            //powerY = 0;
+            wheels.setPower(
+                    (powerY*yDirection) ,
+                    (powerY*yDirection) ,
+                    (powerY*yDirection),
+                    (powerY*yDirection)
+            );
+
+
+            telemetry.addData("Y position:", encoders.getY());
+            telemetry.addData("distance y:", distanceY);
+            telemetry.addData("y power", powerY);
+            telemetry.addData("output:", yPidController.output());
+            telemetry.addData("correction:", (yPidController.output() / Math.abs(yPidController.output())));
+            telemetry.update();
+        }
+
+        wheels.StopMotors();
     }
 
     public void NavigateCrabTicksRight (Telemetry telemetry, double MotorPower,
@@ -498,6 +535,7 @@ public class Navigation {
         wheels.StopMotors();
 
         correctRotation(telemetry, rightCorrect, leftCorrect);
+
     }
 
     private void correctRotation(Telemetry telemetry, double rightCorrect, double leftCorrect) {
@@ -508,9 +546,9 @@ public class Navigation {
         double ki=rotationPidController.getKI();
         double kd=rotationPidController.getKD();
 
-        rotationPidController.setKD(kd*2);
-        rotationPidController.setKI(ki*2);
-        rotationPidController.setKP(kp*2);
+        rotationPidController.setKD(kd*3);
+        rotationPidController.setKI(ki*3);
+        rotationPidController.setKP(kp*5);
 
         while (Math.abs(angle) > 0.5) {
             rotationPidController.input(angle);
