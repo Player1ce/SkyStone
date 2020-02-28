@@ -14,11 +14,12 @@ public class FirstTest extends LinearOpMode {
     private final MecanumWheels wheels = new MecanumWheels(ChassisName.TANK);
     private final Navigation navigation = new Navigation(ChassisName.TANK);
 
-    public void init() {
-        wheels.initializeWheels(this);
-    }
 
     public void runOpMode() {
+        wheels.initializeWheels(this);
+        wheels.setZeroPowerBrakeBehavior();
+        waitForStart();
+        
         navigation.NavigateStraightTicks(telemetry,.7, .3,500);
         wheels.sleepAndCheckActive(2000);
         navigation.NavigateStraightTicks(telemetry,.7,.3,-500);
