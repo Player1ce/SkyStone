@@ -19,7 +19,7 @@ public class FirstTest extends LinearOpMode {
         wheels.initializeWheels(this);
         wheels.setZeroPowerBrakeBehavior();
         waitForStart();
-        
+
         navigation.NavigateStraightTicks(telemetry,.7, .3,500);
         wheels.sleepAndCheckActive(2000);
         navigation.NavigateStraightTicks(telemetry,.7,.3,-500);
