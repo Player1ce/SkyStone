@@ -39,6 +39,7 @@ public class TankTeleOp extends OpMode {
     private ButtonOneShot scissorLiftSetPositionsButtonLogic = new ButtonOneShot();
     private ButtonOneShot clawOpenButtonLogic = new ButtonOneShot();
     private ButtonOneShot clawClosedButtonLogic = new ButtonOneShot();
+    private ButtonOneShot rampCalibrateButtonLogic = new ButtonOneShot();
 
 
     private ButtonOneShot liftRampButtonLogic = new ButtonOneShot();
@@ -158,6 +159,10 @@ public class TankTeleOp extends OpMode {
             intake.raiseRamp();
         }
 
+        if (rampCalibrateButtonLogic.isPressed(gamepad1.dpad_down)) {
+            intake.resetEncoder();
+        }
+
         intake.checkState();
 
 
@@ -252,15 +257,9 @@ public class TankTeleOp extends OpMode {
              */
 
             if (scissorLiftCalibrateButtonLogic.isPressed(gamepad2.y)) {
-                calibrating = true;
-                scissorLift.liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                while (scissorLift.limitSwitch.getState()) {
-                    scissorLift.liftMotor.setPower(-0.5);
-                }
-                scissorLift.liftMotor.setPower(0);
-                scissorLift.resetEncoder();
-                calibrating = false;
+                scissorLift.calibrate();
             }
+            scissorLift.checkCalibrateState();
 
             if (gamepad2.left_trigger > 0 && scissorLift.limitSwitch.getState()) {
                 scissorLiftDirectControl = scissorLift.switchMode(scissorLiftDirectControl);

@@ -179,7 +179,7 @@ public class TankAutonomousFoundationRed extends LinearOpMode {
         navigation.NavigateCrabTicksRightNoRotation(telemetry,.7, .4,300);
         mecanumWheels.sleepAndCheckActive(200);
 
-        imu.rotate(60, .7, .35, this);
+        imu.rotate(-70, .7, .35, this);
         mecanumWheels.sleepAndCheckActive(100);
 
         doOpen();

@@ -38,7 +38,7 @@ public class LiftCalibrator extends OpMode {
     public void loop() {
         if (calibrating) {
             if (lift.limitSwitch.getState()) {
-                lift.liftMotor.setPower(-0.3);
+                lift.liftMotor.setPower(-0.5);
             }
             else {
                 lift.liftMotor.setPower(0);
