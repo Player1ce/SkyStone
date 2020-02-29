@@ -160,7 +160,7 @@ public class TankTeleOp extends OpMode {
         }
 
         if (rampCalibrateButtonLogic.isPressed(gamepad1.dpad_down)) {
-            intake.resetEncoder();
+            intake.retensionAndReset();
         }
 
         intake.checkState();

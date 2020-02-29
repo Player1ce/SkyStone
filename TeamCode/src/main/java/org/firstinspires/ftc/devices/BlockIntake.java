@@ -44,6 +44,10 @@ public class BlockIntake {
     }
 
 
+    public void retensionAndReset() {
+        needsTension=true;
+        tensionTargetTime=System.currentTimeMillis()+1000;
+    }
 
     public void checkState() {
         if (needsTension&&System.currentTimeMillis()>=tensionTargetTime) {
