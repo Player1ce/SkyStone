@@ -4,17 +4,9 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.devices.BlockClaw;
-import org.firstinspires.ftc.devices.Encoders;
-import org.firstinspires.ftc.devices.ScissorLift;
-import org.firstinspires.ftc.devices.SkystoneLever;
-import org.firstinspires.ftc.devices.Swivel;
 import org.firstinspires.ftc.logic.BasicPositions;
 import org.firstinspires.ftc.logic.ButtonOneShot;
 import org.firstinspires.ftc.logic.ChassisName;
-import org.firstinspires.ftc.devices.FoundationHook;
-import org.firstinspires.ftc.devices.MecanumWheels;
-import org.firstinspires.ftc.devices.BlockIntake;
 
 
 @TeleOp(name="Tank TeleOp", group="Skystone")

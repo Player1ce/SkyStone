@@ -6,9 +6,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.logic.ButtonOneShot;
 import org.firstinspires.ftc.logic.ChassisName;
-import org.firstinspires.ftc.devices.FoundationHook;
-import org.firstinspires.ftc.devices.MecanumWheels;
-import org.firstinspires.ftc.devices.BlockIntake;
 import org.firstinspires.ftc.teamcode.TeleOpMethods;
 
 @TeleOp(name="GoBildaChassisTeleop", group="Skystone")

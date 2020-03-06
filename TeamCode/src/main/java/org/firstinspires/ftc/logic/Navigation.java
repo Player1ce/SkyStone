@@ -4,10 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.Controller.PIDController;
-import org.firstinspires.ftc.devices.Encoders;
-import org.firstinspires.ftc.devices.IMURevHub;
-import org.firstinspires.ftc.devices.MecanumWheels;
-import org.firstinspires.ftc.logic.ChassisName;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 

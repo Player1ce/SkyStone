@@ -3,11 +3,7 @@ package org.firstinspires.ftc.GoBilda;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.devices.Camera;
 import org.firstinspires.ftc.logic.ChassisName;
-import org.firstinspires.ftc.devices.FoundationHook;
-import org.firstinspires.ftc.devices.MecanumWheels;
-import org.firstinspires.ftc.devices.BlockIntake;
 import org.firstinspires.ftc.logic.KillOpModeException;
 import org.firstinspires.ftc.teamcode.TeleOpMethods;
 

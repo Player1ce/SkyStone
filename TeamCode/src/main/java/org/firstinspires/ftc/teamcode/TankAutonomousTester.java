@@ -3,12 +3,8 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.devices.IMURevHub;
 import org.firstinspires.ftc.logic.Navigation;
 import org.firstinspires.ftc.logic.ChassisName;
-import org.firstinspires.ftc.devices.FoundationHook;
-import org.firstinspires.ftc.devices.MecanumWheels;
-import org.firstinspires.ftc.devices.BlockIntake;
 import org.firstinspires.ftc.logic.KillOpModeException;
 import org.firstinspires.ftc.utils.LogUtils;
 
