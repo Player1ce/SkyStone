@@ -208,17 +208,18 @@ public class TankTeleOp extends OpMode {
                 }
             }
 
-            swivel.checkState();
-/*
+
             if (swivel90ButtonLogic.isPressed(gamepad2.b)) {
                 switch (count90) {
                     case (0):
-                        swivel.setPositionEnum(BasicPositions.CLOSED);
+                        scissorLiftDirectControl = false;
+                        swivel.setPositionEnum(BasicPositions.MIDWAY);
                         count90 = 1;
                         count180 = 1;
                         break;
                     case (1):
-                        swivel.setPosition(0.6);
+                        scissorLiftDirectControl = false;
+                        swivel.setPositionEnum(BasicPositions.OPEN);
                         count90 = 0;
                         count180 = 1;
                         break;
@@ -227,7 +228,8 @@ public class TankTeleOp extends OpMode {
                         break;
                 }
             }
-*/
+
+        swivel.checkState();
             if (heightUpButtonLogic.isPressed(gamepad2.dpad_up)) {
                 scissorLift.increasePresetHeight();
                 scissorLiftDirectControl = false;

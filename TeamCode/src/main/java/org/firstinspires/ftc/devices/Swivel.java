@@ -55,7 +55,11 @@ public class Swivel {
                 targetState = 2;
                 if (targetMode == BasicPositions.CLOSED) {
                     swivelServo.setPosition(CLOSED_POSITION);
-                } else {
+                }
+                else if (targetMode == BasicPositions.MIDWAY) {
+                    swivelServo.setPosition(MID_POSITION);
+                }
+                else {
                     swivelServo.setPosition(OPEN_POSITION);
                 }
                 break;
@@ -65,6 +69,8 @@ public class Swivel {
                         scissorLift.setPosition(2500);
                     } else if (targetMode == BasicPositions.OPEN) {
                         scissorLift.setPosition(ScissorLift.presetHeights[0]);
+                    } else if (targetMode == BasicPositions.MIDWAY) {
+                        scissorLift.setPosition(ScissorLift.presetHeights[1]);
                     }
                     targetMode = null;
                 }

@@ -311,6 +311,100 @@ public class Navigation {
 
     }
 
+    public void NavigateStraightTicksNoRotation (Telemetry telemetry, double MotorPower,
+                                       double MinMotorPower, double ticks) {
+        //imu----------------------------------------------------------------------------------------------
+        rotationPidController.setMaxErrorForIntegral(0.002);
+        long curTime;
+        long diff;
+        startOrientation = imu.getOrientation();
+        setRotationMaxCorrectionPower(MotorPower - 0.1);
+        double correctionPower;
+        double rightCorrect = 0;
+        double leftCorrect = 0;
+
+        //encoders---------------------------------------------------------------------------------------------
+        encoders.resetPosition();
+        //encoders.setyTarget((Inches * 4)/.0699);
+        encoders.setxTarget(0);
+        encoders.setyTarget(ticks);
+
+        double dest=Math.abs(encoders.yTarget)-5;
+
+        /*setPIDValues(rotationPidController, 0.0125, 0.001, 0.001);
+        setPIDValues(yPidController, 0.15, 0.001,0.001);
+        setPIDValues(xPidController, .00225, 0.001, 0.001);*/
+
+        while (Math.abs(encoders.getY()) < dest) {
+            wheels.checkIsActive();
+
+            //imu---------------------------------------------------------------------------------------------
+            angle = imu.getAngleWithStart(startOrientation);
+            rotationPidController.input(angle);
+
+            correctionPower = Math.abs(rotationPidController.output());
+            correctionPower = Math.max(-maxRotationCorrectionPower, Math.min(maxRotationCorrectionPower, correctionPower));
+
+            if (angle < 0) {
+                rightCorrect = -1 * correctionPower;//-.025;
+                leftCorrect = correctionPower;//.025;
+            } else if (angle > 0) {
+                rightCorrect = correctionPower;//.025;
+                leftCorrect = -1 * correctionPower;//-.025;
+            }
+
+            curTime = System.currentTimeMillis();
+            diff = curTime - time;
+            time = curTime;
+
+            //encoders---------------------------------------------------------------------------------------------
+            //double distanceX = Math.abs(encoders.getX() - encoders.xTarget);
+            //double distanceY = Math.abs(encoders.getY() - encoders.yTarget);
+            double distanceX = encoders.xTarget - encoders.getX();
+            double distanceY = encoders.yTarget - encoders.getY();
+            //double powerX = MecanumWheels.calculateProportionalMotorPower(0.0015, distanceX, MotorPower, Math.max(MinMotorPower, .3));
+            //double powerY = MecanumWheels.calculateProportionalMotorPower(0.0015, distanceY, MotorPower, MinMotorPower);
+            //TODO: Check this ---------------------------------------------------------------------------------------------
+            double powerX = calculateCorrectionPower(xPidController, distanceX * .03 ,   Math.max( .2, MotorPower - .4)  , 0.03);
+            double powerY = calculateCorrectionPower(yPidController, distanceY, MotorPower, MinMotorPower);
+            double yDirection = encoders.getYDirection();
+            double xDirection = encoders.getXDirection();
+
+/*
+            if (encoders.getY() == 0) {
+                wheels.setPowerFromGamepad(false,1, 0 ,0, 1 * yDirection);
+            }
+ */
+
+            //set power---------------------------------------------------------------------------------------------
+            xDirection = 1;
+            //powerY = 0;
+            wheels.setPower(
+                    (powerY) -(powerX * xDirection) + rightCorrect,
+                    (powerY) + (powerX *xDirection) + leftCorrect,
+                    (powerY) + (powerX * xDirection),
+                    (powerY) - (powerX * xDirection)
+            );
+
+            telemetry.addData("X position:", encoders.getX());
+            telemetry.addData("Y position:", encoders.getY());
+            telemetry.addData("distance y:", distanceY);
+            telemetry.addData("distance x:", distanceX);
+            telemetry.addData("x Power:", (powerX * 0.4 * xDirection));
+            telemetry.addData("y power", (powerY * yDirection));
+            telemetry.addData("Correction power:", correctionPower);
+            telemetry.addData("Right Correct:", rightCorrect);
+            telemetry.addData("Left Correct:", leftCorrect);
+            telemetry.addData("Angle", angle);
+            telemetry.addData("Time(ms)", diff);
+            telemetry.update();
+
+        }
+        wheels.StopMotors();
+
+
+    }
+
     public void NavigateCrabTicks (Telemetry telemetry, double MotorPower,
                                    double MinMotorPower, double ticks) {
         NavigateCrabTicksLeft(telemetry,MotorPower,MinMotorPower,ticks);

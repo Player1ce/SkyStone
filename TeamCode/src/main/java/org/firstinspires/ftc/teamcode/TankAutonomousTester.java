@@ -2,8 +2,10 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.devices.IMURevHub;
+import org.firstinspires.ftc.devices.ScissorLift;
 import org.firstinspires.ftc.logic.Navigation;
 import org.firstinspires.ftc.logic.ChassisName;
 import org.firstinspires.ftc.devices.FoundationHook;
@@ -21,6 +23,8 @@ public class TankAutonomousTester extends LinearOpMode {
     private final BlockIntake intake = new BlockIntake(ChassisName.TANK);
     private final Navigation navigation = new Navigation(ChassisName.TANK);
     private final IMURevHub imu = new IMURevHub(ChassisName.TANK);
+    private final ScissorLift scissorLift = new ScissorLift(wheels);
+
     //Use this class to test new methods and anything else for auto
 
     public void runOpMode() {
@@ -31,6 +35,7 @@ public class TankAutonomousTester extends LinearOpMode {
         hookServo.initializeHook(this);
         imu.initializeIMU(wheels, this);
         navigation.initialize(wheels, imu, this);
+        scissorLift.initialize(this);
 
         wheels.setZeroPowerBrakeBehavior();
         waitForStart();
@@ -41,8 +46,31 @@ public class TankAutonomousTester extends LinearOpMode {
         } catch (KillOpModeException e) {}
     }
 
+    private void doOpen() {
+
+        scissorLift.setPosition(scissorLift.getPosition()+1100);
+        wheels.sleepAndCheckActive(1000);
+
+        intake.spoolMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        intake.spoolMotor.setPower(-0.205);
+        wheels.sleepAndCheckActive(1000);
+
+        intake.spoolMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        intake.spoolMotor.setPower(0.1);
+        wheels.sleepAndCheckActive(800);
+
+        intake.spoolMotor.setPower(0.4);
+        intake.spoolMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        wheels.sleepAndCheckActive(200);
+
+        intake.raiseRampHalfway();
+
+        scissorLift.setPosition(scissorLift.getPosition()-2000);
+        wheels.sleepAndCheckActive(500);
+    }
+
     protected void executeAutonomousLogic() {
-        navigation.NavigateCrabTicksRight(telemetry,.7,0.3,300);
+        /*navigation.NavigateCrabTicksRight(telemetry,.7,0.3,300);
         navigation.NavigateCrabTicksLeft(telemetry,.7,0.3,300);
         navigation.NavigateCrabTicksRight(telemetry,.7,0.3,300);
         navigation.NavigateCrabTicksLeft(telemetry,.7,0.3,300);
@@ -51,6 +79,9 @@ public class TankAutonomousTester extends LinearOpMode {
         LogUtils.closeLoggers();
         //navigation.NavigateStraightTicks(telemetry, .5, .3, 2000);
         wheels.sleepAndCheckActive(10000);
+         */
+
+        doOpen();
 
     }
 }

@@ -140,28 +140,7 @@ public class TankAutonomousFoundationBlue extends LinearOpMode {
         imu.rotate(-88, .7, .35, this);
         mecanumWheels.sleepAndCheckActive(100);
 
-        int[] colors = frontColorSensor.getAverageColor(500);
-
-        int redBaseline = colors[0];
-        int blueBaseline = colors[2];
-
-        int redTarget = redBaseline + 7;
-        int blueTarget = blueBaseline + 4;
-
-        telemetry.addData("Baseline Colors", colors[0] + "  " + colors[1] + "   " + colors[2]);
-        telemetry.update();
-        mecanumWheels.setPower(0.3, 0.3, 0.3, 0.3);
-
-        while (colorSensor.red() < redTarget && colorSensor.blue() < blueTarget) {
-            telemetry.addData("Colors", "-> " + colors[0] + "  " + colors[1] + "   " + colors[2]);
-            telemetry.update();
-            mecanumWheels.sleepAndCheckActive(10);
-        }
-        mecanumWheels.StopMotors();
-        telemetry.addData("Colors", "* " + colors[0] + "  " + colors[1] + "   " + colors[2]);
-        telemetry.update();
-
-        navigation.NavigateStraightTicks(telemetry, .5, 0.3, -30);
+        navigation.NavigateStraightTicks(telemetry, .5, 0.3, -550);
         mecanumWheels.sleepAndCheckActive(300);
 
         moveHook(ServoPosition.DOWN);
@@ -170,7 +149,7 @@ public class TankAutonomousFoundationBlue extends LinearOpMode {
         navigation.NavigateStraightTicks(telemetry, .5, 0.3, 1300);
         mecanumWheels.sleepAndCheckActive(300);
 
-        imu.rotate(20, 1, .7, this);
+        imu.rotate(15, 1, .7, this);
         mecanumWheels.sleepAndCheckActive(300);
 
         moveHook(ServoPosition.UP);
@@ -186,7 +165,7 @@ public class TankAutonomousFoundationBlue extends LinearOpMode {
         mecanumWheels.sleepAndCheckActive(100);
 
         doOpen();
-        
+
         navigation.NavigateStraightTicks(telemetry, .5, 0.3, 1400);
         mecanumWheels.sleepAndCheckActive(300);
 

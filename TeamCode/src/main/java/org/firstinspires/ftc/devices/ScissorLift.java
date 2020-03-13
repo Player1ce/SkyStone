@@ -10,7 +10,7 @@ public class ScissorLift {
     public DigitalChannel limitSwitch;
     public int count;
 
-    public static final int[] presetHeights=new int[]{1000,3100,6150,12060,18500};
+    public static final int[] presetHeights=new int[]{1000,3100,6300,12060,18500};
 
     public int presetHeight=0;
 
@@ -126,6 +126,7 @@ public class ScissorLift {
 
     public void calibrate() {
         calibrating = true;
+        liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
     public void checkCalibrateState() {
         if (calibrating) {

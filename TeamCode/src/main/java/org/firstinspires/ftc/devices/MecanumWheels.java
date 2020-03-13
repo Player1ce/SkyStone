@@ -199,6 +199,10 @@ public class MecanumWheels {
 
     }
 
+    protected void setMotorPower() {
+        //use hardwra emap ....
+    }
+
     protected void MoveInchesChanged(Telemetry telemetry,double MotorPower, double MinMotorPower,double Inches) {
 
         ResetEncoders();

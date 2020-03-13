@@ -134,6 +134,7 @@ public class TankAutonomousRedSkystoneBridge extends LinearOpMode {
         skystoneLever.setPosition(BasicPositions.DOWN);
         mecanumWheels.sleepAndCheckActive(300);
         navigation.NavigateCrabTicksLeft(telemetry, .6, 0.35, 400);
+        mecanumWheels.sleepAndCheckActive(300);
         doOpen();
         navigation.NavigateStraightTicks(telemetry, 0.4, 0.2, -2200);
         mecanumWheels.sleepAndCheckActive(300);

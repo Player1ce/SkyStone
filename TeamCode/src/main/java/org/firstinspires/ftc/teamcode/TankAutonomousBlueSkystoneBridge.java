@@ -106,7 +106,7 @@ public class TankAutonomousBlueSkystoneBridge extends LinearOpMode {
 
         intake.spoolMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         intake.spoolMotor.setPower(-0.205);
-        mecanumWheels.sleepAndCheckActive(1000);
+        mecanumWheels.sleepAndCheckActive(1300);
 
         intake.spoolMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         intake.spoolMotor.setPower(0.1);
@@ -119,7 +119,7 @@ public class TankAutonomousBlueSkystoneBridge extends LinearOpMode {
         intake.raiseRampHalfway();
 
         scissorLift.setPosition(scissorLift.getPosition()-2000);
-        mecanumWheels.sleepAndCheckActive(500);
+        mecanumWheels.sleepAndCheckActive(400);
     }
 
     public void moveHook(ServoPosition position) {
@@ -135,8 +135,10 @@ public class TankAutonomousBlueSkystoneBridge extends LinearOpMode {
         navigation.NavigateCrabTicksRight(telemetry,.7,0.35,1400);
         skystoneLever.setPosition(BasicPositions.DOWN);
         mecanumWheels.sleepAndCheckActive(300);
-        navigation.NavigateCrabTicksLeft(telemetry,.6,0.35,400);
+        navigation.NavigateCrabTicksLeft(telemetry,.6,0.35,200);
+        mecanumWheels.sleepAndCheckActive(300);
         doOpen();
+        mecanumWheels.sleepAndCheckActive(10000);
         navigation.NavigateStraightTicks(telemetry,0.4,0.2,2000);
         mecanumWheels.sleepAndCheckActive(300);
         skystoneLever.setPosition(BasicPositions.UP);
