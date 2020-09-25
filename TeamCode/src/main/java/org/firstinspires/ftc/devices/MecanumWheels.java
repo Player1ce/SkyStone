@@ -145,10 +145,10 @@ public class MecanumWheels {
     }
 
     public double getAverageEncoderPos() {
-        double averagePos= (Math.abs(frontLeft.getCurrentPosition())+Math.abs(frontRight.getCurrentPosition())+
-                Math.abs(backLeft.getCurrentPosition())+Math.abs(backRight.getCurrentPosition()))/4;
+        return (Math.abs(frontLeft.getCurrentPosition())+Math.abs(frontRight.getCurrentPosition())+
+                Math.abs(backLeft.getCurrentPosition())+Math.abs(backRight.getCurrentPosition()))/4.0;
 
-        return averagePos;
+
     }
 
 
@@ -324,6 +324,22 @@ public class MecanumWheels {
 
         return Math.min(maxMotorPower,suggestedPower);
     }
+
+    public static final double calculateProportionalMotorPowerFix(double gain, double errorDistance, double maxMotorPower,double minMotorPower) {
+        double suggestedPower;
+        if (errorDistance > 0) {
+            suggestedPower=(gain*errorDistance) + minMotorPower;
+        }
+        else if (errorDistance < 0) {
+            suggestedPower=(gain*errorDistance) - minMotorPower;
+        }
+        else {
+            return 0;
+        }
+
+        return Math.min(maxMotorPower,suggestedPower);
+    }
+
 
 
     public void StopMotors(){
