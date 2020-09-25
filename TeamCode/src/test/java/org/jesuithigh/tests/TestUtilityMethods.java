@@ -4,6 +4,7 @@ import org.firstinspires.ftc.Controller.PIDController;
 import org.firstinspires.ftc.logic.ButtonOneShot;
 import org.firstinspires.ftc.devices.MecanumWheels;
 import org.firstinspires.ftc.logic.ChassisName;
+import org.firstinspires.ftc.Controller.PIDController;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -69,6 +70,31 @@ public class TestUtilityMethods {
         //pid.input(90);
         //Assert.assertTrue();
 
+
+    }
+
+
+    PIDController pid = new PIDController(0.00225, 0.001, 0.001);
+
+    @Test
+    public void testPID () {
+        pid.setTarget(0);
+        pid.input(25);
+        //Assert.assertEquals(1, pid.output(),0.000001 );
+        pid.input(-20);
+        //Assert.assertEquals(1, pid.output(),0.000001 );
+
+        // above a distance of about 25 the output will be over 1. we might want to divide by 10 in our program
+        /*
+        here the target it set to 0 so that distance is represented exactly by the input.
+        Outputs are negative because the correction would be to move backwards.
+
+        input: 3000 output: -136
+        input: 200 output: -9
+        input: 25 output: -1.2
+        input: 20 output: -.89
+
+         */
 
     }
 
