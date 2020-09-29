@@ -34,16 +34,30 @@ public class MecanumWheels {
     LinearOpMode linearOpMode;
 
     public void initializeWheels (OpMode opMode) {
-        //compress using this.frontRight = ...;
-        frontRight = opMode.hardwareMap.dcMotor.get("frontRight");
-        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        if (chassis == ChassisName.GOBILDA) {
+            frontRight = opMode.hardwareMap.dcMotor.get("frontRight");
+            //frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        frontLeft = opMode.hardwareMap.dcMotor.get("frontLeft");
-        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+            frontLeft = opMode.hardwareMap.dcMotor.get("frontLeft");
+            //frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        backRight = opMode.hardwareMap.dcMotor.get("backRight");
+            backRight = opMode.hardwareMap.dcMotor.get("backRight");
+            //backRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        backLeft = opMode.hardwareMap.dcMotor.get("backLeft");
+            backLeft = opMode.hardwareMap.dcMotor.get("backLeft");
+            backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        }
+        else {
+            //compress using this.frontRight = ...;
+            frontRight = opMode.hardwareMap.dcMotor.get("frontRight");
+            frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
+
+            frontLeft = opMode.hardwareMap.dcMotor.get("frontLeft");
+
+            backRight = opMode.hardwareMap.dcMotor.get("backRight");
+
+            backLeft = opMode.hardwareMap.dcMotor.get("backLeft");
+        }
 
         if (opMode instanceof LinearOpMode) {
             linearOpMode=(LinearOpMode)opMode;
@@ -89,7 +103,7 @@ public class MecanumWheels {
         else if (chassis == ChassisName.GOBILDA) {
             frontRightPower = (yLeft - xRight - xLeft) * power; //-right
             frontLeftPower = (yLeft + xRight + xLeft) * power; //-right
-            backRightPower = (-yLeft - xRight + xLeft) * power; //-right
+            backRightPower = (yLeft + xRight - xLeft) * power; //-right
             backLeftPower = (yLeft - xRight + xLeft) * power;
 
         }
