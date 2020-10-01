@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.Controller.PIDController;
 import org.firstinspires.ftc.devices.Encoders;
+import org.firstinspires.ftc.devices.EncodersFix;
 import org.firstinspires.ftc.devices.IMURevHub;
 import org.firstinspires.ftc.devices.MecanumWheels;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -27,7 +28,7 @@ public class NavigationFix {
     private PIDController yPidController = new PIDController("y_pid",true,0.00225, 0.001, 0.001);
     private PIDController xPidController = new PIDController("x_pid",true,0.00015, .0001, .0001);
 
-    Encoders encoders = new Encoders(chassis);
+    EncodersFix encoders = new EncodersFix(chassis);
     IMURevHub imu;
     private MecanumWheels wheels;
 
@@ -82,21 +83,30 @@ public class NavigationFix {
 
         //encoders---------------------------------------------------------------------------------------------
         encoders.resetPosition();
-        encoders.setyTarget(ticks);
+
+        //need to set this for getting direction later
+        encoders.setXTarget(0);
+        encoders.setYTarget(ticks);
 
         double distanceX;
         double distanceY;
         double currentY;
         double powerX;
         double powerY;
+        double yDirection;
+        double xDirection;
 
         //sets target for pid
-        xPidController.setTarget(ticks);
+        xPidController.setTarget(0);
+        yPidController.setTarget(ticks);
+        Orientation startAngle = new Orientation();
+        rotationPidController.setTarget(startAngle.firstAngle);
 
         while (Math.abs(ticks - encoders.getY()) < 10) {
             wheels.checkIsActive();
 
-            /* //imu---------------------------------------------------------------------------------------------
+            /*
+            //imu---------------------------------------------------------------------------------------------
             angle = imu.getAngleWithStart(startOrientation);
             rotationPidController.input(angle);
 
@@ -117,29 +127,23 @@ public class NavigationFix {
             */
 
             //encoders---------------------------------------------------------------------------------------------
-            //double distanceX = Math.abs(encoders.getX() - encoders.xTarget);
-            //double distanceY = Math.abs(encoders.getY() - encoders.yTarget);
             distanceX = encoders.getX();
             currentY = encoders.getY();
             distanceY = encoders.yTarget - currentY;
-            //double powerX = MecanumWheels.calculateProportionalMotorPower(0.0015, distanceX, MotorPower, Math.max(MinMotorPower, .3));
-            //double powerY = MecanumWheels.calculateProportionalMotorPower(0.0015, distanceY, MotorPower, MinMotorPower);
+
             //TODO: Check this ---------------------------------------------------------------------------------------------
             //need to fix these numbers
-            powerX = calculateCorrectionPower(xPidController, distanceX, Math.max( .2, MotorPower - .4)  , 0.03);
-            powerY = calculateCorrectionPower(yPidController, currentY, MotorPower, MinMotorPower);
-            double yDirection = encoders.getYDirection();
-            double xDirection = encoders.getXDirection();
+            //divide by ten to adjust for the huge encoder tick values. might need to divide by 100.
+            powerX = calculateCorrectionPower(xPidController, distanceX, Math.max( .2, MotorPower - .4)  , 0.03) / 10;
+            powerY = calculateCorrectionPower(yPidController, currentY, MotorPower, MinMotorPower) / 10;
 
-/*
-            if (currentY == 0) {
-                wheels.setPowerFromGamepad(false,1, 0 ,0, 1 * yDirection);
-            }
- */
+            yDirection = encoders.getYDirection(distanceX);
+            //xDirection = encoders.getXDirection(currentY);
+
 
             //set power---------------------------------------------------------------------------------------------
             xDirection = 1;
-            //powerY = 0;
+
             wheels.setPower(
                     (powerY) -(powerX * xDirection) + rightCorrect,
                     (powerY) + (powerX *xDirection) + leftCorrect,
@@ -147,10 +151,10 @@ public class NavigationFix {
                     (powerY) - (powerX * xDirection)
             );
 
-            telemetry.addData("X position:", encoders.getX());
-            telemetry.addData("Y position:", encoders.getY());
-            telemetry.addData("distance y:", distanceY);
+            telemetry.addData("X position:", distanceX);
             telemetry.addData("distance x:", distanceX);
+            telemetry.addData("Y position:", currentY);
+            telemetry.addData("distance y:", distanceY);
             telemetry.addData("x Power:", (powerX * 0.4 * xDirection));
             telemetry.addData("y power", (powerY * yDirection));
             //telemetry.addData("Correction power:", correctionPower);
@@ -232,8 +236,8 @@ public class NavigationFix {
         //encoders---------------------------------------------------------------------------------------------
         encoders.resetPosition();
         //encoders.setyTarget((Inches * 4)/.0699);
-        encoders.setxTarget(0);
-        encoders.setyTarget(ticks);
+        encoders.setXTarget(0);
+        encoders.setYTarget(ticks);
 
         double dest=Math.abs(encoders.yTarget)-5;
 
@@ -273,8 +277,8 @@ public class NavigationFix {
             //TODO: Check this ---------------------------------------------------------------------------------------------
             double powerX = calculateCorrectionPower(xPidController, distanceX * .03 ,   Math.max( .2, MotorPower - .4)  , 0.03);
             double powerY = calculateCorrectionPower(yPidController, distanceY, MotorPower, MinMotorPower);
-            double yDirection = encoders.getYDirection();
-            double xDirection = encoders.getXDirection();
+            double yDirection = encoders.getYDirection(1);
+            double xDirection = encoders.getXDirection(1);
 
 /*
             if (encoders.getY() == 0) {
@@ -319,7 +323,7 @@ public class NavigationFix {
     public void correctY(Telemetry telemetry) {
 
         double distanceY = encoders.yTarget - encoders.getY();
-        double yDirection = -1*encoders.getYDirection();
+        double yDirection = -1*encoders.getYDirection(1);
 
         if (encoders.getY()==0) {
             return;

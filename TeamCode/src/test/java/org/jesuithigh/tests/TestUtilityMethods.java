@@ -79,8 +79,8 @@ public class TestUtilityMethods {
     @Test
     public void testPID () {
         pid.setTarget(0);
-        pid.input(25);
-        //Assert.assertEquals(1, pid.output(),0.000001 );
+        pid.input(-25);
+        Assert.assertEquals(1, pid.output(),0.000001 );
         pid.input(-20);
         //Assert.assertEquals(1, pid.output(),0.000001 );
 

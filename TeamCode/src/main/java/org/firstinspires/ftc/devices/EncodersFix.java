@@ -151,12 +151,12 @@ public class EncodersFix {
 
     }
 
-    public double getXDirection() {
-        return Double.compare(xTarget, getX());
+    public double getXDirection(double x) {
+        return Double.compare(xTarget, x);
     }
 
-    public double getYDirection() {
-        return Double.compare(getY(), yTarget);
+    public double getYDirection(double y) {
+        return Double.compare(y, yTarget);
     }
 
 }
