@@ -51,7 +51,6 @@ public class GoBildaChassisTeleop extends OpMode {
         //telemetry is used to show on the driver controller phone what the code sees
         telemetry.addData("Power:", power);
         //reverse telemetry
-        telemetry.addData("F/R:", robot.reverseSense(reverse));
 
     }
 
