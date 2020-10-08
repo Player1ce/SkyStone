@@ -10,6 +10,7 @@ import org.firstinspires.ftc.logic.KillOpModeException;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class MecanumWheels {
+    //the 4 motors on the bot
     public DcMotor frontLeft;
     public DcMotor frontRight;
     public DcMotor backLeft;
@@ -98,7 +99,6 @@ public class MecanumWheels {
             frontLeftPower = (yLeft + xRight - xLeft) * power; //-right
             backRightPower = (yLeft + xRight + xLeft) * power; //-right
             backLeftPower = (yLeft - xRight - xLeft) * power;
-
         }
         else if (chassis == ChassisName.GOBILDA) {
             frontRightPower = (yLeft - xRight - xLeft) * power; //-right

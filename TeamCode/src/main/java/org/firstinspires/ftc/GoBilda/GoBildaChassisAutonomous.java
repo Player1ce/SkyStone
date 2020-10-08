@@ -5,22 +5,14 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.devices.Camera;
 import org.firstinspires.ftc.logic.ChassisName;
-import org.firstinspires.ftc.devices.FoundationHook;
 import org.firstinspires.ftc.devices.MecanumWheels;
-import org.firstinspires.ftc.devices.BlockIntake;
 import org.firstinspires.ftc.logic.KillOpModeException;
 import org.firstinspires.ftc.teamcode.TeleOpMethods;
-
-
-
-
 
 @Autonomous(name = "GoBildaChassisAutonomous", group="Skystone")
 public class GoBildaChassisAutonomous extends LinearOpMode {
     private TeleOpMethods robot = new TeleOpMethods(ChassisName.GOBILDA);
     private final MecanumWheels mecanumWheels=new MecanumWheels(ChassisName.GOBILDA);
-    private final FoundationHook hookServo = new FoundationHook(ChassisName.GOBILDA);
-    private final BlockIntake intake = new BlockIntake(ChassisName.GOBILDA);
     private final Camera camera = new Camera();
 
     public void runOpMode() throws InterruptedException {
@@ -47,6 +39,7 @@ public class GoBildaChassisAutonomous extends LinearOpMode {
         //put all code in this while loop so the bot will stop when we tell it to
 
             mecanumWheels.sleepAndCheckActive(30000);
+
 
     }
 
